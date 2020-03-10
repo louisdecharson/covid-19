@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="./covid.css">
+    </head>
+    
+    <body>
+        <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
+        <p class="text-muted font-italic">Using data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a></p>
+        <div class="container">
+            <div class="row">
+                <nav class="col-2 col-md-2 sidebar">
+                    <ul class="nav flex-column">
+                    </ul>
+                </nav>
+                <main class="col-10 col-md-10">
+                    <div class="form-row align-items-center">
+                        <div class="col-auto my-1">
+                            <div class="form-group">
+                                <select class="mr-sm-2" id="chooseCountry">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="mr-sm-2 text-muted">Last data point:</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="mr-sm-2" id="lastDataPoint">Choose country</div>
+                        </div>
+                    </div>
+                    <!-- <h2 id="countryChosen" class="mb-4">Country</h2> -->
+                    <div class="container mb-4">
+                        <div class="row">
+                            <div class="container mb-2">
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <p class="col-title">Confirmed</p>
+                                        <h3 id="nb_confirmed" class="confirmed"></h3>
+                                        <div id="sparkline_confirmed"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="col-title">Recovered</p>
+                                        <h3 id="nb_recovered" class="recovered"></h3>
+                                        <div id="sparkline_recovered"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="col-title">Deaths</p>
+                                        <h3 id="nb_deaths" class="deaths"></h3>
+                                        <div id="sparkline_deaths"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
+                        <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale</label>
+                    </div>
+                    <div class="mt-4" id="country_graph"></div>
+                </main>
+            </div>
+
+        </div>
+        <!-- SCRIPTS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js" integrity="sha256-m0QmIsBXcOMiETRmpT3qg2IQ/i0qazJA2miCHzOmS1Y=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="./covid.js">
+        </script>
+    </body>
+    
+</html>
