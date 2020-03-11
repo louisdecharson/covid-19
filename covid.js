@@ -1,17 +1,22 @@
-let widthMainGraph = document.getElementsByTagName('main')[0].offsetWidth;
+// let widthMainGraph = document.getElementsByTagName('main')[0].offsetWidth;
+$('.content').hide();
+$('#by_country').show();
+
+let widthMainGraph = document.getElementById('summary_stats').offsetWidth;
 let heightMainGraph = Math.max(400, screen.height*0.5);
 let links = {
     'recovered': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv",
     'confirmed': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     'death': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"
 };
-let colors_countries = ["#1abb9b","#3497da","#9a59b5","#34495e","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-let colors = ['#2ecb71','#f29b12','#e64c3c'];
+const colors_countries = ["#1abb9b","#3497da","#9a59b5","#34495e","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
+const colors = ['#2ecb71','#f29b12','#e64c3c'];
 let data = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
     cases_categories = ['Recovered','Confirmed','Deaths'],
     countries = [];
 let logScale = false,
+    logScale2 = false,
     country, data_country;
 
 // ====================================================================== //
@@ -221,7 +226,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
             .range([height, 0])
             .nice();
     } else {
-         y = d3.scaleLinear()
+        y = d3.scaleLinear()
             .domain(d3.extent(data, d => d[yVar]))
             .range([height, 0]);
     }
@@ -247,10 +252,10 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     // Add legend
     addLegend(id+'_svg',categories,3*margin.right,margin.top);
 }
-function addLegend(id,keys,px,py) {
+function addLegend(id, keys, px, py, colors_ = colors) {
     var color = d3.scaleOrdinal()
         .domain(keys)
-        .range(colors);
+        .range(colors_);
     var svg = d3.select(id);
     var mydots = svg.selectAll(".dots-legend")
         .data(keys);
@@ -289,9 +294,151 @@ function computeWorldData() {
     });
     data = data.concat(data_);
 }
+function updateGraphComparison(data, logScale = false, id = "#compare_graph", w = widthMainGraph, h = heightMainGraph, xVar = 'date', yVar = 'field_value') {
+    var margin = {top: 10, right: 30, bottom: 30, left: 60};
+    var width = w - margin.left - margin.right;
+    var height = h - margin.top - margin.bottom;
+
+    // Select the id
+    var svg = d3.select(id + '_g');
+
+    // Delete the axis
+    svg.selectAll('g.x.axis').remove();
+    svg.selectAll('g.y.axis').remove();
+
+    // X-axis
+    var x = d3.scaleTime()
+        .domain(d3.extent(data, d => d[xVar]))
+        .range([0, width]);
+
+    svg.append("g")
+        .attr('class','x axis')
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom()
+              .scale(x)
+              .tickFormat(d3.timeFormat("%m/%d/%y"))
+             );
+
+    // Y-axis
+    let y;
+    let yscale = [],
+        keys = [];
+    elements.forEach(function(element,index) {
+        let _ = data.filter(d => (d['category'] === element['category'] &&
+                                  d['Country/Region'] === element['Country/Region']));
+        yscale = yscale.concat(d3.extent(_, d => d[yVar]));
+        keys.push(element['Country/Region'] + " - " + element['category']);
+    });
+    if (logScale) {
+        y = d3.scaleSymlog()
+            .domain(d3.extent(yscale))
+            .nice()
+            .range([height, 0]);
+    } else {
+        y = d3.scaleLinear()
+            .domain(d3.extent(yscale))
+            .nice()
+            .range([height, 0]);
+    }
+    svg.append("g")
+        .attr('class','y axis')
+        .call(d3.axisLeft(y).tickFormat(d3.format('.3s')));
+
+    // Offset
+    let offset = function(date, offset_value) {
+        let d = new Date(date);
+        d.setDate(d.getDate() + offset_value);
+        return d;
+    };
+    function offset_data(data, offset_value) {
+        data.forEach(function(it,ind) {
+            let value = ind + offset_value < data.length ? data[ind + offset_value][yVar] : NaN;
+            it[yVar] = value;
+        });
+        return data;
+    }
+
+    // Colors
+    let color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(colors_countries);
+    
+    svg.selectAll('path.lines').remove();
+    elements.forEach(function(element,index) {
+        let data_ = data.filter(d => (d['category'] === element['category'] &&
+                                      d['Country/Region'] === element['Country/Region']));
+        let data__ = $.extend(true, [], data_);
+        offset_data(data__, element['offset']);
+        svg.append('path')
+            .datum(data__)
+            .attr('class','lines')
+            .attr('fill','none')
+            .attr('stroke', color(element['Country/Region'] + " - " + element['category']))
+            .attr("stroke-width", 2)
+            .attr('d',d3.line()
+                  .x(d => x(d[xVar]))
+                  .y(d => y(d[yVar]))
+                 );
+    });
+    addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
+}
+function build_elements_compare() {
+    let html = '';
+    for (const [index, element] of elements.entries()) {
+        element.id = (parseInt(Math.random()*1e16)).toString();
+        // html += '<div class="col-md-3 col-6"> <div class="card element"><div class="card-title country_element">' + element['Country/Region'] + '</div>';
+        html += `<div class="col-md-3 col-6"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
+        for (const country of countries) {
+            let selected = country === element['Country/Region'] ? 'selected' : '';
+            html += '<option ' + selected + '>' + country + '</option>';
+        }
+        html += '</select></div>';
+        html += `<div class="category_element mb-1 mt-1"><select onchange="update_element(this,'category')" class="select-category-element" element_id="${element.id}">`;
+        for (const category of cases_categories) {
+            let selected = category === element['category'] ? 'selected' : '';
+            html += '<option ' + selected + '>' + category + '</option>';
+        }
+        html +=  '</select></div><div class="offset_element"><span>Offset:</span><span id="offset_'+ element.id+'" class="offset pr-1 pl-1">' + element['offset'] + '</span><span>days</span> <svg class="svg-icon" element_id="' + element.id + '" viewBox="0 0 20 20" onclick=update_offset(this,1)> <path d="M14.613,10c0,0.23-0.188,0.419-0.419,0.419H10.42v3.774c0,0.23-0.189,0.42-0.42,0.42s-0.419-0.189-0.419-0.42v-3.774H5.806c-0.23,0-0.419-0.189-0.419-0.419s0.189-0.419,0.419-0.419h3.775V5.806c0-0.23,0.189-0.419,0.419-0.419s0.42,0.189,0.42,0.419v3.775h3.774C14.425,9.581,14.613,9.77,14.613,10 M17.969,10c0,4.401-3.567,7.969-7.969,7.969c-4.402,0-7.969-3.567-7.969-7.969c0-4.402,3.567-7.969,7.969-7.969C14.401,2.031,17.969,5.598,17.969,10 M17.13,10c0-3.932-3.198-7.13-7.13-7.13S2.87,6.068,2.87,10c0,3.933,3.198,7.13,7.13,7.13S17.13,13.933,17.13,10"></path></svg><svg class="svg-icon" element_id="' + element.id + '" viewBox="0 0 20 20" onclick=update_offset(this,-1)><path d="M14.776,10c0,0.239-0.195,0.434-0.435,0.434H5.658c-0.239,0-0.434-0.195-0.434-0.434s0.195-0.434,0.434-0.434h8.684C14.581,9.566,14.776,9.762,14.776,10 M18.25,10c0,4.558-3.693,8.25-8.25,8.25c-4.557,0-8.25-3.691-8.25-8.25c0-4.557,3.693-8.25,8.25-8.25C14.557,1.75,18.25,5.443,18.25,10 M17.382,10c0-4.071-3.312-7.381-7.382-7.381C5.929,2.619,2.619,5.93,2.619,10c0,4.07,3.311,7.382,7.381,7.382C14.07,17.383,17.382,14.07,17.382,10"></path></svg></div></div></div>';
+    }
+    $('#compare_elements_container').html(html);
+}
+function update_offset(el, value) {
+    let element_id = $(el).attr('element_id');
+    elements.forEach(function(it, ind) {
+        if (it.id === element_id) {
+            it.offset = Math.max(0, it.offset + parseInt(value));
+            $(`#offset_${element_id}`).html(it.offset);
+        }
+    });
+    updateGraphComparison(data, logScale2);
+}
+function update_element(el, property) {
+    let element_id = $(el).attr('element_id');
+    elements.forEach(function(it, ind) {
+        if (it.id === element_id) {
+            it[property] = el.value;
+        }
+    });
+    updateGraphComparison(data, logScale2);
+}
 // ====================================================================== //
 createGraph('#country_graph');
+createGraph('#compare_graph');
 
+let elements = [
+    {
+        "Country/Region": "France",
+        "category": "Confirmed",
+        "offset": 3
+    },
+    {
+        "Country/Region": "Italy",
+        "category": "Confirmed",
+        "offset": 0
+    }
+];
+
+// Load Data
 let nb_process_ended = 0;
 for (const element of cases_categories) {
     let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-${element}.csv`;
@@ -305,6 +452,7 @@ for (const element of cases_categories) {
         })
         .finally(_ => nb_process_ended += 1);
 }
+// Process Data
 let timer = setInterval(() => {
     if (nb_process_ended === 3) {
         clearInterval(timer);
@@ -312,14 +460,23 @@ let timer = setInterval(() => {
         get_list_countries(data);
         country = 'World';
         data_country = data.filter(d => d['Country/Region'] === country);
-        // $('#countryChosen').text(country);
         load_summary_data(data_country);
         updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+
+        // Compare
+        build_elements_compare();
+        updateGraphComparison(data, logScale2);
     }
 }, 100);
 
 
 // ======
+
+$('.sidebar_show').click(function(){
+    var target = $(this).attr('target');
+    $('.content').hide();
+    $(target).show();
+});
 
 $('#chooseCountry').change(function(){
     country = $('#chooseCountry option:selected').text(),
@@ -332,4 +489,13 @@ $('#logScaleSwitch').change(function(){
     logScale = logScale ? false : true;
     updateGraph('#country_graph', data_country, 'date', 'field_value', logScale);
     load_summary_data(data_country);
+});
+
+
+$('#logScaleSwitch2').change(function(){
+    logScale2 = logScale2 ? false : true;
+    updateGraphComparison(data, logScale2);
+});
+$('.select-category-element').on('change',function(){
+    
 });

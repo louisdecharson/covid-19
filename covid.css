@@ -11,7 +11,7 @@ body {
 #country_graph_svg {
     background-color: var(--background-color-dark);;
 }
-select {
+select#chooseCountry {
     padding: 0.3em;
     color: var(--color-text-dark);
     font-size: 1.5rem;
@@ -44,6 +44,39 @@ select option{
     font-size: 1rem;
 }
 
+@media (min-width: 1200px) {
+    #container{
+        max-width: inherit;
+    }
+}
+/* SVG Icons */
+.svg-icon {
+    width: 1.5em;
+    height: 1.5em;
+}
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+    fill: var(--color-text-dark);
+}
+.svg-icon circle {
+    stroke: var(--color-text-dark);
+    stroke-width: 1;
+}
+
+/* Nav Bar */
+.sidebar_show {
+    cursor: pointer;
+}
+.sidebar {
+    margin-top: 1%;
+}
+.sidebar-heading {
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-top: 1rem;
+}
+
 /* Colors */
 .confirmed {
     color: #f29b12;
@@ -52,5 +85,56 @@ select option{
     color: #e64c3c;
 }
 .recovered {
-    color: #2ecb71
+    color: #2ecb71;
+}
+.btn-confirmed {
+    background-color: #f29b12;
+    color: var(--color-text-dark);
+}
+.btn-deaths {
+    background-color: #e64c3c;
+    color: var(--color-text-dark);
+}
+.btn-recovered {
+    background-color: #2ecb71;
+    color: var(--color-text-dark);
+}
+select option.btn-confirmed{
+    color: #f29b12 !important;
+}
+
+
+/* Compare elements */
+
+.element {
+    background-color: var(--background-color-dark);
+    border: 2px solid rgba(200, 200, 200, .4);
+    border-radius: 1rem;
+    padding: 0.75em;
+}
+.card-title {
+    margin: auto;
+    font-weight: bold;
+    text-transform: uppercase;    
+}
+.category_element {
+    margin: auto;
+}
+.offset_element {
+    margin: auto;
+    font-style: italic;
+} 
+.select-country-element {
+    padding: 0.3em;
+    color: var(--color-text-dark);
+    background: transparent;
+    -webkit-appearance: none;
+    margin: auto;
+    border: 1px solid var(--color-text-dark);
+}
+.select-category-element {
+    padding: 0.3em;
+    color: var(--color-text-dark);
+    background: transparent;
+    -webkit-appearance: none;
 }
