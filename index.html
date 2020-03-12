@@ -10,7 +10,7 @@
     
     <body>
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
-        <p class="text-muted font-italic" style="font-size: 0.8rem">Using data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a></p>
+        <p class="text-muted font-italic" style="font-size: 0.8rem">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a></p>
         <div class="container" id="container">
             <div class="row">
                 <nav class="col-2 col-md-2 sidebar">
@@ -47,12 +47,18 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12 order-md-1">
-                                    <div class="col-auto my-1">
-                                        <div class="form-group">
-                                            <select class="mr-sm-2" id="chooseCountry">
-                                            </select>
+                                    <form class="form-inline">
+                                        <div class="col-auto my-1">
+                                            <div class="form-group">
+                                                <select class="mr-sm-2" id="chooseCountry">
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="my-1 mr-2 text-muted custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="percPopulation">
+                                            <label class="custom-control-label text-muted" for="percPopulation">as % of population</label>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +115,10 @@
                             <label class="my-1 mr-2 text-muted">To</label>
                             <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
                             </select>
+                            <div class="my-1 mr-2 text-muted custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="percPopulation2">
+                                <label class="custom-control-label text-muted" for="percPopulation2">as % of population</label>
+                            </div>
                         </form>
                         <div class="mt-4" id="compare_graph"></div>
                     </div>

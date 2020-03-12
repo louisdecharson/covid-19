@@ -2,15 +2,21 @@
 $('.content').hide();
 $('#by_country').show();
 
-let widthMainGraph = document.getElementById('summary_stats').offsetWidth;
-let heightMainGraph = Math.max(400, screen.height*0.5);
-let links = {
-    'recovered': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv",
-    'confirmed': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
-    'death': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"
-};
+const widthMainGraph = document.getElementById('summary_stats').offsetWidth;
+const heightMainGraph = Math.max(400, screen.height*0.5);
+const root = document.documentElement,
+      rootStyle = getComputedStyle(root);
+
+// Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
 const colors = ['#2ecb71','#f29b12','#e64c3c'];
+let colorVariables = ['--background-color','--color-text'];
+let colorsValues = {};
+colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
+                                    colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
+
+
+// Initiate variables
 let data = [],
     data_by_country = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
@@ -18,21 +24,16 @@ let data = [],
     countries = [],
     list_dates = [],
     startDate,
-    endDate;
-
+    endDate,
+    population_data = [];
 let logScale = false,
     logScale2 = false,
     country, data_country,
-    darkMode = true;
+    darkMode = true,
+    percPopulation = false,
+    percPopulation2 = false;
 
 // DARK MODE
-let colorVariables = ['--background-color','--color-text'];
-const root = document.documentElement,
-      rootStyle = getComputedStyle(root);
-let colorsValues = {};
-colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
-                                    colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
-console.log(colorsValues);
 $('#darkmodeSwitch').click(function() {
     var $this = $(this);
     if ($this.hasClass('darkmode')) {
@@ -123,7 +124,7 @@ function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
             return out;
         });
 }
-function get_list_countries(data,) {
+function get_list_countries(data) {
     let countries_ = [];
     for (const category of cases_categories) {
         let _ = d3.set(data.filter(f => f.category === category).map(f => f['Country/Region'])).values();
@@ -140,16 +141,18 @@ function get_list_countries(data,) {
     $('#chooseCountry').html(chooseCountryHTML);
     $('#chooseCountry').show();
 }
-function load_summary_data(data) {
+function load_summary_data() {
     for (const category of cases_categories) {
-        let cases_category = category.toLowerCase(),
-            data_ = data.filter(f => f['category'] === category),
-            last_date = data_[data_.length-1]['field_id'],
-            last_value = groupBy(data_.filter(f => f['field_id'] === last_date),'Country/Region',['field_value'],[],['field_id'])[0]['field_value'];
-        $(`#nb_${cases_category}`).html(d3.format(',')(last_value));
+        let data_category = data_country.filter(f => f['category'] === category),
+            last_date = data_category.slice(-1)[0]['field_id'],
+            last_value = data_category.slice(-1)[0][(percPopulation ? 'field_value_pop' : 'field_value')];
+
+        // Add this data to 
+        $(`#nb_${category.toLowerCase()}`).html(d3.format((percPopulation ? '%' : ','))(last_value));
         $('#lastDataPoint').html(last_date);
-        let data__ = groupBy(data_,'key',['field_value'],[],['field_id']);
-        sparkline(`#sparkline_${cases_category}`, data__, 'field_id', 'field_value', logScale);
+        
+        // let data__ = groupBy(data_category,'key',['field_value'],[],['field_id']);
+        sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
     }
 }
 function get_dates(data) {
@@ -202,7 +205,7 @@ function sparkline(elemId, data, xVar, yVar, logScale = false) {
     d3.select(elemId)
         .append('span')
         .attr('class','sparklines-number')
-        .text(d3.format('.3s')(data[data.length-1].y));
+        .text(d3.format((percPopulation ? '%' : '.3s'))(data[data.length-1].y));
 }
 function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
@@ -279,7 +282,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     }
     svg.append("g")
         .attr('class','y axis')
-        .call(d3.axisLeft(y).tickFormat(d3.format('.3s')));
+        .call(d3.axisLeft(y).tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
     
     // Add the content
     svg.selectAll('path.lines').remove();
@@ -335,7 +338,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
                     .attr("class","tooltip_text")
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d.category))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format(',')(d[yVar])}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percPopulation ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
         text.attr("transform", `translate(${text_x},${my})`);
@@ -407,15 +410,16 @@ function addLegend(id, keys, px, py, colors_ = colors) {
         .attr('class','labels-legend');
 }
 function computeWorldData() {
-    let data_ = groupBy(data,'key_world',['field_value'],[],['field_id','Country/Region','date','category','Lat','Long','Province/State']);
+    let data_ = groupBy(data_by_country,'key_world',['field_value','Population'],[],['field_id','Country/Region','date','category','Lat','Long','Province/State']);
     data_.forEach(function(d){
         d['Country/Region'] = 'World';
         d['Province/State'] = '';
         d['key'] = d.category + d['Country/Region'] + d['field_id'];
+        d['field_value_pop'] = d['field_value'] / d['Population'];
     });
-    data = data.concat(data_);
+    return data_by_country.concat(data_);
 }
-function updateGraphComparison(data, logScale = false, id = "#compare_graph", w = widthMainGraph, h = heightMainGraph, xVar = 'date', yVar = 'field_value') {
+function updateGraphComparison(data, logScale = false, yVar = 'field_value', id = "#compare_graph", w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
@@ -474,7 +478,7 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
         .range([height, 0]);
     svg.append("g")
         .attr('class','y axis')
-        .call(d3.axisLeft(y).tickFormat(d3.format('.3s')));
+        .call(d3.axisLeft(y).tickFormat(d3.format((percPopulation2 ? '%' : '.3s'))));
 
     // Colors
     let color = d3.scaleOrdinal()
@@ -541,7 +545,7 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d['Country/Region'] + " - " + d['category']))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d[yVar])}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
         text.attr("transform", `translate(${text_x},${my})`);
@@ -609,7 +613,7 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
@@ -618,7 +622,7 @@ function update_element(el, property) {
             it[property] = el.value;
         }
     });
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 }
 function add_element() {
     let last_el = elements.length > 0 ? $.extend(true, {}, elements[elements.length-1]) : {
@@ -629,12 +633,12 @@ function add_element() {
     last_el['Country/Region'] = elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
     elements = elements.concat(last_el);
     build_elements_compare();
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 }
 function delete_element(id) {
     elements = elements.filter(d => d.id != id);
     build_elements_compare();
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 }
 
 function addDatestoSelect() {
@@ -650,10 +654,13 @@ function addDatestoSelect() {
     $('#endDate2').html(html_end_dates);
 
 }
-function filterData(data) {
-    return data.filter(d => d['country'] === country &&
-                       d['date'] >= startDate &&
-                       d['date'] <= endDate);
+function addPopulationData() {
+    data_by_country.forEach(function(e) {
+        e['Population'] = population_data
+            .filter(d => d['Country/Region'] === e['Country/Region'])
+            .map(d => +d['Population'])[0];
+        e['field_value_pop'] = e['field_value'] / e['Population'];
+    });
 }
 // ====================================================================== //
 createGraph('#country_graph');
@@ -691,21 +698,35 @@ for (const element of cases_categories) {
         })
         .finally(_ => nb_process_ended += 1);
 }
+d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/population_data.csv')
+    .then(d => population_data = d)
+    .catch(e => console.log(e))
+    .finally(_ => nb_process_ended += 1);
 // Process Data
 let timer = setInterval(() => {
-    if (nb_process_ended === 3) {
+    if (nb_process_ended === 4) {
         clearInterval(timer);
-        computeWorldData();
-        get_list_countries(data);
-        country = 'World';
-        data_country = data.filter(d => d['Country/Region'] === country);
-        load_summary_data(data_country);
+
+        // Add Dates to select
         addDatestoSelect();
+        
+        // Group By Data
+        data_by_country = groupBy(data,'key',['field_value'],[],
+                                  ['field_id','Country/Region','date','category','Lat','Long','key_world']);
+
+        // Add Population Data
+        addPopulationData();
+
+        // Compute data for the world
+        data_by_country = computeWorldData();
+        get_list_countries(data_by_country);
+        
+        country = 'World';
+        data_country = data_by_country.filter(d => d['Country/Region'] === country);
+        load_summary_data(data_country);
         updateGraph('#country_graph', data_country, 'date','field_value', logScale);
 
         // Compare
-        data_by_country = groupBy(data,'key',['field_value'],[],
-                                  ['field_id','Country/Region','date','category','Lat','Long']);
         build_elements_compare();
         updateGraphComparison(data_by_country, logScale2);
     }
@@ -722,39 +743,48 @@ $('.sidebar_show').click(function(){
 
 $('#chooseCountry').change(function(){
     country = $('#chooseCountry option:selected').text(),
-    data_country = groupBy(data.filter(f => f['Country/Region'] === country),'key',['field_value'],[],['field_id','Country/Region','date','category','Lat','Long']);
-    // $('#countryChosen').text(country);
+    data_country = data_by_country.filter(d => d['Country/Region'] === country);
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', 'field_value',  logScale);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale);
 });
 $('#logScaleSwitch').change(function(){
     logScale = logScale ? false : true;
-    updateGraph('#country_graph', data_country, 'date', 'field_value', logScale);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
     load_summary_data(data_country);
 });
 
 //
 $('#logScaleSwitch2').change(function(){
     logScale2 = logScale2 ? false : true;
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+});
+$('#percPopulation2').change(function() {
+    percPopulation2 = percPopulation2 ? false : true;
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+});
+
+$('#percPopulation').change(function() {
+    percPopulation = percPopulation ? false : true;
+    load_summary_data(data_country);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale);
 });
 
 // Dates
 $('#startDate').change(function() {
     startDate = new Date($('#startDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale);
 
 });
 $('#endDate').change(function() {
     endDate = new Date($('#endDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale);
 });
 $('#startDate2').change(function() {
     startDate = new Date($('#startDate2 option:selected').text());
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 
 });
 $('#endDate2').change(function() {
     endDate = new Date($('#endDate2 option:selected').text());
-    updateGraphComparison(data_by_country, logScale2);
+    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
 });
