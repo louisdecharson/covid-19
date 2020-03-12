@@ -1,12 +1,16 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <title>Coronavirus Data Dashboard</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="./covid.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
     </head>
     
     <body>
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
-        <p class="text-muted font-italic">Using data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a></p>
+        <p class="text-muted font-italic" style="font-size: 0.8rem">Using data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a></p>
         <div class="container" id="container">
             <div class="row">
                 <nav class="col-2 col-md-2 sidebar">
@@ -23,22 +27,33 @@
 			    </svg>
                             Compare
                         </li>
+                        <li class="fixed-bottom p-3" style="background-color: inherit;">
+                            Dark Mode <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
+                        </li>
                     </ul>
                 </nav>
                 <main class="col-10 col-md-10">
                     <div class="content" id="by_country">
-                        <div class="form-row align-items-center">
-                            <div class="col-auto my-1">
-                                <div class="form-group">
-                                    <select class="mr-sm-2" id="chooseCountry">
-                                    </select>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4 col-12 order-md-2">
+                                    <div class="text-md-right text-left">
+                                        <div class="col-auto">
+                                            <div class="mr-sm-2 text-muted">Last data point:</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="mr-sm-2 text-muted" id="lastDataPoint"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="mr-sm-2 text-muted">Last data point:</div>
-                            </div>
-                            <div class="col-auto">
-                                <div class="mr-sm-2" id="lastDataPoint">Choose country</div>
+                                <div class="col-md-8 col-12 order-md-1">
+                                    <div class="col-auto my-1">
+                                        <div class="form-group">
+                                            <select class="mr-sm-2" id="chooseCountry">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="container mb-4">
@@ -60,29 +75,45 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
-                            <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale</label>
-                        </div>
+                        <form class="form-inline">
+                            <div class="my-1 mr-2 text-muted custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
+                                <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale | </label>
+                            </div>
+                            <label class="my-1 mr-2 text-muted">Range:</label>
+                            <select class="select-dates custom-select my-1 mr-sm-2" id="startDate">
+                            </select>
+                            <label class="my-1 mr-2 text-muted">To</label>
+                            <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
+                            </select>
+                        </form>
                         <div class="mt-4" id="country_graph"></div>
                     </div>
                     <div class="content" id="compare">
                         <div id="compare_elements">
-                            <h2 class="mb-4">Compare</h2>
+                            <h2 class="mb-2">Compare by countries</h2>
                             <div class="container">
                                 <div class="row mb-4" id="compare_elements_container">
                                 </div>
                             </div>
                         </div>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="logScaleSwitch2">
-                            <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale</label>
-                        </div>
+                        <div class="btn btn-sm btn-secondary mb-2" id="compare_add" onclick="add_element()">Add Country</div>
+                        <form class="form-inline">
+                            <div class="my-1 mr-2 text-muted custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="logScaleSwitch2">
+                                <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale | </label>
+                            </div>
+                            <label class="my-1 mr-2 text-muted">Range:</label>
+                            <select class="select-dates custom-select my-1 mr-sm-2" id="startDate2">
+                            </select>
+                            <label class="my-1 mr-2 text-muted">To</label>
+                            <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
+                            </select>
+                        </form>
                         <div class="mt-4" id="compare_graph"></div>
                     </div>
                 </main>
             </div>
-
         </div>
         <!-- SCRIPTS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js" integrity="sha256-m0QmIsBXcOMiETRmpT3qg2IQ/i0qazJA2miCHzOmS1Y=" crossorigin="anonymous"></script>

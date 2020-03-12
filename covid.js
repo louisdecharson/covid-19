@@ -9,15 +9,48 @@ let links = {
     'confirmed': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
     'death': "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"
 };
-const colors_countries = ["#1abb9b","#3497da","#9a59b5","#34495e","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
+const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
 const colors = ['#2ecb71','#f29b12','#e64c3c'];
 let data = [],
+    data_by_country = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
     cases_categories = ['Recovered','Confirmed','Deaths'],
-    countries = [];
+    countries = [],
+    list_dates = [],
+    startDate,
+    endDate;
+
 let logScale = false,
     logScale2 = false,
-    country, data_country;
+    country, data_country,
+    darkMode = true;
+
+// DARK MODE
+let colorVariables = ['--background-color','--color-text'];
+const root = document.documentElement,
+      rootStyle = getComputedStyle(root);
+let colorsValues = {};
+colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
+                                    colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
+console.log(colorsValues);
+$('#darkmodeSwitch').click(function() {
+    var $this = $(this);
+    if ($this.hasClass('darkmode')) {
+        // switch to light mode
+        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it + '-light']);});
+        $this.removeClass('darkmode badge-secondary');
+        $this.addClass('badge-secondary');
+        $this.text('OFF');
+        darkMode = false;
+    } else {
+        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it+'-dark']);});
+        $this.addClass('darkmode badge-primary');
+        $this.removeClass('badge-secondary');
+        $this.text('ON');
+        darkMode = true;
+    }
+});
+
 
 // ====================================================================== //
 // FUNCTIONS
@@ -51,6 +84,9 @@ function parseData(wide_data, pivot_columns, category) {
             long_data.push(long_element);
         }
     }
+    list_dates = d3.set(data.map(d => d['date'])).values();
+    startDate = list_dates[0];
+    endDate = list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
 function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
@@ -115,6 +151,9 @@ function load_summary_data(data) {
         let data__ = groupBy(data_,'key',['field_value'],[],['field_id']);
         sparkline(`#sparkline_${cases_category}`, data__, 'field_id', 'field_value', logScale);
     }
+}
+function get_dates(data) {
+    list_dates = d3.set(data.map(d => d['date'])).values();
 }
 function sparkline(elemId, data, xVar, yVar, logScale = false) {
     // Plot a Sparkline (see Edward Tufte)
@@ -201,12 +240,20 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     // Select the id
     var svg = d3.select(id + '_g');
 
+    // Data Filtered
+    data = data.filter(d => d['date'] >= new Date(startDate) &&
+                       d['date'] <= new Date(endDate));
+    
+    var color = d3.scaleOrdinal()
+        .domain(categories)
+        .range(colors);
+    
     // Delete the axis
     svg.selectAll('g.x.axis').remove();
     svg.selectAll('g.y.axis').remove();
 
     // X-axis
-    var x = d3.scaleTime()
+    let x = d3.scaleTime()
         .domain(d3.extent(data, d => d[xVar]))
         .range([0, width]);
 
@@ -215,7 +262,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom()
               .scale(x)
-              .tickFormat(d3.timeFormat("%m/%d/%y"))
+              .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
 
     // Y-axis
@@ -242,13 +289,87 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
             .datum(data__)
             .attr('class','lines')
             .attr('fill','none')
-            .attr('stroke', colors[index])
+            .attr('stroke', d => color(category))
             .attr("stroke-width", 2)
             .attr('d',d3.line()
                   .x(d => x(d[xVar]))
                   .y(d => y(d[yVar]))
                  );
     });
+
+    // Add Tooltip (vertical line + tooltip)
+    function addTooltip(g, data, mx, my) {
+        if (!data) return g.style("display", "none");
+        
+        g.style("display", null);
+
+        const xLine = g.selectAll("line")
+              .data([null])
+              .join("line")
+              .attr("class", "tooltip_line")
+              .attr("x1", mx).attr("x2", mx) 
+              .attr("y1", 0).attr("y2", height);
+
+        const dots = g.selectAll("circle")
+              .data(data.slice(1))
+              .join("circle")
+              .style("fill", d => color(d.category))
+              .attr("r", 5)
+              .attr("cx", (d, i) => x(d[xVar]))
+              .attr("cy", (d, i) => y(d[yVar]));
+
+        const path = g.selectAll("rect")
+              .data([null])
+              .join("rect")
+              .attr("class","rect_tooltip");
+
+        const text = g.selectAll("text")
+              .data([null])
+              .join("text")
+              .call(text => text
+                    .selectAll('tspan')
+                    .data(data)
+                    .join("tspan")
+                    .attr("x", 0)
+                    .attr("y", (d, i) => `${i * 1.1}em`)
+                    .attr("class","tooltip_text")
+                    .style("font-weight","bold")
+                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d.category))
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format(',')(d[yVar])}`));
+        const {xx, yy, width: w, height: h} = text.node().getBBox();
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
+        text.attr("transform", `translate(${text_x},${my})`);
+
+        path.attr("x", text_x-5)
+            .attr("y", my - 20)
+            .attr("rx", 5)
+            .attr("width", w + 10)
+            .attr("height", h + 10);
+        
+        return true;
+    };
+    function getMouseData(mx) {
+        const bisect = d3.bisector(d => d[xVar]).left;
+        let mouseDate = x.invert(mx),
+            i = bisect(data, mouseDate),
+            a = data[i-1],
+            b = data[i],
+            fid = mouseDate - a[xVar] > mouseDate - b[xVar] ? b['field_id'] : a['field_id'],
+            date = mouseDate - a[xVar] > mouseDate - b[xVar] ? b[xVar] : a[xVar],
+            values = data.filter(d => d['field_id'] === fid).sort((a,b) => b[yVar] - a[yVar]);
+        return [date].concat(values);
+    }
+    svg.selectAll("g.tooltip_container").remove();
+    const tooltip = svg.append("g").attr("class","tooltip_container");
+    svg.on("touchmove mousemove", function() {
+        let mouseData = getMouseData(d3.mouse(this)[0]),
+            mouse_y = d3.mouse(this)[1];
+        tooltip
+            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+    });
+    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
+
+    
     // Add legend
     addLegend(id+'_svg',categories,3*margin.right,margin.top);
 }
@@ -302,54 +423,21 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
     // Select the id
     var svg = d3.select(id + '_g');
 
+    // Filter data
+    data = data.filter(d => d['date'] >= new Date(startDate) &&
+                       d['date'] <= new Date(endDate));
+    
     // Delete the axis
     svg.selectAll('g.x.axis').remove();
     svg.selectAll('g.y.axis').remove();
 
-    // X-axis
-    var x = d3.scaleTime()
-        .domain(d3.extent(data, d => d[xVar]))
-        .range([0, width]);
+    // Get the list of dates
+    let dates = d3.set(data.map(d => d[xVar])).values();
 
-    svg.append("g")
-        .attr('class','x axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom()
-              .scale(x)
-              .tickFormat(d3.timeFormat("%m/%d/%y"))
-             );
-
-    // Y-axis
-    let y;
-    let yscale = [],
+    // Get y data with the offsets
+    let y_data = [],
         keys = [];
-    elements.forEach(function(element,index) {
-        let _ = data.filter(d => (d['category'] === element['category'] &&
-                                  d['Country/Region'] === element['Country/Region']));
-        yscale = yscale.concat(d3.extent(_, d => d[yVar]));
-        keys.push(element['Country/Region'] + " - " + element['category']);
-    });
-    if (logScale) {
-        y = d3.scaleSymlog()
-            .domain(d3.extent(yscale))
-            .nice()
-            .range([height, 0]);
-    } else {
-        y = d3.scaleLinear()
-            .domain(d3.extent(yscale))
-            .nice()
-            .range([height, 0]);
-    }
-    svg.append("g")
-        .attr('class','y axis')
-        .call(d3.axisLeft(y).tickFormat(d3.format('.3s')));
-
     // Offset
-    let offset = function(date, offset_value) {
-        let d = new Date(date);
-        d.setDate(d.getDate() + offset_value);
-        return d;
-    };
     function offset_data(data, offset_value) {
         data.forEach(function(it,ind) {
             let value = ind + offset_value < data.length ? data[ind + offset_value][yVar] : NaN;
@@ -357,20 +445,49 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
         });
         return data;
     }
+    elements.forEach(function(element,index) {
+        let _ = data.filter(d => (d['category'] === element['category'] &&
+                                  d['Country/Region'] === element['Country/Region']));
+        _ = offset_data($.extend(true, [], _), element['offset']);
+        y_data = y_data.concat(_);
+        keys.push(element['Country/Region'] + " - " + element['category']);
+    });
+    
+    // X-axis
+    var x = d3.scaleTime()
+        .domain(d3.extent(y_data, d => d[xVar]))
+        .range([0, width]);
+
+    svg.append("g")
+        .attr('class','x axis')
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom()
+              .scale(x)
+              .tickFormat(d3.timeFormat("%d/%m/%y"))
+             );
+
+    // Y-axis
+    let y;    
+    y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
+        .domain(d3.extent(y_data, d => d[yVar]))
+        .nice()
+        .range([height, 0]);
+    svg.append("g")
+        .attr('class','y axis')
+        .call(d3.axisLeft(y).tickFormat(d3.format('.3s')));
 
     // Colors
     let color = d3.scaleOrdinal()
         .domain(keys)
         .range(colors_countries);
-    
+
+    // Add lines
     svg.selectAll('path.lines').remove();
     elements.forEach(function(element,index) {
-        let data_ = data.filter(d => (d['category'] === element['category'] &&
-                                      d['Country/Region'] === element['Country/Region']));
-        let data__ = $.extend(true, [], data_);
-        offset_data(data__, element['offset']);
+        let _ = y_data.filter(d => (d['category'] === element['category'] &&
+                                    d['Country/Region'] === element['Country/Region']));
         svg.append('path')
-            .datum(data__)
+            .datum(_)
             .attr('class','lines')
             .attr('fill','none')
             .attr('stroke', color(element['Country/Region'] + " - " + element['category']))
@@ -380,19 +497,101 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
                   .y(d => y(d[yVar]))
                  );
     });
+    
+    // Add Tooltip (vertical line + tooltip)
+    function addTooltip(g, data, mx, my) {
+        if (!data) {
+            g.selectAll("line").remove();
+            g.selectAll("circle").remove();
+            g.selectAll("text").remove();
+            return g.style("display", "none");
+        }
+        
+        g.style("display", null);
+
+
+        const xLine = g.selectAll("line")
+              .data([null])
+              .join("line")
+              .attr("class","tooltip_line")
+              .attr("x1", mx).attr("x2", mx) 
+              .attr("y1", 0).attr("y2", height);
+
+        const dots = g.selectAll("circle")
+              .data(data.slice(1))
+              .join("circle")
+              .style("fill", (d, i) => color(d['Country/Region'] + " - " + d['category']))
+              .attr("r", 5)
+              .attr("cx", (d, i) => x(d[xVar]))
+              .attr("cy", (d, i) => y(d[yVar]));
+
+        const path = g.selectAll("rect")
+              .data([null])
+              .join("rect")
+              .attr("class","rect_tooltip");
+        
+        const text = g.selectAll("text")
+              .data([null])
+              .join("text")
+              .call(text => text
+                    .selectAll('tspan')
+                    .data(data)
+                    .join("tspan")
+                    .attr("x", 0)
+                    .attr("y", (d, i) => `${i * 1.1}em`)
+                    .style("font-weight","bold")
+                    .style("fill",(d, i) => i === 0 ? '#dadada' : color(d['Country/Region'] + " - " + d['category']))
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d[yVar])}`));
+        const {xx, yy, width: w, height: h} = text.node().getBBox();
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
+        text.attr("transform", `translate(${text_x},${my})`);
+
+        path.attr("x", text_x-5)
+            .attr("y", my - 20)
+            .attr("rx", 5)
+            .attr("width", w + 10)
+            .attr("height", h + 10);
+
+        // path.attr("transform",`translate(${text_x},${my})`);
+
+        return true;
+    };
+    function getMouseData(mx) {
+        const bisect = d3.bisector(d => d[xVar]).left;
+        let mouseDate = x.invert(mx),
+            i = bisect(y_data, mouseDate),
+            a = y_data[i-1],
+            b = y_data[i],
+            fid = mouseDate - a[xVar] > mouseDate - b[xVar] ? b['field_id'] : a['field_id'],
+            date = mouseDate - a[xVar] > mouseDate - b[xVar] ? b[xVar] : a[xVar],
+            values = y_data.filter(d => d['field_id'] === fid).sort((a,b) => b[yVar] - a[yVar]);
+        return [date].concat(values);
+    }
+    svg.selectAll("g.tooltip_container").remove();
+    const tooltip = svg.append("g").attr("class","tooltip_container");
+    svg.on("touchmove mousemove", function() {
+        let mouseData = getMouseData(d3.mouse(this)[0]),
+            mouse_y = d3.mouse(this)[1];
+        tooltip
+            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+    });
+    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
+
+    // Add legend
     addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
 }
+
 function build_elements_compare() {
     let html = '';
     for (const [index, element] of elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
         // html += '<div class="col-md-3 col-6"> <div class="card element"><div class="card-title country_element">' + element['Country/Region'] + '</div>';
-        html += `<div class="col-md-3 col-6"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
+        html += `<div class="col-lg-4 col-md-6 col-6 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
         for (const country of countries) {
             let selected = country === element['Country/Region'] ? 'selected' : '';
             html += '<option ' + selected + '>' + country + '</option>';
         }
-        html += '</select></div>';
+        html += '</select><svg class="ml-4 svg-icon delete-element" onclick=delete_element('+ element.id +') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>';
         html += `<div class="category_element mb-1 mt-1"><select onchange="update_element(this,'category')" class="select-category-element" element_id="${element.id}">`;
         for (const category of cases_categories) {
             let selected = category === element['category'] ? 'selected' : '';
@@ -410,7 +609,7 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    updateGraphComparison(data, logScale2);
+    updateGraphComparison(data_by_country, logScale2);
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
@@ -419,7 +618,42 @@ function update_element(el, property) {
             it[property] = el.value;
         }
     });
-    updateGraphComparison(data, logScale2);
+    updateGraphComparison(data_by_country, logScale2);
+}
+function add_element() {
+    let last_el = elements.length > 0 ? $.extend(true, {}, elements[elements.length-1]) : {
+        "Country/Region": "France",
+        "category": "Confirmed",
+        "offset": 0
+    }; // copy last element
+    last_el['Country/Region'] = elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
+    elements = elements.concat(last_el);
+    build_elements_compare();
+    updateGraphComparison(data_by_country, logScale2);
+}
+function delete_element(id) {
+    elements = elements.filter(d => d.id != id);
+    build_elements_compare();
+    updateGraphComparison(data_by_country, logScale2);
+}
+
+function addDatestoSelect() {
+    let html_start_dates = '',
+        html_end_dates = '';
+    for (const d of list_dates) {
+        html_start_dates += '<option ' + (d === startDate ? 'selected' : '') + '>' + d3.timeFormat("%d-%b-%y")(new Date(d)) + '</option>';
+        html_end_dates += '<option ' + (d === endDate ? 'selected' : '') + '>' + d3.timeFormat("%d-%b-%y")(new Date(d)) + '</option>';
+    }
+    $('#startDate').html(html_start_dates);
+    $('#endDate').html(html_end_dates);
+    $('#startDate2').html(html_start_dates);
+    $('#endDate2').html(html_end_dates);
+
+}
+function filterData(data) {
+    return data.filter(d => d['country'] === country &&
+                       d['date'] >= startDate &&
+                       d['date'] <= endDate);
 }
 // ====================================================================== //
 createGraph('#country_graph');
@@ -429,10 +663,15 @@ let elements = [
     {
         "Country/Region": "France",
         "category": "Confirmed",
-        "offset": 3
+        "offset": 0
     },
     {
         "Country/Region": "Italy",
+        "category": "Confirmed",
+        "offset": 0
+    },
+    {
+        "Country/Region": "Spain",
         "category": "Confirmed",
         "offset": 0
     }
@@ -461,11 +700,14 @@ let timer = setInterval(() => {
         country = 'World';
         data_country = data.filter(d => d['Country/Region'] === country);
         load_summary_data(data_country);
+        addDatestoSelect();
         updateGraph('#country_graph', data_country, 'date','field_value', logScale);
 
         // Compare
+        data_by_country = groupBy(data,'key',['field_value'],[],
+                                  ['field_id','Country/Region','date','category','Lat','Long']);
         build_elements_compare();
-        updateGraphComparison(data, logScale2);
+        updateGraphComparison(data_by_country, logScale2);
     }
 }, 100);
 
@@ -491,11 +733,28 @@ $('#logScaleSwitch').change(function(){
     load_summary_data(data_country);
 });
 
-
+//
 $('#logScaleSwitch2').change(function(){
     logScale2 = logScale2 ? false : true;
-    updateGraphComparison(data, logScale2);
+    updateGraphComparison(data_by_country, logScale2);
 });
-$('.select-category-element').on('change',function(){
-    
+
+// Dates
+$('#startDate').change(function() {
+    startDate = new Date($('#startDate option:selected').text());
+    updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+
+});
+$('#endDate').change(function() {
+    endDate = new Date($('#endDate option:selected').text());
+    updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+});
+$('#startDate2').change(function() {
+    startDate = new Date($('#startDate2 option:selected').text());
+    updateGraphComparison(data_by_country, logScale2);
+
+});
+$('#endDate2').change(function() {
+    endDate = new Date($('#endDate2 option:selected').text());
+    updateGraphComparison(data_by_country, logScale2);
 });
