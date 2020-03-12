@@ -449,12 +449,15 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
         });
         return data;
     }
+    function getKey(e) {
+        return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
+    }
     elements.forEach(function(element,index) {
         let _ = data.filter(d => (d['category'] === element['category'] &&
                                   d['Country/Region'] === element['Country/Region']));
         _ = offset_data($.extend(true, [], _), element['offset']);
         y_data = y_data.concat(_);
-        keys.push(element['Country/Region'] + " - " + element['category']);
+        keys.push(getKey(element));
     });
     
     // X-axis
@@ -494,7 +497,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
             .datum(_)
             .attr('class','lines')
             .attr('fill','none')
-            .attr('stroke', color(element['Country/Region'] + " - " + element['category']))
+            .attr('stroke', color(getKey(element)))
             .attr("stroke-width", 2)
             .attr('d',d3.line()
                   .x(d => x(d[xVar]))
@@ -524,7 +527,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
         const dots = g.selectAll("circle")
               .data(data.slice(1))
               .join("circle")
-              .style("fill", (d, i) => color(d['Country/Region'] + " - " + d['category']))
+              .style("fill", (d, i) => color(getKey(d)))
               .attr("r", 5)
               .attr("cx", (d, i) => x(d[xVar]))
               .attr("cy", (d, i) => y(d[yVar]));
@@ -544,7 +547,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
                     .attr("x", 0)
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d['Country/Region'] + " - " + d['category']))
+                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(getKey(d)))
                     .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
