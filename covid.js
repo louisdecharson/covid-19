@@ -540,7 +540,7 @@ function updateGraphComparison(data, logScale = false, id = "#compare_graph", w 
                     .attr("x", 0)
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? '#dadada' : color(d['Country/Region'] + " - " + d['category']))
+                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d['Country/Region'] + " - " + d['category']))
                     .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
