@@ -9,8 +9,8 @@ const root = document.documentElement,
 
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-const colors = ['#2ecb71','#f29b12','#e64c3c'];
-let colorVariables = ['--background-color','--color-text'];
+const colors = ['#2ecb71','#f29b12','#e64c3c']; // red, green orange for dead, confirmed and recovered cases
+let colorVariables = ['--background-color','--color-text']; // for dark mode
 let colorsValues = {};
 colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
                                     colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
@@ -340,11 +340,14 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d.category))
                     .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percPopulation ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
-        text.attr("transform", `translate(${text_x},${my})`);
+
+        // Make sure the tooltip is always in the graph area (and visible)
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
+            text_y = h + my - 20 > height ? my - h : my;
+        text.attr("transform", `translate(${text_x},${text_y})`);
 
         path.attr("x", text_x-5)
-            .attr("y", my - 20)
+            .attr("y", text_y - 20)
             .attr("rx", 5)
             .attr("width", w + 10)
             .attr("height", h + 10);
@@ -550,11 +553,11 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(getKey(d)))
                     .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10 ;
-        text.attr("transform", `translate(${text_x},${my})`);
-
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
+            text_y = h + my - 20 > height ? my - h : my;
+        text.attr("transform", `translate(${text_x},${text_y})`);
         path.attr("x", text_x-5)
-            .attr("y", my - 20)
+            .attr("y", text_y-20)
             .attr("rx", 5)
             .attr("width", w + 10)
             .attr("height", h + 10);
