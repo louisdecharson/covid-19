@@ -220,19 +220,18 @@ function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
         .attr('id',id.substring(1,) + '_g')
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
-
-    // Add overlay for focus & tooltip
+    // // Add overlay for focus & tooltip
     svg.append("rect")
         .attr("class", "overlay")
         .attr("width", width)
         .attr("height", height);
-    // Append circle
-    svg.append("g")
-        .attr("class", "focus")
-        .append('circle')
-        .attr('class', 'circle-focus')
-        .attr("r", 5)
-        .style('display','none');
+    // // Append circle
+    // svg.append("g")
+    //     .attr("class", "focus")
+    //     .append('circle')
+    //     .attr('class', 'circle-focus')
+    //     .attr("r", 5)
+    //     .style('display','none');
 
 }
 function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGraph, h = heightMainGraph, categories = cases_categories) {
@@ -254,7 +253,8 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     // Delete the axis
     svg.selectAll('g.x.axis').remove();
     svg.selectAll('g.y.axis').remove();
-
+    svg.selectAll('g.yGrid').remove();
+    
     // X-axis
     let x = d3.scaleTime()
         .domain(d3.extent(data, d => d[xVar]))
@@ -270,20 +270,31 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
 
     // Y-axis
     let y;
-    if (logScale) {
-        y = d3.scaleSymlog()
-            .domain(d3.extent(data, d => d[yVar]))
-            .range([height, 0])
-            .nice();
-    } else {
-        y = d3.scaleLinear()
-            .domain(d3.extent(data, d => d[yVar]))
-            .range([height, 0]);
-    }
+    y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
+        .domain(d3.extent(data, d => d[yVar]))
+        .nice()
+        .range([height, 0]);
+
+    let yGrid = svg => svg
+        .call(d3.axisRight(y)
+              .tickSize(width)
+              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))))
+        .call(g => g.selectAll('.domain').remove())
+        .call(g => g.selectAll(".tick:not(:first-of-type) line")
+              .attr("stroke-opacity", 0.5)
+              .attr("stroke-dasharray", "2,2"))
+        .call(g => g.selectAll(".tick text")
+              .remove());
+    
+    svg.append("g")
+        .attr('class','yGrid')
+        .call(yGrid);
+
     svg.append("g")
         .attr('class','y axis')
-        .call(d3.axisLeft(y).tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
-    
+        .call(d3.axisLeft(y)
+              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
+        
     // Add the content
     svg.selectAll('path.lines').remove();
     categories.forEach(function(category,index) {
@@ -383,35 +394,55 @@ function addLegend(id, keys, px, py, colors_ = colors) {
     var color = d3.scaleOrdinal()
         .domain(keys)
         .range(colors_);
-    var svg = d3.select(id);
-    var mydots = svg.selectAll(".dots-legend")
-        .data(keys);
 
+    const svg = d3.select(id);
+
+    // remove legend if exist
+    svg.selectAll('.legend').remove();
+    const legend = svg.append('g')
+          .attr('class','legend');
+
+    const  path = legend.selectAll("rect")
+          .data([null])
+          .join("rect")
+          .attr("class","rect_legend");
+    
+    const mydots = legend.selectAll(".dots-legend")
+          .data(keys);
     mydots.exit().remove();
     mydots.enter()
         .append("circle")
         .merge(mydots)
-        .attr("cx", px)
+        .attr("cx", px + 10)
         .attr("cy", (d,i) =>  py + i*25) // 100 is where the first dot appears. 25 is the distance between dots
         .attr("r", 3)
         .attr('class','dots-legend')
         .style("fill",d => color(d));
 
     // Add one dot in the legend for each name.
-    var mylabels = svg.selectAll(".labels-legend")
+    var mylabels = legend.selectAll(".labels-legend")
         .data(keys);
     mylabels.exit().remove();
     mylabels.enter()
         .append("text")
         .merge(mylabels)
-        .attr("x", px + 20)
+        .attr("x", px + 30)
         .attr("y", (d,i) => py + i*25) // 100 is where the first dot appears. 25 is the distance between dots
         .style("fill", d => color(d))
         .text(t => t)
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
         .attr('class','labels-legend');
+
+    const {x, y, width: w, height: h} = legend.node().getBBox();
+    path.attr('x',px-5)
+        .attr('y',py-5)
+        .attr('width', (w > 0 ? w + 10 : d3.max(keys.map(d => d.length))*10 + 10)) // if graph is not displayed the width and height will be zero (*)
+        .attr('height',(h > 0 ?  h + 10 : keys.length * 25 + 10));
+    // (*) we try to estimate the width and height based on max
+    //     nb of characthers of the legend text and nb of keys
 }
+
 function computeWorldData() {
     let data_ = groupBy(data_by_country,'key_world',['field_value','Population'],[],['field_id','Country/Region','date','category','Lat','Long','Province/State']);
     data_.forEach(function(d){
@@ -437,6 +468,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     // Delete the axis
     svg.selectAll('g.x.axis').remove();
     svg.selectAll('g.y.axis').remove();
+    svg.selectAll('g.yGrid').remove();
 
     // Get the list of dates
     let dates = d3.set(data.map(d => d[xVar])).values();
@@ -482,10 +514,27 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
         .domain(d3.extent(y_data, d => d[yVar]))
         .nice()
         .range([height, 0]);
+
+    let yGrid = svg => svg
+        .call(d3.axisRight(y)
+              .tickSize(width)
+              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))))
+        .call(g => g.selectAll('.domain').remove())
+        .call(g => g.selectAll(".tick:not(:first-of-type) line")
+              .attr("stroke-opacity", 0.5)
+              .attr("stroke-dasharray", "2,2"))
+        .call(g => g.selectAll(".tick text")
+              .remove());
+    
+    svg.append("g")
+        .attr('class','yGrid')
+        .call(yGrid);
+
     svg.append("g")
         .attr('class','y axis')
-        .call(d3.axisLeft(y).tickFormat(d3.format((percPopulation2 ? '%' : '.3s'))));
-
+        .call(d3.axisLeft(y)
+              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
+    
     // Colors
     let color = d3.scaleOrdinal()
         .domain(keys)
@@ -561,9 +610,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
             .attr("rx", 5)
             .attr("width", w + 10)
             .attr("height", h + 10);
-
-        // path.attr("transform",`translate(${text_x},${my})`);
-
         return true;
     };
     function getMouseData(mx) {

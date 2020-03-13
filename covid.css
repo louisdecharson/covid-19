@@ -150,6 +150,10 @@ select option{
     fill-opacity: 0.8;
     stroke: var(--color-text);
 }
+.rect_legend {
+    fill: var(--background-color);
+    fill-opacity: 0.5;
+}
 .tooltip_line {
     stroke: var(--color-text)
 }
