@@ -220,18 +220,13 @@ function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
         .attr('id',id.substring(1,) + '_g')
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
-    // // Add overlay for focus & tooltip
+
+    // Add overlay for focus & tooltip
+    // (useful to pointer events, see css)
     svg.append("rect")
         .attr("class", "overlay")
         .attr("width", width)
         .attr("height", height);
-    // // Append circle
-    // svg.append("g")
-    //     .attr("class", "focus")
-    //     .append('circle')
-    //     .attr('class', 'circle-focus')
-    //     .attr("r", 5)
-    //     .style('display','none');
 
 }
 function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGraph, h = heightMainGraph, categories = cases_categories) {
@@ -476,11 +471,13 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     // Get y data with the offsets
     let y_data = [],
         keys = [];
+
     // Offset
     function offset_data(data, offset_value) {
         data.forEach(function(it,ind) {
             let value = ind + offset_value < data.length ? data[ind + offset_value][yVar] : NaN;
-            it[yVar] = value;
+            it[yVar] = value; // update value
+            it.offset = offset_value; // add offset to the element
         });
         return data;
     }
@@ -600,7 +597,8 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(getKey(d)))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['Country/Region']} - ${d['category']}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
+        
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
             text_y = h + my - 20 > height ? my - h : my;
