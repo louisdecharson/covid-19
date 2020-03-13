@@ -83,6 +83,10 @@ select option{
     text-transform: uppercase;
     margin-top: 1rem;
 }
+.sidebar-heading.active {
+    background-color: rgba(140,140,140,0.5);
+    border-radius: 0.5rem;
+}
 
 /* Colors */
 .confirmed {

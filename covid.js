@@ -639,8 +639,7 @@ function build_elements_compare() {
     let html = '';
     for (const [index, element] of elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
-        // html += '<div class="col-md-3 col-6"> <div class="card element"><div class="card-title country_element">' + element['Country/Region'] + '</div>';
-        html += `<div class="col-lg-4 col-md-6 col-6 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
+        html += `<div class="col-lg-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
         for (const country of countries) {
             let selected = country === element['Country/Region'] ? 'selected' : '';
             html += '<option ' + selected + '>' + country + '</option>';
@@ -786,7 +785,12 @@ let timer = setInterval(() => {
 // ======
 
 $('.sidebar_show').click(function(){
-    var target = $(this).attr('target');
+    let $this = $(this);
+    let target = $this.attr('target');
+    $('.sidebar_show.active').each(function() {
+        $(this).removeClass('active');
+    });
+    $this.addClass('active');
     $('.content').hide();
     $(target).show();
 });
