@@ -1,12 +1,15 @@
 :root{
-    --background-color: #181818;
-    --color-text: #dadada;
+    --background-color: #323232;
+    --color-text: #ffffff;
+    --text-muted: #cccccc;
 
-    --background-color-dark: #181818;
-    --color-text-dark: #dadada;
+    --background-color-dark: #323232;
+    --color-text-dark: #ffffff;
+    --text-muted-dark: #cccccc;
 
     --background-color-light: #ffffff;
     --color-text-light: #181818;
+    --text-muted-light: #6c757d;
     
 }
 body {
@@ -14,6 +17,9 @@ body {
     font: "Helvetica", Arial;
     background-color: var(--background-color); 
     color: var(--color-text);
+}
+.text-muted {
+    color: var(--text-muted) !important;
 }
 #country_graph_svg {
     background-color: var(--background-color);;
@@ -136,16 +142,16 @@ select option{
 }
 .select-dates {
     padding: 0.3em;
-    color: #6c757d;
+    color: var(--text-muted);
     background: transparent;
     -webkit-appearance: none;
-    border: 1px solid #6c757d;
+    border: 1px solid var(--text-muted);
 }
 .delete-element {
          cursor: pointer;
 }
 .delete-plot path {
-    fill: #9e9e9e;
+    fill: var(--text-muted);
 }
 
 /*  Tooltip */

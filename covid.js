@@ -10,7 +10,7 @@ const root = document.documentElement,
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
 const colors = ['#2ecb71','#f29b12','#e64c3c']; // red, green orange for dead, confirmed and recovered cases
-let colorVariables = ['--background-color','--color-text']; // for dark mode
+let colorVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
 let colorsValues = {};
 colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
                                     colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
@@ -173,14 +173,12 @@ function get_list_countries(data) {
 function load_summary_data() {
     for (const category of cases_categories) {
         let data_category = data_country.filter(f => f['category'] === category),
-            last_date = data_category.slice(-1)[0]['field_id'],
+            last_date = data_category.slice(-1)[0]['date'],
             last_value = data_category.slice(-1)[0][(percPopulation ? 'field_value_pop' : 'field_value')];
 
         // Add this data to 
         $(`#nb_${category.toLowerCase()}`).html(d3.format((percPopulation ? '%' : ','))(last_value));
-        $('#lastDataPoint').html(last_date);
-        
-        // let data__ = groupBy(data_category,'key',['field_value'],[],['field_id']);
+        $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
         sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
     }
 }
@@ -328,7 +326,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
             .attr('class','lines')
             .attr('fill','none')
             .attr('stroke', d => color(category))
-            .attr("stroke-width", 2)
+            .attr("stroke-width", 3)
             .attr('d',d3.line()
                   .x(d => x(d[xVar]))
                   .y(d => y(d[yVar]))
@@ -576,7 +574,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
             .attr('class','lines')
             .attr('fill','none')
             .attr('stroke', color(getKey(element)))
-            .attr("stroke-width", 2)
+            .attr("stroke-width", 3)
             .attr('d',d3.line()
                   .x(d => x(d[xVar]))
                   .y(d => y(d[yVar]))
