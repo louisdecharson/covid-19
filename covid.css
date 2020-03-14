@@ -169,3 +169,36 @@ tooltip_text {
     cursor: pointer;
 }
 
+
+.banner {
+    display: inline-block;
+    font-size: 0.8rem;
+}
+/* popup */
+#crossquit{
+    position:absolute;
+    color: var(--color-text);
+    margin: 0;
+    top: 2%; left:97%;
+    cursor:pointer;
+}
+#popup{
+    display:none;
+    z-index: 1000;
+    position:absolute;
+    margin: 0;
+    width: 90%;
+    top: 5%;
+    left:5%;
+    padding: 2%;
+    background-color: var(--background-color);
+    color: var(--color-text);
+    border: 1px solid var(--color-text);
+    border-radius: 25px;
+}
+@media (min-width: 1200px) {
+    #popup{
+        width: 60%;
+        left: 20%;
+    }
+}

@@ -90,6 +90,35 @@ function parseData(wide_data, pivot_columns, category) {
     endDate = list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
+function addRates(data) {
+    let keys = d3.set(data.map(d => d['Country/Region']+d['field_id'])).values();
+    let new_elements = [];
+    console.log(keys.length);
+    for (const key of keys) {
+        let _ = data.filter(d => d['Country/Region']+d['field_id'] === key);
+        let confirmed = _.filter(d => d['key'] === 'Confirmed' + key)[0],
+            deaths = _.filter(d => d['key'] === 'Deaths' + key)[0],
+            recovered = _.filter(d => d['key'] === 'Recovered' + key)[0],
+            death_rate = confirmed === 0 ? 0 : deaths['field_value'] / confirmed['field_value'],
+            recovered_rate = confirmed === 0 ? 0 : recovered['field_value'] / confirmed['field_value'];
+
+        // Reuse the element to add them to data
+        let death_rate_el = $.extend(true, {}, deaths);
+        death_rate_el['category'] = 'Deaths rate';
+        death_rate_el['field_value'] = death_rate;
+        death_rate_el['key'] = 'Deaths rate ' + key;
+        new_elements.push(death_rate_el);
+
+        let recov_rate_el = $.extend(true, {}, deaths);
+        recov_rate_el['category'] = 'Recovered rate';
+        recov_rate_el['field_value'] = recovered_rate;
+        death_rate_el['key'] = 'Recovered rate ' + key;
+        new_elements.push(recov_rate_el);
+    }
+    return data.concat(new_elements);
+}
+
+
 function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
     // This function mimics a groupby with sum as the agg function.
     // It uses D3.js
@@ -769,6 +798,9 @@ let timer = setInterval(() => {
         // Compute data for the world
         data_by_country = computeWorldData();
         get_list_countries(data_by_country);
+
+        // Add rates
+        // data_by_country = addRates(data_by_country);
         
         country = 'World';
         data_country = data_by_country.filter(d => d['Country/Region'] === country);
@@ -841,4 +873,11 @@ $('#startDate2').change(function() {
 $('#endDate2').change(function() {
     endDate = new Date($('#endDate2 option:selected').text());
     updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+});
+
+$('#view_popup').click(function(){
+    $("#popup").show();
+});
+$('#crossquit').click(function(){
+        $("#popup").hide();
 });

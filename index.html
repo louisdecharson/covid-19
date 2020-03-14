@@ -9,8 +9,23 @@
     </head>
     
     <body>
+        <div id="popup">
+            <span id="crossquit">x</span>
+            <center><h3>Content and data issues</h3></center>
+            <hr>
+            <p>Data of COVID-19 cases is retrieved from Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">github repository</a>. Browse it to know more about potential errors or data issues.</p>
+            <p>Population data is from the <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a> for most of the countries and for national statistics institute. Population data is from 2018 and is stored here <a href="https://github.com/louisdecharson/covid-19/blob/master/population_data.csv">github.com/louisdecharson/covid-19/population_data.csv</a></p>
+            <p>The code is on <a href="http://github.com/louisdecharson/covid-19">Github.</a></p>
+            <h4>Known data issues</h4>
+            <ul>
+                <li>12/03/2019: Data for <strong>12/03/2019</strong> appears to be wrong on some European countries. No new cases has been reported in the data contrary to figures reported in other sources. Read more <a href="https://github.com/CSSEGISandData/COVID-19/issues/599">here</a>.</li>
+            </ul>
+        </div>
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
-        <p class="text-muted font-italic" style="font-size: 0.8rem">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a></p>
+        <div>
+            <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
+        </div>
+        <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div>
         <div class="container" id="container">
             <div class="row">
                 <nav class="col-12 col-md-2 sidebar order-md-1">
