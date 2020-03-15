@@ -125,7 +125,10 @@ select option{
 .offset_element {
     margin: auto;
     font-style: italic;
-} 
+}
+hr {
+    border-top: 1px solid var(--text-muted);
+}
 .select-country-element {
     padding: 0.3em;
     color: var(--color-text);

@@ -37,7 +37,7 @@
             </ul>
         </div>
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
-        <div>
+        <div class="m-2">
             <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
         </div>
         <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div>
@@ -67,7 +67,7 @@
                         <div class="container mb-2">
                             <div class="row">
                                 <div class="col-md-4 col-12 order-md-2">
-                                    <div class="text-md-right text-left">
+                                    <div class="text-md-right text-left form-row">
                                         <div class="col-auto">
                                             <div class="mr-sm-2 text-muted">Last data point:</div>
                                         </div>
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-12 order-md-1">
-                                    <form class="form-inline">
+                                    <form class="form-inline mb-2 mt-2 form-row">
                                         <div class="col-auto my-1">
                                             <div class="form-group">
                                                 <select class="mr-sm-2" id="chooseCountry">
@@ -122,6 +122,10 @@
                             <label class="my-1 mr-2 text-muted">To</label>
                             <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
                             </select>
+                            <div class="my-1 mr-2 text-muted custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="barSwitch">
+                                <label class="custom-control-label text-muted" for="barSwitch">Bars</label>
+                            </div>
                         </form>
                         <div class="mt-4" id="country_graph"></div>
                     </div>

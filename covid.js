@@ -28,6 +28,7 @@ let data = [],
     population_data = [];
 let logScale = false,
     logScale2 = false,
+    lines = true,
     country, data_country,
     darkMode = true,
     percPopulation = false,
@@ -256,7 +257,7 @@ function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
         .attr("height", height);
 
 }
-function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGraph, h = heightMainGraph, categories = cases_categories) {
+function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w = widthMainGraph, h = heightMainGraph, categories = cases_categories) {
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
@@ -278,8 +279,17 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     svg.selectAll('g.yGrid').remove();
     
     // X-axis
+    function extendOneDay(extent) {
+        // in case of bars, we extend by one day the x-axis
+        function addOneDay(date) {
+                let nextDay = new Date(date);
+                nextDay.setDate(nextDay.getDate() + 1);
+                return nextDay;
+            }
+        return [extent[0], addOneDay(extent[1])];
+    }
     let x = d3.scaleTime()
-        .domain(d3.extent(data, d => d[xVar]))
+        .domain((lines ? d3.extent(data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar]))))
         .range([0, width]);
 
     svg.append("g")
@@ -289,6 +299,11 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
               .scale(x)
               .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
+
+    // Second X-axis (bars)
+    let x2 = d3.scaleBand()
+        .domain(categories)
+        .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
 
     // Y-axis
     let y;
@@ -320,17 +335,39 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
     // Add the content
     svg.selectAll('path.lines').remove();
     categories.forEach(function(category,index) {
-        var data__ = data.filter(d => d.category === category);
-        svg.append('path')
-            .datum(data__)
-            .attr('class','lines')
-            .attr('fill','none')
-            .attr('stroke', d => color(category))
-            .attr("stroke-width", 3)
-            .attr('d',d3.line()
-                  .x(d => x(d[xVar]))
-                  .y(d => y(d[yVar]))
-                 );
+        if (lines) {
+            svg.selectAll(`rect.${category}`).remove();
+            svg.append('path')
+                .datum(data.filter(d => d.category === category))
+                .attr('class','lines')
+                .attr('fill','none')
+                .attr('stroke',  d => color(category))
+                .attr("stroke-width", 3)
+                .attr('d', d3.line()
+                      .x(d => x(d[xVar]))
+                      .y(d => y(d[yVar])));
+            
+        } else {
+            svg.selectAll(`rect.${category}`)
+                .data(data.filter(d => d.category === category))
+                .join('rect')
+                .attr('class', category)
+                .attr('fill',  d => color(category))
+                .attr('x', d => x(d[xVar]) + x2(category))
+                .attr('width', x2.bandwidth())
+                .attr('y',  (d => y(d[yVar])))
+                .attr('height', d => (height - y(d[yVar])))
+                .on("mouseover", function(d) {
+	            d3.select(this).attr("fill", function() {
+                        return d3.rgb(d3.select(this).style("fill")).darker(0.5);
+                    });
+                })
+                .on("mouseout", function(d) {
+	            d3.select(this).attr("fill", function() {
+                        return d3.rgb(d3.select(this).style("fill")).brighter(0.5);
+                    });
+                });
+        }
     });
 
     // Add Tooltip (vertical line + tooltip)
@@ -345,14 +382,16 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
               .attr("class", "tooltip_line")
               .attr("x1", mx).attr("x2", mx) 
               .attr("y1", 0).attr("y2", height);
-
-        const dots = g.selectAll("circle")
-              .data(data.slice(1))
-              .join("circle")
-              .style("fill", d => color(d.category))
-              .attr("r", 5)
-              .attr("cx", (d, i) => x(d[xVar]))
-              .attr("cy", (d, i) => y(d[yVar]));
+        
+        if (lines) {
+            const dots = g.selectAll("circle")
+                  .data(data.slice(1))
+                  .join("circle")
+                  .style("fill", d => color(d.category))
+                  .attr("r", 5)
+                  .attr("cx", (d, i) => x(d[xVar]))
+                  .attr("cy", (d, i) => y(d[yVar]));
+        }
 
         const path = g.selectAll("rect")
               .data([null])
@@ -392,19 +431,20 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, w = widthMainGra
         let mouseDate = x.invert(mx),
             i = bisect(data, mouseDate),
             a = data[i-1],
-            b = data[i],
-            fid = mouseDate - a[xVar] > mouseDate - b[xVar] ? b['field_id'] : a['field_id'],
-            date = mouseDate - a[xVar] > mouseDate - b[xVar] ? b[xVar] : a[xVar],
-            values = data.filter(d => d['field_id'] === fid).sort((a,b) => b[yVar] - a[yVar]);
+            b = i > data.length - 1 ? data.slice(-1)[0] : data[i],
+            f_id = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b['field_id'] : a['field_id']) : (mouseDate < b[xVar] ? a['field_id'] : b['field_id'] )),
+            date = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b[xVar] : a[xVar]) : (mouseDate < b[xVar] ? a[xVar] : b[xVar])),
+            values = data.filter(d => d['field_id'] === f_id).sort((a,b) => b[yVar] - a[yVar]);
         return [date].concat(values);
     }
     svg.selectAll("g.tooltip_container").remove();
     const tooltip = svg.append("g").attr("class","tooltip_container");
     svg.on("touchmove mousemove", function() {
-        let mouseData = getMouseData(d3.mouse(this)[0]),
-            mouse_y = d3.mouse(this)[1];
+        let mouse_x = d3.mouse(this)[0],
+            mouse_y = d3.mouse(this)[1],
+            mouseData = getMouseData(mouse_x);
         tooltip
-            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+            .call(addTooltip, mouseData, lines ? x(mouseData[0]) : mouse_x, mouse_y+30);            
     });
     svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
 
@@ -803,7 +843,7 @@ let timer = setInterval(() => {
         country = 'World';
         data_country = data_by_country.filter(d => d['Country/Region'] === country);
         load_summary_data(data_country);
-        updateGraph('#country_graph', data_country, 'date','field_value', logScale);
+        updateGraph('#country_graph', data_country, 'date','field_value', logScale, lines);
 
         // Compare
         build_elements_compare();
@@ -829,12 +869,16 @@ $('#chooseCountry').change(function(){
     country = $('#chooseCountry option:selected').text(),
     data_country = data_by_country.filter(d => d['Country/Region'] === country);
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale, lines);
 });
 $('#logScaleSwitch').change(function(){
     logScale = logScale ? false : true;
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
     load_summary_data(data_country);
+});
+$('#barSwitch').change(function(){
+    lines = lines ? false : true;
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
 });
 
 //
@@ -850,18 +894,18 @@ $('#percPopulation2').change(function() {
 $('#percPopulation').change(function() {
     percPopulation = percPopulation ? false : true;
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale);
+    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale, lines);
 });
 
 // Dates
 $('#startDate').change(function() {
     startDate = new Date($('#startDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale);
+    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
 
 });
 $('#endDate').change(function() {
     endDate = new Date($('#endDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale);
+    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
 });
 $('#startDate2').change(function() {
     startDate = new Date($('#startDate2 option:selected').text());
