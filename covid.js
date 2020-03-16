@@ -92,31 +92,38 @@ function parseData(wide_data, pivot_columns, category) {
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
 function addRates(data) {
-    let keys = d3.set(data.map(d => d['Country/Region']+d['field_id'])).values();
-    let new_elements = [];
-    console.log(keys.length);
-    for (const key of keys) {
-        let _ = data.filter(d => d['Country/Region']+d['field_id'] === key);
-        let confirmed = _.filter(d => d['key'] === 'Confirmed' + key)[0],
-            deaths = _.filter(d => d['key'] === 'Deaths' + key)[0],
-            recovered = _.filter(d => d['key'] === 'Recovered' + key)[0],
-            death_rate = confirmed === 0 ? 0 : deaths['field_value'] / confirmed['field_value'],
-            recovered_rate = confirmed === 0 ? 0 : recovered['field_value'] / confirmed['field_value'];
 
-        // Reuse the element to add them to data
-        let death_rate_el = $.extend(true, {}, deaths);
-        death_rate_el['category'] = 'Deaths rate';
-        death_rate_el['field_value'] = death_rate;
-        death_rate_el['key'] = 'Deaths rate ' + key;
-        new_elements.push(death_rate_el);
+    let death_rates = d3.nest()
+        .key(d => d['Country/Region']+d['field_id'])
+        .rollup(function(d) {
+            let out = $.extend(true, {}, d[0]);
+            let confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
+                deaths = d.filter(e => e['category'] === 'Deaths')[0]['field_value'],
+                death_rate = confirmed === 0 ? 0 : deaths / confirmed;
+            out['category'] = 'Deaths rate';
+            out['field_value'] = death_rate;
+            out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
+            return out;
+        })
+        .entries(data)
+        .map(g => g.value);
 
-        let recov_rate_el = $.extend(true, {}, deaths);
-        recov_rate_el['category'] = 'Recovered rate';
-        recov_rate_el['field_value'] = recovered_rate;
-        death_rate_el['key'] = 'Recovered rate ' + key;
-        new_elements.push(recov_rate_el);
-    }
-    return data.concat(new_elements);
+    let recovered_rates = d3.nest()
+        .key(d => d['Country/Region']+d['field_id'])
+        .rollup(function(d) {
+            let out = $.extend(true, {}, d[0]);
+            let confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
+                recovered = d.filter(e => e['category'] === 'Recovered')[0]['field_value'],
+                recovered_rate = confirmed === 0 ? 0 : recovered / confirmed;
+            out['category'] = 'Recovered rate';
+            out['field_value'] = recovered_rate;
+            out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
+            return out;
+        })
+        .entries(data)
+        .map(g => g.value);
+    
+    return [...data, ...death_rates, ...recovered_rates];
 }
 
 
@@ -155,12 +162,7 @@ function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
         });
 }
 function get_list_countries(data) {
-    let countries_ = [];
-    for (const category of cases_categories) {
-        let _ = d3.set(data.filter(f => f.category === category).map(f => f['Country/Region'])).values();
-        countries_ = countries_.concat(_);
-    }
-    countries = d3.set(countries_).values().sort();
+    countries = d3.set(data.map(f => f['Country/Region'])).values().sort();
 
     // Add countries to selector
     let chooseCountryHTML = '';
@@ -172,16 +174,21 @@ function get_list_countries(data) {
     $('#chooseCountry').show();
 }
 function load_summary_data() {
+    let last_date = data.map(d => d['date']).slice(-1)[0];
     for (const category of cases_categories) {
         let data_category = data_country.filter(f => f['category'] === category),
-            last_date = data_category.slice(-1)[0]['date'],
-            last_value = data_category.slice(-1)[0][(percPopulation ? 'field_value_pop' : 'field_value')];
+            last_value = d3.format((percPopulation ? '%' : ','))(data_category.slice(-1)[0][(percPopulation ? 'field_value_pop' : 'field_value')]);
+        $(`#nb_${category.toLowerCase()}`).html(last_value);
 
-        // Add this data to 
-        $(`#nb_${category.toLowerCase()}`).html(d3.format((percPopulation ? '%' : ','))(last_value));
-        $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
+        // Add this data to DOM
+        if (category === 'Deaths' || category === 'Recovered') {
+            let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
+            $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
+        } 
         sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
     }
+    $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
+
 }
 function get_dates(data) {
     list_dates = d3.set(data.map(d => d['date'])).values();
@@ -409,6 +416,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .attr("class","tooltip_text")
                     .style("font-weight","bold")
+                    .style("display", (d, i) => i === 0 ? null : d.category.includes('rate') ? "none" : null) // don't display rate
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d.category))
                     .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percPopulation ? '%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
@@ -581,8 +589,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
 
     let yGrid = svg => svg
         .call(d3.axisRight(y)
-              .tickSize(width)
-              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))))
+              .tickSize(width))
         .call(g => g.selectAll('.domain').remove())
         .call(g => g.selectAll(".tick:not(:first-of-type) line")
               .attr("stroke-opacity", 0.5)
@@ -597,8 +604,9 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     svg.append("g")
         .attr('class','y axis')
         .call(d3.axisLeft(y)
-              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
-    
+              .tickFormat(d3.format((percPopulation ? '%' : y_data[0].category.includes('rate') ? '.2%' : '.3s'))));
+
+
     // Colors
     let color = d3.scaleOrdinal()
         .domain(keys)
@@ -664,7 +672,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(getKey(d)))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((percPopulation2 ? '%' : ','))(d[yVar])}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((percPopulation2 ? '%' : d.category.includes('rate') ? '.3%' : ','))(d[yVar])}`));
         
         const {xx, yy, width: w, height: h} = text.node().getBBox();
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
@@ -703,7 +711,8 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
 }
 
 function build_elements_compare() {
-    let html = '';
+    let html = '',
+        categories = d3.set(data_by_country.map(d => d['category'])).values();
     for (const [index, element] of elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
         html += `<div class="col-lg-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
@@ -713,7 +722,7 @@ function build_elements_compare() {
         }
         html += '</select><svg class="ml-4 svg-icon delete-element" onclick=delete_element('+ element.id +') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>';
         html += `<div class="category_element mb-1 mt-1"><select onchange="update_element(this,'category')" class="select-category-element" element_id="${element.id}">`;
-        for (const category of cases_categories) {
+        for (const category of categories) {
             let selected = category === element['category'] ? 'selected' : '';
             html += '<option ' + selected + '>' + category + '</option>';
         }
@@ -838,7 +847,7 @@ let timer = setInterval(() => {
         get_list_countries(data_by_country);
 
         // Add rates
-        // data_by_country = addRates(data_by_country);
+        data_by_country = addRates(data_by_country);
         
         country = 'World';
         data_country = data_by_country.filter(d => d['Country/Region'] === country);

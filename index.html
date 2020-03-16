@@ -39,133 +39,136 @@
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
         <div class="m-2">
             <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
-        </div>
-        <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div>
-        <div class="container" id="container">
-            <div class="row">
-                <nav class="col-12 col-md-2 sidebar order-md-1">
-                    <ul class="nav flex-md-column flex-row justify-content-around mb-2">
-                        <li class="sidebar_show sidebar-heading active m-1 p-1" target="#by_country">
-                            <svg class="svg-icon" viewBox="0 0 20 20">
-				<path d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
-			    </svg>
-                            By Country
-                        </li>
-                        <li class="sidebar_show sidebar-heading m-1 p-1" target="#compare">
-                            <svg class="svg-icon" viewBox="0 0 20 20">
-				<path d="M12.319,5.792L8.836,2.328C8.589,2.08,8.269,2.295,8.269,2.573v1.534C8.115,4.091,7.937,4.084,7.783,4.084c-2.592,0-4.7,2.097-4.7,4.676c0,1.749,0.968,3.337,2.528,4.146c0.352,0.194,0.651-0.257,0.424-0.529c-0.415-0.492-0.643-1.118-0.643-1.762c0-1.514,1.261-2.747,2.787-2.747c0.029,0,0.06,0,0.09,0.002v1.632c0,0.335,0.378,0.435,0.568,0.245l3.483-3.464C12.455,6.147,12.455,5.928,12.319,5.792 M8.938,8.67V7.554c0-0.411-0.528-0.377-0.781-0.377c-1.906,0-3.457,1.542-3.457,3.438c0,0.271,0.033,0.542,0.097,0.805C4.149,10.7,3.775,9.762,3.775,8.76c0-2.197,1.798-3.985,4.008-3.985c0.251,0,0.501,0.023,0.744,0.069c0.212,0.039,0.412-0.124,0.412-0.34v-1.1l2.646,2.633L8.938,8.67z M14.389,7.107c-0.34-0.18-0.662,0.244-0.424,0.529c0.416,0.493,0.644,1.118,0.644,1.762c0,1.515-1.272,2.747-2.798,2.747c-0.029,0-0.061,0-0.089-0.002v-1.631c0-0.354-0.382-0.419-0.558-0.246l-3.482,3.465c-0.136,0.136-0.136,0.355,0,0.49l3.482,3.465c0.189,0.186,0.568,0.096,0.568-0.245v-1.533c0.153,0.016,0.331,0.022,0.484,0.022c2.592,0,4.7-2.098,4.7-4.677C16.917,9.506,15.948,7.917,14.389,7.107 M12.217,15.238c-0.251,0-0.501-0.022-0.743-0.069c-0.212-0.039-0.411,0.125-0.411,0.341v1.101l-2.646-2.634l2.646-2.633v1.116c0,0.174,0.126,0.318,0.295,0.343c0.158,0.024,0.318,0.034,0.486,0.034c1.905,0,3.456-1.542,3.456-3.438c0-0.271-0.032-0.541-0.097-0.804c0.648,0.719,1.022,1.659,1.022,2.66C16.226,13.451,14.428,15.238,12.217,15.238"></path>
-			    </svg>
-                            Compare
-                        </li>
-                        <li class="fixed-bottom p-3" style="background-color: inherit;">
-                            Dark Mode <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
-                        </li>
-                    </ul>
-                </nav>
-                <main class="col-12 col-md-10 order-md-2">
-                    <div class="content" id="by_country">
-                        <div class="container mb-2">
-                            <div class="row">
-                                <div class="col-md-4 col-12 order-md-2">
-                                    <div class="text-md-right text-left form-row">
-                                        <div class="col-auto">
-                                            <div class="mr-sm-2 text-muted">Last data point:</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="mr-sm-2 text-muted" id="lastDataPoint"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-12 order-md-1">
-                                    <form class="form-inline mb-2 mt-2 form-row">
-                                        <div class="col-auto my-1">
-                                            <div class="form-group">
-                                                <select class="mr-sm-2" id="chooseCountry">
-                                                </select>
+            </div>
+            <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div>
+            <div class="container" id="container">
+                <div class="row">
+                    <nav class="col-12 col-md-2 sidebar order-md-1">
+                        <ul class="nav flex-md-column flex-row justify-content-around mb-2">
+                            <li class="sidebar_show sidebar-heading active m-1 p-1" target="#by_country">
+                                <svg class="svg-icon" viewBox="0 0 20 20">
+				    <path d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
+			        </svg>
+                                By Country
+                            </li>
+                            <li class="sidebar_show sidebar-heading m-1 p-1" target="#compare">
+                                <svg class="svg-icon" viewBox="0 0 20 20">
+				    <path d="M12.319,5.792L8.836,2.328C8.589,2.08,8.269,2.295,8.269,2.573v1.534C8.115,4.091,7.937,4.084,7.783,4.084c-2.592,0-4.7,2.097-4.7,4.676c0,1.749,0.968,3.337,2.528,4.146c0.352,0.194,0.651-0.257,0.424-0.529c-0.415-0.492-0.643-1.118-0.643-1.762c0-1.514,1.261-2.747,2.787-2.747c0.029,0,0.06,0,0.09,0.002v1.632c0,0.335,0.378,0.435,0.568,0.245l3.483-3.464C12.455,6.147,12.455,5.928,12.319,5.792 M8.938,8.67V7.554c0-0.411-0.528-0.377-0.781-0.377c-1.906,0-3.457,1.542-3.457,3.438c0,0.271,0.033,0.542,0.097,0.805C4.149,10.7,3.775,9.762,3.775,8.76c0-2.197,1.798-3.985,4.008-3.985c0.251,0,0.501,0.023,0.744,0.069c0.212,0.039,0.412-0.124,0.412-0.34v-1.1l2.646,2.633L8.938,8.67z M14.389,7.107c-0.34-0.18-0.662,0.244-0.424,0.529c0.416,0.493,0.644,1.118,0.644,1.762c0,1.515-1.272,2.747-2.798,2.747c-0.029,0-0.061,0-0.089-0.002v-1.631c0-0.354-0.382-0.419-0.558-0.246l-3.482,3.465c-0.136,0.136-0.136,0.355,0,0.49l3.482,3.465c0.189,0.186,0.568,0.096,0.568-0.245v-1.533c0.153,0.016,0.331,0.022,0.484,0.022c2.592,0,4.7-2.098,4.7-4.677C16.917,9.506,15.948,7.917,14.389,7.107 M12.217,15.238c-0.251,0-0.501-0.022-0.743-0.069c-0.212-0.039-0.411,0.125-0.411,0.341v1.101l-2.646-2.634l2.646-2.633v1.116c0,0.174,0.126,0.318,0.295,0.343c0.158,0.024,0.318,0.034,0.486,0.034c1.905,0,3.456-1.542,3.456-3.438c0-0.271-0.032-0.541-0.097-0.804c0.648,0.719,1.022,1.659,1.022,2.66C16.226,13.451,14.428,15.238,12.217,15.238"></path>
+			        </svg>
+                                Compare
+                            </li>
+                            <li class="fixed-bottom p-3" style="background-color: inherit;">
+                                Dark Mode <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
+                            </li>
+                        </ul>
+                    </nav>
+                    <main class="col-12 col-md-10 order-md-2">
+                        <div class="content" id="by_country">
+                            <div class="container mb-2">
+                                <div class="row">
+                                    <div class="col-md-4 col-12 order-md-2">
+                                        <div class="text-md-right text-left form-row">
+                                            <div class="col-auto">
+                                                <div class="mr-sm-2 text-muted">Last data point:</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="mr-sm-2 text-muted" id="lastDataPoint"></div>
                                             </div>
                                         </div>
-                                        <div class="my-1 mr-2 text-muted custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="percPopulation">
-                                            <label class="custom-control-label text-muted" for="percPopulation">as % of population</label>
-                                        </div>
-                                    </form>
+                                    </div>
+                                    <div class="col-md-8 col-12 order-md-1">
+                                        <form class="form-inline mb-2 mt-2 form-row">
+                                            <div class="col-auto my-1">
+                                                <div class="form-group">
+                                                    <select class="mr-sm-2" id="chooseCountry">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="my-1 mr-2 text-muted custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="percPopulation">
+                                                <label class="custom-control-label text-muted" for="percPopulation">as % of population</label>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="container mb-4">
+                                <div class="row text-center" id="summary_stats">
+                                    <div class="col-4">
+                                        <p class="col-title">Confirmed</p>
+                                        <h3 id="nb_confirmed" class="confirmed"></h3>
+                                        <h6><span>&#8203;</span></h6>
+                                        <div id="sparkline_confirmed"></div>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="col-title">Recovered</p>
+                                        <h3 id="nb_recovered" class="recovered"></h3>
+                                        <h6 id="nb_recovered_rate" class="recovered"></h6>
+                                        <div id="sparkline_recovered"></div>
+                                    </div>
+                                    <div class="col-4">
+                                        <p class="col-title">Deaths</p>
+                                        <h3 id="nb_deaths" class="deaths"></h3>
+                                        <h6 id="nb_deaths_rate" class="deaths"></h6>
+                                        <div id="sparkline_deaths"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form class="form-inline">
+                                <div class="my-1 mr-2 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
+                                    <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale | </label>
+                                </div>
+                                <label class="my-1 mr-2 text-muted">Range:</label>
+                                <select class="select-dates custom-select my-1 mr-sm-2" id="startDate">
+                                </select>
+                                <label class="my-1 mr-2 text-muted">To</label>
+                                <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
+                                </select>
+                                <div class="my-1 mr-2 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="barSwitch">
+                                    <label class="custom-control-label text-muted" for="barSwitch">Bars</label>
+                                </div>
+                            </form>
+                            <div class="mt-4" id="country_graph"></div>
                         </div>
-                        <div class="container mb-4">
-                            <div class="row text-center" id="summary_stats">
-                                <div class="col-4">
-                                    <p class="col-title">Confirmed</p>
-                                    <h3 id="nb_confirmed" class="confirmed"></h3>
-                                    <div id="sparkline_confirmed"></div>
-                                </div>
-                                <div class="col-4">
-                                    <p class="col-title">Recovered</p>
-                                    <h3 id="nb_recovered" class="recovered"></h3>
-                                    <div id="sparkline_recovered"></div>
-                                </div>
-                                <div class="col-4">
-                                    <p class="col-title">Deaths</p>
-                                    <h3 id="nb_deaths" class="deaths"></h3>
-                                    <div id="sparkline_deaths"></div>
+                        <div class="content" id="compare">
+                            <div id="compare_elements">
+                                <h2 class="mb-2">Compare by countries</h2>
+                                <div class="container">
+                                    <div class="row mb-4" id="compare_elements_container">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="btn btn-sm btn-secondary mb-2" id="compare_add" onclick="add_element()">Add Country</div>
+                            <form class="form-inline">
+                                <div class="my-1 mr-2 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="logScaleSwitch2">
+                                    <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale | </label>
+                                </div>
+                                <label class="my-1 mr-2 text-muted">Range:</label>
+                                <select class="select-dates custom-select my-1 mr-sm-2" id="startDate2">
+                                </select>
+                                <label class="my-1 mr-2 text-muted">To</label>
+                                <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
+                                </select>
+                                <div class="my-1 mr-2 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="percPopulation2">
+                                    <label class="custom-control-label text-muted" for="percPopulation2">as % of population</label>
+                                </div>
+                            </form>
+                            <div class="mt-4" id="compare_graph"></div>
                         </div>
-                        <form class="form-inline">
-                            <div class="my-1 mr-2 text-muted custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
-                                <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale | </label>
-                            </div>
-                            <label class="my-1 mr-2 text-muted">Range:</label>
-                            <select class="select-dates custom-select my-1 mr-sm-2" id="startDate">
-                            </select>
-                            <label class="my-1 mr-2 text-muted">To</label>
-                            <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
-                            </select>
-                            <div class="my-1 mr-2 text-muted custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="barSwitch">
-                                <label class="custom-control-label text-muted" for="barSwitch">Bars</label>
-                            </div>
-                        </form>
-                        <div class="mt-4" id="country_graph"></div>
-                    </div>
-                    <div class="content" id="compare">
-                        <div id="compare_elements">
-                            <h2 class="mb-2">Compare by countries</h2>
-                            <div class="container">
-                                <div class="row mb-4" id="compare_elements_container">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn btn-sm btn-secondary mb-2" id="compare_add" onclick="add_element()">Add Country</div>
-                        <form class="form-inline">
-                            <div class="my-1 mr-2 text-muted custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="logScaleSwitch2">
-                                <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale | </label>
-                            </div>
-                            <label class="my-1 mr-2 text-muted">Range:</label>
-                            <select class="select-dates custom-select my-1 mr-sm-2" id="startDate2">
-                            </select>
-                            <label class="my-1 mr-2 text-muted">To</label>
-                            <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
-                            </select>
-                            <div class="my-1 mr-2 text-muted custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="percPopulation2">
-                                <label class="custom-control-label text-muted" for="percPopulation2">as % of population</label>
-                            </div>
-                        </form>
-                        <div class="mt-4" id="compare_graph"></div>
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
-        </div>
-        <!-- SCRIPTS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js" integrity="sha256-m0QmIsBXcOMiETRmpT3qg2IQ/i0qazJA2miCHzOmS1Y=" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <script src="./covid.js">
-        </script>
+            <!-- SCRIPTS -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js" integrity="sha256-m0QmIsBXcOMiETRmpT3qg2IQ/i0qazJA2miCHzOmS1Y=" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+            <script src="./covid.js">
+            </script>
     </body>
     
 </html>
