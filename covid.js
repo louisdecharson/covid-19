@@ -1079,13 +1079,13 @@ $('#barSwitch2').change(function(){
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 });
 $('#startDate2').change(function() {
-    startDate = new Date($('#startDate2 option:selected').text());
+    startDate = $('#startDate2 option:selected').text();
     updateNavigation({"startDate": startDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 
 });
 $('#endDate2').change(function() {
-    endDate = new Date($('#endDate2 option:selected').text());
+    endDate = $('#endDate2 option:selected').text();
     updateNavigation({"endDate": endDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 });
