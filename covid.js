@@ -711,6 +711,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         let _ = y_data.filter(d => (d['category'] === element['category'] &&
                                     d['Country/Region'] === element['Country/Region']));
         if (lines) {
+            svg.selectAll(`rect.bars.id_${element.id}`).remove();
             svg.append('path')
                 .datum(_)
                 .attr('class','lines')
