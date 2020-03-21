@@ -17,6 +17,7 @@ body {
     font: "Helvetica", Arial;
     background-color: var(--background-color); 
     color: var(--color-text);
+    font-color: 10px;
 }
 .text-muted {
     color: var(--text-muted) !important;

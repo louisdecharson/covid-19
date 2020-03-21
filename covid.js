@@ -1,13 +1,9 @@
-// let widthMainGraph = document.getElementsByTagName('main')[0].offsetWidth;
-$('.content').hide();
-
 const el = document.getElementById('main');
 let el_style = el.currentStyle || window.getComputedStyle(el),
     el_width = el.offsetWidth,
     el_margin = parseFloat(el_style.marginLeft) + parseFloat(el_style.marginRight),
     el_padding = parseFloat(el_style.paddingLeft) + parseFloat(el_style.paddingRight);
 const widthMainGraph = el_width - el_padding;
-console.log(widthMainGraph);
 const heightMainGraph = Math.max(400, screen.height*0.5);
 const root = document.documentElement,
       rootStyle = getComputedStyle(root);
@@ -342,8 +338,8 @@ function updateGraph(id, data, xVar, yVar,
     var svg = d3.select(id + '_g');
 
     // Data Filtered
-    data = data.filter(d => d['date'] >= new Date(startDate) &&
-                       d['date'] <= new Date(endDate) &&
+    data = data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
+                       d['date'] <= d3.timeParse('%d-%b-%y')(endDate) &&
                        categories.indexOf(d['category']) > -1);
     
     var color = d3.scaleOrdinal()
@@ -573,7 +569,20 @@ function addLegend(id, keys, px, py, colors_ = colors) {
         .style("alignment-baseline", "middle")
         .attr('class','labels-legend');
 
-    const {x, y, width: w, height: h} = legend.node().getBBox();
+    let x, y, w, h;
+    try {
+        let _ = legend.node().getBBox();
+        x = _.x,
+        y = _.y,
+        w = _.width,
+        h = _.height;
+    } catch(err) {
+        console.log(err);
+        x = 85,
+        y = 5,
+        w = 0,
+        h = 0;
+    }
     path.attr('x',px-5)
         .attr('y',py-5)
         .attr('width', (w > 0 ? w + 10 : d3.max(keys.map(d => d.length))*10 + 10)) // if graph is not displayed the width and height will be zero (*)
@@ -627,8 +636,8 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     navigation.elements.forEach(function(element,index) {
         let _ = data.filter(d => (d['category'] === element['category'] &&
                                   d['Country/Region'] === element['Country/Region'] &&
-                                  d['date'] >= new Date(startDate) &&
-                                  d['date'] <= new Date(endDate)));
+                                  d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
+                                  d['date'] <= d3.timeParse('%d-%b-%y')(endDate)));
         _ = offset_data($.extend(true, [], _), element['offset']);
         y_data = y_data.concat(_);
         keys.push(getKey(element));
@@ -636,7 +645,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
 
     // Get the list of dates
     let dates = d3.set(data.map(d => d[xVar])).values();
-
     
     // X-axis
     function extendOneDay(extent) {
@@ -690,7 +698,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         .call(d3.axisLeft(y)
               .tickFormat(d3.format((navigation.percPopulation2 ? '%' : y_data[0].category.includes('rate') ? '.2%' : '.3s'))));
 
-
+    
     // Colors
     let color = d3.scaleOrdinal()
         .domain(keys)
@@ -698,7 +706,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
 
     // Add lines
     svg.selectAll('path.lines').remove();
-    svg.selectAll('rect').remove();
+    svg.selectAll('rect.bars').remove();
     navigation.elements.forEach(function(element,index) {
         let _ = y_data.filter(d => (d['category'] === element['category'] &&
                                     d['Country/Region'] === element['Country/Region']));
@@ -717,7 +725,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
             svg.selectAll(`rect.id_${element.id}`)
                 .data(_)
                 .join('rect')
-                .attr('class', 'id_'+element.id)
+                .attr('class', 'id_'+element.id + 'bars')
                 .attr('fill',  d => color(getKey(element)))
                 .attr('x', d => x(d[xVar]) + x2(getKey(element)))
                 .attr('width', x2.bandwidth())
@@ -832,7 +840,7 @@ function build_elements_compare() {
             let selected = country === element['Country/Region'] ? 'selected' : '';
             html += '<option ' + selected + '>' + country + '</option>';
         }
-        html += '</select><svg class="ml-4 svg-icon delete-element" onclick=delete_element('+ element.id +') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>';
+        html += '</select><svg class="ml-2 svg-icon delete-element" onclick=delete_element('+ element.id +') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>';
         html += `<div class="category_element mb-1 mt-1"><select onchange="update_element(this,'category')" class="select-category-element" element_id="${element.id}">`;
         for (const category of categories) {
             let selected = category === element['category'] ? 'selected' : '';
@@ -884,8 +892,9 @@ function addDatestoSelect() {
     let html_start_dates = '',
         html_end_dates = '';
     for (const d of list_dates) {
-        html_start_dates += '<option ' + (d === startDate ? 'selected' : '') + '>' + d3.timeFormat("%d-%b-%y")(new Date(d)) + '</option>';
-        html_end_dates += '<option ' + (d === endDate ? 'selected' : '') + '>' + d3.timeFormat("%d-%b-%y")(new Date(d)) + '</option>';
+        //        console.log(d3.timeFormat("%d-%b-%y")(new Date(d)));
+        html_start_dates += '<option ' + (d === startDate ? 'selected' : '') + '>' + d + '</option>';
+        html_end_dates += '<option ' + (d === endDate ? 'selected' : '') + '>' + d + '</option>';
     }
     $('#startDate').html(html_start_dates);
     $('#endDate').html(html_end_dates);
@@ -907,11 +916,10 @@ function loadPage(button, target) {
     $('.sidebar_show.active').each(function() {
         $(this).removeClass('active');
     });
-    console.log(button);
     button.addClass('active');
     $('.content').hide();
     $(target).show();
-    updateNavigation({"page":target});
+    updateNavigation({"page":target.slice(1)});
 }
 function updateNavigation(j) {
     Object.keys(j).forEach(function(e,i) {
@@ -929,22 +937,6 @@ createGraph('#country_graph_rates');
 createGraph('#country_graph_new_cases');
 createGraph('#compare_graph');
 
-$('.sidebar_show').click(function(){
-    loadPage($(this), $(this).attr('target'));
-});
-if (document.location.hash.length > 0) {
-    updateNavigation(JSON.parse(document.location.hash.substring(1)));
-}
-// Load page, buttons according to navigation
-console.log(`#button_${navigation.page}`);
-loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
-toggleDarkMode(navigation.darkMode);
-$('#logScaleSwitch').prop('checked', navigation.logScale);
-$('#barSwitch').prop('checked', !navigation.lines);
-$('#percPopulation').prop('checked', navigation.percPopulation);
-$('#logScaleSwitch2').prop('checked', navigation.logScale2);
-$('#barSwitch2').prop('checked', !navigation.lines2);
-$('#percPopulation2').prop('checked', navigation.percPopulation2);
 
 // Load Data (async)
 let nb_process_ended = 0;
@@ -1002,8 +994,27 @@ let timer = setInterval(() => {
 }, 100);
 
 
+// Load page, buttons according to navigation
+if (document.location.hash.length > 0) {
+    updateNavigation(JSON.parse(decodeURIComponent(document.location.hash.substring(1))));
+}
+loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
+toggleDarkMode(navigation.darkMode);
+$('#logScaleSwitch').prop('checked', navigation.logScale);
+$('#barSwitch').prop('checked', !navigation.lines);
+$('#percPopulation').prop('checked', navigation.percPopulation);
+$('#logScaleSwitch2').prop('checked', navigation.logScale2);
+$('#barSwitch2').prop('checked', !navigation.lines2);
+$('#percPopulation2').prop('checked', navigation.percPopulation2);
+
 // ACTIONS
 // =======
+
+// Nav actions
+$('.sidebar_show').click(function(){
+    loadPage($(this), $(this).attr('target'));
+});
+
 
 // By Country graphs - actions
 $('#chooseCountry').change(function(){
@@ -1039,7 +1050,7 @@ $('#percPopulation').change(function() {
 });
 $('#startDate').change(function() {
     startDate = $('#startDate option:selected').text();
-    updateNavigation({'startDate': startDate});
+    updateNavigation({"startDate": startDate});
     updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
@@ -1068,29 +1079,20 @@ $('#barSwitch2').change(function(){
 });
 $('#startDate2').change(function() {
     startDate = new Date($('#startDate2 option:selected').text());
-    updateNavigation({'startDate': startDate});
+    updateNavigation({"startDate": startDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 
 });
 $('#endDate2').change(function() {
     endDate = new Date($('#endDate2 option:selected').text());
-    updateNavigation({'endDate': endDate});
+    updateNavigation({"endDate": endDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 });
 
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {
-    console.log("Hello dark mode");
     toggleDarkMode(!navigation.darkMode);
 });
 
-
-// Popup 
-// $('#view_popup').click(function(){
-//     $("#popup").show();
-// });
-// $('#crossquit').click(function(){
-//     $("#popup").hide();
-// });
 
 
