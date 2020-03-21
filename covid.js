@@ -722,10 +722,10 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                       .y(d => y(d[yVar]))
                      );
         } else {
-            svg.selectAll(`rect.id_${element.id}`)
+            svg.selectAll(`rect.bars.id_${element.id}`)
                 .data(_)
                 .join('rect')
-                .attr('class', 'id_'+element.id + 'bars')
+                .attr('class', 'bars id_' + element.id)
                 .attr('fill',  d => color(getKey(element)))
                 .attr('x', d => x(d[xVar]) + x2(getKey(element)))
                 .attr('width', x2.bandwidth())
