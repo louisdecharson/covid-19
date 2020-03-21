@@ -934,19 +934,17 @@ $('.sidebar_show').click(function(){
 });
 if (document.location.hash.length > 0) {
     updateNavigation(JSON.parse(document.location.hash.substring(1)));
-
-    // Load page, buttons according to navigation
-    loadPage($(`#button_${navigation.page.substring(1)}`),navigation.page);
-    toggleDarkMode(navigation.darkMode);
-    $('#logScaleSwitch').prop('checked', navigation.logScale);
-    $('#barSwitch').prop('checked', !navigation.lines);
-    $('#percPopulation').prop('checked', navigation.percPopulation);
-    $('#logScaleSwitch2').prop('checked', navigation.logScale2);
-    $('#barSwitch2').prop('checked', !navigation.lines2);
-    $('#percPopulation2').prop('checked', navigation.percPopulation2);
-
-    
 }
+// Load page, buttons according to navigation
+console.log(`#button_${navigation.page}`);
+loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
+toggleDarkMode(navigation.darkMode);
+$('#logScaleSwitch').prop('checked', navigation.logScale);
+$('#barSwitch').prop('checked', !navigation.lines);
+$('#percPopulation').prop('checked', navigation.percPopulation);
+$('#logScaleSwitch2').prop('checked', navigation.logScale2);
+$('#barSwitch2').prop('checked', !navigation.lines2);
+$('#percPopulation2').prop('checked', navigation.percPopulation2);
 
 // Load Data (async)
 let nb_process_ended = 0;
