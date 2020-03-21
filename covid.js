@@ -1,8 +1,13 @@
 // let widthMainGraph = document.getElementsByTagName('main')[0].offsetWidth;
 $('.content').hide();
-$('#by_country').show();
 
-const widthMainGraph = document.getElementById('summary_stats').offsetWidth;
+const el = document.getElementById('main');
+let el_style = el.currentStyle || window.getComputedStyle(el),
+    el_width = el.offsetWidth,
+    el_margin = parseFloat(el_style.marginLeft) + parseFloat(el_style.marginRight),
+    el_padding = parseFloat(el_style.paddingLeft) + parseFloat(el_style.paddingRight);
+const widthMainGraph = el_width - el_padding;
+console.log(widthMainGraph);
 const heightMainGraph = Math.max(400, screen.height*0.5);
 const root = document.documentElement,
       rootStyle = getComputedStyle(root);
@@ -21,38 +26,74 @@ let data = [],
     data_by_country = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
     cases_categories = ['Recovered','Confirmed','Deaths'],
+    rates_categories = ['Deaths rate', 'Recovered rate'],
+    new_cases_categories = ['New Recovered cases','New Confirmed cases','New Deaths cases'],
     countries = [],
     list_dates = [],
+    population_data = [],
+    data_country;
+
+// Default values
+let // logScale = false,
+    // logScale2 = false,
+    // lines = true,
+    // country = "World",
+    // darkMode = true,
+    // percPopulation = false,
+    // percPopulation2 = false,
     startDate,
-    endDate,
-    population_data = [];
-let logScale = false,
-    logScale2 = false,
-    lines = true,
-    country, data_country,
-    darkMode = true,
-    percPopulation = false,
-    percPopulation2 = false;
+    endDate;
+
+let elements = [
+    {
+        "Country/Region": "France",
+        "category": "Confirmed",
+        "offset": 0
+    },
+    {
+        "Country/Region": "Italy",
+        "category": "Confirmed",
+        "offset": 0
+    },
+    {
+        "Country/Region": "Spain",
+        "category": "Confirmed",
+        "offset": 0
+    }
+];
+
+let navigation = {
+    "page": 'by_country',
+    "darkMode": true,
+    "country": "World",
+    "elements": elements,
+    "logScale": false,
+    "logScale2": false,
+    "lines": true,
+    "lines2": true,
+    "percPopulation": false,
+    "percPopulation2": false,
+    "startDate": '',
+    "endDate":''
+};
 
 // DARK MODE
-$('#darkmodeSwitch').click(function() {
-    var $this = $(this);
-    if ($this.hasClass('darkmode')) {
-        // switch to light mode
-        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it + '-light']);});
-        $this.removeClass('darkmode badge-secondary');
-        $this.addClass('badge-secondary');
-        $this.text('OFF');
-        darkMode = false;
-    } else {
+function toggleDarkMode(darkMode) {
+    let darkModeSwitch = $('#darkmodeSwitch');
+    if (darkMode) {
         colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it+'-dark']);});
-        $this.addClass('darkmode badge-primary');
-        $this.removeClass('badge-secondary');
-        $this.text('ON');
-        darkMode = true;
+        darkModeSwitch.addClass('darkmode badge-primary');
+        darkModeSwitch.removeClass('badge-secondary');
+        darkModeSwitch.text('ON');
+        updateNavigation({"darkMode":true});
+    } else {
+        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it + '-light']);});
+        darkModeSwitch.removeClass('darkmode badge-secondary');
+        darkModeSwitch.addClass('badge-secondary');
+        darkModeSwitch.text('OFF');
+        updateNavigation({"darkMode":false});
     }
-});
-
+}
 
 // ====================================================================== //
 // FUNCTIONS
@@ -86,13 +127,13 @@ function parseData(wide_data, pivot_columns, category) {
             long_data.push(long_element);
         }
     }
-    list_dates = d3.set(data.map(d => d['date'])).values();
-    startDate = list_dates[0];
-    endDate = list_dates.slice(-1)[0];
+    list_dates = d3.set(data.map(d => d['date'])).values().map(d => d3.timeFormat("%d-%b-%y")(new Date(d)));
+    startDate = navigation.startDate.length > 0 ? navigation.startDate : list_dates[0];
+    endDate = navigation.endDate.length > 0 ? navigation.endDate : list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
-function addRates(data) {
 
+function addRates(data) {
     let death_rates = d3.nest()
         .key(d => d['Country/Region']+d['field_id'])
         .rollup(function(d) {
@@ -103,6 +144,7 @@ function addRates(data) {
             out['category'] = 'Deaths rate';
             out['field_value'] = death_rate;
             out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
+            out['field_value_pop'] = NaN;
             return out;
         })
         .entries(data)
@@ -118,12 +160,36 @@ function addRates(data) {
             out['category'] = 'Recovered rate';
             out['field_value'] = recovered_rate;
             out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
+            out['field_value_pop'] = NaN;
             return out;
         })
         .entries(data)
         .map(g => g.value);
+
+    let new_cases = [];
+    d3.nest()
+        .key(d => d['Country/Region'] + d['category'])
+        .rollup(function(array) {
+            let new_array = $.extend(true, [], array);
+            for(const [i, e] of new_array.entries()) {
+                if (i > 0) {
+                    e['field_value'] = array[i]['field_value']-array[i-1]['field_value'];
+                    e['previous_date'] = array[i-1]['field_id'];
+                }
+                e['category'] = `New ${e['category']} cases`;
+                e['key'] = e['category'] + e['Country/Region'] + e['field_id'];
+                e['field_value_pop'] = e['field_value'] / e['Population'];
+            }
+            return new_array;
+        })
+        .entries(data_by_country)
+        .map(g => g.value)
+        .forEach(function(array) {
+            array.forEach(a => new_cases.push(a));
+        });
     
-    return [...data, ...death_rates, ...recovered_rates];
+    
+    return [...data, ...death_rates, ...recovered_rates, ...new_cases];
 }
 
 
@@ -167,7 +233,7 @@ function get_list_countries(data) {
     // Add countries to selector
     let chooseCountryHTML = '';
     for (const [index, country] of countries.entries()) {
-        let selected = country === 'World' ? 'selected' : '';
+        let selected = country === navigation.country ? 'selected' : '';
         chooseCountryHTML += `<option ${selected}>${country}</option>`;
     }
     $('#chooseCountry').html(chooseCountryHTML);
@@ -177,7 +243,7 @@ function load_summary_data() {
     let last_date = data.map(d => d['date']).slice(-1)[0];
     for (const category of cases_categories) {
         let data_category = data_country.filter(f => f['category'] === category),
-            last_value = d3.format((percPopulation ? '%' : ','))(data_category.slice(-1)[0][(percPopulation ? 'field_value_pop' : 'field_value')]);
+            last_value = d3.format((navigation.percPopulation ? '%' : ','))(data_category.slice(-1)[0][(navigation.percPopulation ? 'field_value_pop' : 'field_value')]);
         $(`#nb_${category.toLowerCase()}`).html(last_value);
 
         // Add this data to DOM
@@ -185,7 +251,7 @@ function load_summary_data() {
             let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
             $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
         } 
-        sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (percPopulation ? 'field_value_pop' : 'field_value'), logScale);
+        sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
     }
     $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
 
@@ -240,7 +306,7 @@ function sparkline(elemId, data, xVar, yVar, logScale = false) {
     d3.select(elemId)
         .append('span')
         .attr('class','sparklines-number')
-        .text(d3.format((percPopulation ? '%' : '.3s'))(data[data.length-1].y));
+        .text(d3.format((navigation.percPopulation ? '%' : '.3s'))(data[data.length-1].y));
 }
 function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
@@ -264,7 +330,10 @@ function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
         .attr("height", height);
 
 }
-function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w = widthMainGraph, h = heightMainGraph, categories = cases_categories) {
+function updateGraph(id, data, xVar, yVar,
+                     logScale = navigation.logScale, lines = true, categories = cases_categories, percentage = false,
+                     w = widthMainGraph, h = heightMainGraph)
+{
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
@@ -274,7 +343,8 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
 
     // Data Filtered
     data = data.filter(d => d['date'] >= new Date(startDate) &&
-                       d['date'] <= new Date(endDate));
+                       d['date'] <= new Date(endDate) &&
+                       categories.indexOf(d['category']) > -1);
     
     var color = d3.scaleOrdinal()
         .domain(categories)
@@ -313,8 +383,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
         .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
 
     // Y-axis
-    let y;
-    y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
+    let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
         .domain(d3.extent(data, d => d[yVar]))
         .nice()
         .range([height, 0]);
@@ -322,7 +391,7 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
     let yGrid = svg => svg
         .call(d3.axisRight(y)
               .tickSize(width)
-              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))))
+              .tickFormat(d3.format((percentage ? '.3%' : '.3s'))))
         .call(g => g.selectAll('.domain').remove())
         .call(g => g.selectAll(".tick:not(:first-of-type) line")
               .attr("stroke-opacity", 0.5)
@@ -337,13 +406,13 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
     svg.append("g")
         .attr('class','y axis')
         .call(d3.axisLeft(y)
-              .tickFormat(d3.format((percPopulation ? '%' : '.3s'))));
+              .tickFormat(d3.format((percentage ? '.2%' : '.3s'))));
         
     // Add the content
     svg.selectAll('path.lines').remove();
     categories.forEach(function(category,index) {
         if (lines) {
-            svg.selectAll(`rect.${category}`).remove();
+            svg.selectAll(`rect.${category.replace(/ /g,'_')}`).remove();
             svg.append('path')
                 .datum(data.filter(d => d.category === category))
                 .attr('class','lines')
@@ -355,10 +424,10 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
                       .y(d => y(d[yVar])));
             
         } else {
-            svg.selectAll(`rect.${category}`)
+            svg.selectAll(`rect.${category.replace(/ /g,'_')}`)
                 .data(data.filter(d => d.category === category))
                 .join('rect')
-                .attr('class', category)
+                .attr('class', category.replace(/ /g,'_'))
                 .attr('fill',  d => color(category))
                 .attr('x', d => x(d[xVar]) + x2(category))
                 .attr('width', x2.bandwidth())
@@ -416,9 +485,8 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .attr("class","tooltip_text")
                     .style("font-weight","bold")
-                    .style("display", (d, i) => i === 0 ? null : d.category.includes('rate') ? "none" : null) // don't display rate
-                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(d.category))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percPopulation ? '%' : ','))(d[yVar])}`));
+                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.category))
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percentage ? '.2%' : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
 
         // Make sure the tooltip is always in the graph area (and visible)
@@ -442,7 +510,8 @@ function updateGraph(id, data, xVar, yVar, logScale = logScale, lines = true, w 
             b = i > data.length - 1 ? data.slice(-1)[0] : data[i],
             f_id = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b['field_id'] : a['field_id']) : (mouseDate < b[xVar] ? a['field_id'] : b['field_id'] )),
             date = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b[xVar] : a[xVar]) : (mouseDate < b[xVar] ? a[xVar] : b[xVar])),
-            values = data.filter(d => d['field_id'] === f_id).sort((a,b) => b[yVar] - a[yVar]);
+            values = data.filter(d => d['field_id'] === f_id && categories.indexOf(d.category) > -1)
+            .sort((a,b) => b[yVar] - a[yVar]);
         return [date].concat(values);
     }
     svg.selectAll("g.tooltip_container").remove();
@@ -523,25 +592,20 @@ function computeWorldData() {
     });
     return data_by_country.concat(data_);
 }
-function updateGraphComparison(data, logScale = false, yVar = 'field_value', id = "#compare_graph", w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
+function updateGraphComparison(data, logScale = false, yVar = 'field_value',
+                               lines = true, id = "#compare_graph", 
+                               w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
     var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
 
     // Select the id
     var svg = d3.select(id + '_g');
-
-    // Filter data
-    data = data.filter(d => d['date'] >= new Date(startDate) &&
-                       d['date'] <= new Date(endDate));
     
     // Delete the axis
     svg.selectAll('g.x.axis').remove();
     svg.selectAll('g.y.axis').remove();
     svg.selectAll('g.yGrid').remove();
-
-    // Get the list of dates
-    let dates = d3.set(data.map(d => d[xVar])).values();
 
     // Get y data with the offsets
     let y_data = [],
@@ -559,17 +623,33 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     function getKey(e) {
         return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
     }
-    elements.forEach(function(element,index) {
+    // BUILD Y DATA
+    navigation.elements.forEach(function(element,index) {
         let _ = data.filter(d => (d['category'] === element['category'] &&
-                                  d['Country/Region'] === element['Country/Region']));
+                                  d['Country/Region'] === element['Country/Region'] &&
+                                  d['date'] >= new Date(startDate) &&
+                                  d['date'] <= new Date(endDate)));
         _ = offset_data($.extend(true, [], _), element['offset']);
         y_data = y_data.concat(_);
         keys.push(getKey(element));
     });
+
+    // Get the list of dates
+    let dates = d3.set(data.map(d => d[xVar])).values();
+
     
     // X-axis
-    var x = d3.scaleTime()
-        .domain(d3.extent(y_data, d => d[xVar]))
+    function extendOneDay(extent) {
+        // in case of bars, we extend by one day the x-axis
+        function addOneDay(date) {
+                let nextDay = new Date(date);
+                nextDay.setDate(nextDay.getDate() + 1);
+                return nextDay;
+            }
+        return [extent[0], addOneDay(extent[1])];
+    }
+    let x = d3.scaleTime()
+        .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar]))))
         .range([0, width]);
 
     svg.append("g")
@@ -580,9 +660,13 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
               .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
 
+    // Second X-axis (bars)
+    let x2 = d3.scaleBand()
+        .domain(keys)
+        .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
+
     // Y-axis
-    let y;    
-    y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
+    let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
         .domain(d3.extent(y_data, d => d[yVar]))
         .nice()
         .range([height, 0]);
@@ -604,7 +688,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     svg.append("g")
         .attr('class','y axis')
         .call(d3.axisLeft(y)
-              .tickFormat(d3.format((percPopulation ? '%' : y_data[0].category.includes('rate') ? '.2%' : '.3s'))));
+              .tickFormat(d3.format((navigation.percPopulation2 ? '%' : y_data[0].category.includes('rate') ? '.2%' : '.3s'))));
 
 
     // Colors
@@ -614,19 +698,42 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
 
     // Add lines
     svg.selectAll('path.lines').remove();
-    elements.forEach(function(element,index) {
+    svg.selectAll('rect').remove();
+    navigation.elements.forEach(function(element,index) {
         let _ = y_data.filter(d => (d['category'] === element['category'] &&
                                     d['Country/Region'] === element['Country/Region']));
-        svg.append('path')
-            .datum(_)
-            .attr('class','lines')
-            .attr('fill','none')
-            .attr('stroke', color(getKey(element)))
-            .attr("stroke-width", 3)
-            .attr('d',d3.line()
-                  .x(d => x(d[xVar]))
-                  .y(d => y(d[yVar]))
-                 );
+        if (lines) {
+            svg.append('path')
+                .datum(_)
+                .attr('class','lines')
+                .attr('fill','none')
+                .attr('stroke', color(getKey(element)))
+                .attr("stroke-width", 3)
+                .attr('d',d3.line()
+                      .x(d => x(d[xVar]))
+                      .y(d => y(d[yVar]))
+                     );
+        } else {
+            svg.selectAll(`rect.id_${element.id}`)
+                .data(_)
+                .join('rect')
+                .attr('class', 'id_'+element.id)
+                .attr('fill',  d => color(getKey(element)))
+                .attr('x', d => x(d[xVar]) + x2(getKey(element)))
+                .attr('width', x2.bandwidth())
+                .attr('y',  (d => y(d[yVar])))
+                .attr('height', d => (height - y(d[yVar])))
+                .on("mouseover", function(d) {
+	            d3.select(this).attr("fill", function() {
+                        return d3.rgb(d3.select(this).style("fill")).darker(0.5);
+                    });
+                })
+                .on("mouseout", function(d) {
+	            d3.select(this).attr("fill", function() {
+                        return d3.rgb(d3.select(this).style("fill")).brighter(0.5);
+                    });
+                });
+        }
     });
     
     // Add Tooltip (vertical line + tooltip)
@@ -640,7 +747,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
         
         g.style("display", null);
 
-
         const xLine = g.selectAll("line")
               .data([null])
               .join("line")
@@ -648,13 +754,16 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
               .attr("x1", mx).attr("x2", mx) 
               .attr("y1", 0).attr("y2", height);
 
-        const dots = g.selectAll("circle")
-              .data(data.slice(1))
-              .join("circle")
-              .style("fill", (d, i) => color(getKey(d)))
-              .attr("r", 5)
-              .attr("cx", (d, i) => x(d[xVar]))
-              .attr("cy", (d, i) => y(d[yVar]));
+        
+        if (lines) {
+            const dots = g.selectAll("circle")
+                  .data(data.slice(1))
+                  .join("circle")
+                  .style("fill", (d, i) => color(getKey(d)))
+                  .attr("r", 5)
+                  .attr("cx", (d, i) => x(d[xVar]))
+                  .attr("cy", (d, i) => y(d[yVar]));
+        }
 
         const path = g.selectAll("rect")
               .data([null])
@@ -671,10 +780,12 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
                     .attr("x", 0)
                     .attr("y", (d, i) => `${i * 1.1}em`)
                     .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (darkMode ? '#dadada' : '#181818') : color(getKey(d)))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((percPopulation2 ? '%' : d.category.includes('rate') ? '.3%' : ','))(d[yVar])}`));
+                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(getKey(d)))
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((navigation.percPopulation2 ? '%' : d.category.includes('rate') ? '.3%' : ','))(d[yVar])}`));
         
         const {xx, yy, width: w, height: h} = text.node().getBBox();
+
+        // Make sure the tooltip is always in the graph area (and visible)
         let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
             text_y = h + my - 20 > height ? my - h : my;
         text.attr("transform", `translate(${text_x},${text_y})`);
@@ -688,19 +799,20 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
     function getMouseData(mx) {
         const bisect = d3.bisector(d => d[xVar]).left;
         let mouseDate = x.invert(mx),
-            i = bisect(y_data, mouseDate),
-            a = y_data[i-1],
-            b = y_data[i],
-            fid = mouseDate - a[xVar] > mouseDate - b[xVar] ? b['field_id'] : a['field_id'],
-            date = mouseDate - a[xVar] > mouseDate - b[xVar] ? b[xVar] : a[xVar],
-            values = y_data.filter(d => d['field_id'] === fid).sort((a,b) => b[yVar] - a[yVar]);
+            i = bisect(data, mouseDate),
+            a = data[i-1],
+            b = i > data.length - 1 ? data.slice(-1)[0] : data[i],
+            f_id = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b['field_id'] : a['field_id']) : (mouseDate < b[xVar] ? a['field_id'] : b['field_id'] )),
+            date = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b[xVar] : a[xVar]) : (mouseDate < b[xVar] ? a[xVar] : b[xVar])),
+            values = y_data.filter(d => d['field_id'] === f_id).sort((a,b) => b[yVar] - a[yVar]);
         return [date].concat(values);
     }
     svg.selectAll("g.tooltip_container").remove();
     const tooltip = svg.append("g").attr("class","tooltip_container");
     svg.on("touchmove mousemove", function() {
-        let mouseData = getMouseData(d3.mouse(this)[0]),
-            mouse_y = d3.mouse(this)[1];
+        let mouse_x = d3.mouse(this)[0],
+            mouse_y = d3.mouse(this)[1],
+            mouseData = getMouseData(mouse_x);
         tooltip
             .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
     });
@@ -713,7 +825,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value', id 
 function build_elements_compare() {
     let html = '',
         categories = d3.set(data_by_country.map(d => d['category'])).values();
-    for (const [index, element] of elements.entries()) {
+    for (const [index, element] of navigation.elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
         html += `<div class="col-lg-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
         for (const country of countries) {
@@ -732,38 +844,40 @@ function build_elements_compare() {
 }
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
-    elements.forEach(function(it, ind) {
+    navigation.elements.forEach(function(it, ind) {
         if (it.id === element_id) {
             it.offset = Math.max(0, it.offset + parseInt(value));
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateNavigation({});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
-    elements.forEach(function(it, ind) {
+    navigation.elements.forEach(function(it, ind) {
         if (it.id === element_id) {
             it[property] = el.value;
         }
     });
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateNavigation({});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 }
 function add_element() {
-    let last_el = elements.length > 0 ? $.extend(true, {}, elements[elements.length-1]) : {
+    let last_el = navigation.elements.length > 0 ? $.extend(true, {}, navigation.elements[navigation.elements.length-1]) : {
         "Country/Region": "France",
         "category": "Confirmed",
         "offset": 0
     }; // copy last element
-    last_el['Country/Region'] = elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
-    elements = elements.concat(last_el);
+    last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
+    navigation.elements = navigation.elements.concat(last_el);
     build_elements_compare();
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 }
 function delete_element(id) {
-    elements = elements.filter(d => d.id != id);
+    navigation.elements = navigation.elements.filter(d => d.id != id);
     build_elements_compare();
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 }
 
 function addDatestoSelect() {
@@ -787,29 +901,54 @@ function addPopulationData() {
         e['field_value_pop'] = e['field_value'] / e['Population'];
     });
 }
+
+// Navigation
+function loadPage(button, target) {
+    $('.sidebar_show.active').each(function() {
+        $(this).removeClass('active');
+    });
+    console.log(button);
+    button.addClass('active');
+    $('.content').hide();
+    $(target).show();
+    updateNavigation({"page":target});
+}
+function updateNavigation(j) {
+    Object.keys(j).forEach(function(e,i) {
+        if (Object.keys(navigation).indexOf(e) > -1) {
+            navigation[e] = j[e];
+        }
+    });
+    document.location.hash = JSON.stringify(navigation);
+}
 // ====================================================================== //
+
+// Create graphs
 createGraph('#country_graph');
+createGraph('#country_graph_rates');
+createGraph('#country_graph_new_cases');
 createGraph('#compare_graph');
 
-let elements = [
-    {
-        "Country/Region": "France",
-        "category": "Confirmed",
-        "offset": 0
-    },
-    {
-        "Country/Region": "Italy",
-        "category": "Confirmed",
-        "offset": 0
-    },
-    {
-        "Country/Region": "Spain",
-        "category": "Confirmed",
-        "offset": 0
-    }
-];
+$('.sidebar_show').click(function(){
+    loadPage($(this), $(this).attr('target'));
+});
+if (document.location.hash.length > 0) {
+    updateNavigation(JSON.parse(document.location.hash.substring(1)));
 
-// Load Data
+    // Load page, buttons according to navigation
+    loadPage($(`#button_${navigation.page.substring(1)}`),navigation.page);
+    toggleDarkMode(navigation.darkMode);
+    $('#logScaleSwitch').prop('checked', navigation.logScale);
+    $('#barSwitch').prop('checked', !navigation.lines);
+    $('#percPopulation').prop('checked', navigation.percPopulation);
+    $('#logScaleSwitch2').prop('checked', navigation.logScale2);
+    $('#barSwitch2').prop('checked', !navigation.lines2);
+    $('#percPopulation2').prop('checked', navigation.percPopulation2);
+
+    
+}
+
+// Load Data (async)
 let nb_process_ended = 0;
 for (const element of cases_categories) {
     let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-${element}.csv`;
@@ -827,6 +966,7 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
     .then(d => population_data = d)
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
+
 // Process Data
 let timer = setInterval(() => {
     if (nb_process_ended === 4) {
@@ -848,87 +988,111 @@ let timer = setInterval(() => {
 
         // Add rates
         data_by_country = addRates(data_by_country);
-        
-        country = 'World';
-        data_country = data_by_country.filter(d => d['Country/Region'] === country);
-        load_summary_data(data_country);
-        updateGraph('#country_graph', data_country, 'date','field_value', logScale, lines);
 
+        // Graph
+        data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
+        load_summary_data(data_country);
+        updateGraph('#country_graph', data_country, 'date','field_value', navigation.logScale, navigation.lines);
+        updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+        updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+        $('.country_name').each(function() {$(this).html(navigation.country);});
+        
         // Compare
         build_elements_compare();
-        updateGraphComparison(data_by_country, logScale2);
+        updateGraphComparison(data_by_country, navigation.logScale2, 'field_value', navigation.lines2);
     }
 }, 100);
 
 
-// ======
+// ACTIONS
+// =======
 
-$('.sidebar_show').click(function(){
-    let $this = $(this);
-    let target = $this.attr('target');
-    $('.sidebar_show.active').each(function() {
-        $(this).removeClass('active');
-    });
-    $this.addClass('active');
-    $('.content').hide();
-    $(target).show();
-});
-
+// By Country graphs - actions
 $('#chooseCountry').change(function(){
-    country = $('#chooseCountry option:selected').text(),
-    data_country = data_by_country.filter(d => d['Country/Region'] === country);
+    updateNavigation({"country":$('#chooseCountry option:selected').text()});
+    data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale, lines);
+
+    $('.country_name').each(function() {$(this).html(navigation.country);});
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 $('#logScaleSwitch').change(function(){
-    logScale = logScale ? false : true;
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
+    updateNavigation({"logScale": navigation.logScale ? false : true});
     load_summary_data(data_country);
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 $('#barSwitch').change(function(){
-    lines = lines ? false : true;
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
-});
-
-//
-$('#logScaleSwitch2').change(function(){
-    logScale2 = logScale2 ? false : true;
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
-});
-$('#percPopulation2').change(function() {
-    percPopulation2 = percPopulation2 ? false : true;
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateNavigation({"lines": navigation.lines ? false : true});
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 
 $('#percPopulation').change(function() {
-    percPopulation = percPopulation ? false : true;
+    updateNavigation({"percPopulation": navigation.percPopulation ? false : true});
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (percPopulation ? 'field_value_pop' : 'field_value'),  logScale, lines);
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'),  navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
-
-// Dates
 $('#startDate').change(function() {
-    startDate = new Date($('#startDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
+    startDate = $('#startDate option:selected').text();
+    updateNavigation({'startDate': startDate});
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 
 });
 $('#endDate').change(function() {
-    endDate = new Date($('#endDate option:selected').text());
-    updateGraph('#country_graph', data_country, 'date',(percPopulation ? 'field_value_pop' : 'field_value'), logScale, lines);
+    endDate = $('#endDate option:selected').text();
+    updateNavigation({'endDate': endDate});
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
+    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+});
+
+// Graph Comparison -  actions
+$('#logScaleSwitch2').change(function(){
+    updateNavigation({"logScale2": navigation.logScale2 ? false : true});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+});
+$('#percPopulation2').change(function() {
+    updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+});
+$('#barSwitch2').change(function(){
+    updateNavigation({"lines2": navigation.lines2 ? false : true});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 });
 $('#startDate2').change(function() {
     startDate = new Date($('#startDate2 option:selected').text());
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateNavigation({'startDate': startDate});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 
 });
 $('#endDate2').change(function() {
     endDate = new Date($('#endDate2 option:selected').text());
-    updateGraphComparison(data_by_country, logScale2, (percPopulation2 ? 'field_value_pop' : 'field_value'));
+    updateNavigation({'endDate': endDate});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
 });
 
-$('#view_popup').click(function(){
-    $("#popup").show();
+// Dark Mode
+$('#darkmodeSwitch').on('click',function() {
+    console.log("Hello dark mode");
+    toggleDarkMode(!navigation.darkMode);
 });
-$('#crossquit').click(function(){
-        $("#popup").hide();
-});
+
+
+// Popup 
+// $('#view_popup').click(function(){
+//     $("#popup").show();
+// });
+// $('#crossquit').click(function(){
+//     $("#popup").hide();
+// });
+
+

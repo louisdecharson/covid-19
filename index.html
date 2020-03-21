@@ -26,43 +26,42 @@
     <body>
         <div id="popup">
             <span id="crossquit">x</span>
-            <center><h3>Content and data issues</h3></center>
-            <hr>
-            <p>Data of COVID-19 cases is retrieved from Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">github repository</a>. Browse it to know more about potential errors or data issues.</p>
-            <p>Population data is from the <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a> for most of the countries and for national statistics institute. Population data is from 2018 and is stored here <a href="https://github.com/louisdecharson/covid-19/blob/master/population_data.csv">github.com/louisdecharson/covid-19/population_data.csv</a></p>
-            <p>The code is on <a href="http://github.com/louisdecharson/covid-19">Github.</a></p>
-            <h4>Known data issues</h4>
-            <ul>
-                <li>12/03/2019: Data for <strong>12/03/2019</strong> appears to be wrong on some European countries. No new cases has been reported in the data contrary to figures reported in other sources. Read more <a href="https://github.com/CSSEGISandData/COVID-19/issues/599">here</a>.</li>
-            </ul>
         </div>
         <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
         <div class="m-2">
             <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
             </div>
-            <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div>
+            <!-- <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div> -->
             <div class="container" id="container">
                 <div class="row">
                     <nav class="col-12 col-md-2 sidebar order-md-1">
                         <ul class="nav flex-md-column flex-row justify-content-around mb-2">
-                            <li class="sidebar_show sidebar-heading active m-1 p-1" target="#by_country">
+                            <li class="sidebar_show sidebar-heading active m-1 p-1" target="#by_country" id="button_by_country">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
 				    <path d="M17.659,9.597h-1.224c-0.199-3.235-2.797-5.833-6.032-6.033V2.341c0-0.222-0.182-0.403-0.403-0.403S9.597,2.119,9.597,2.341v1.223c-3.235,0.2-5.833,2.798-6.033,6.033H2.341c-0.222,0-0.403,0.182-0.403,0.403s0.182,0.403,0.403,0.403h1.223c0.2,3.235,2.798,5.833,6.033,6.032v1.224c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403v-1.224c3.235-0.199,5.833-2.797,6.032-6.032h1.224c0.222,0,0.403-0.182,0.403-0.403S17.881,9.597,17.659,9.597 M14.435,10.403h1.193c-0.198,2.791-2.434,5.026-5.225,5.225v-1.193c0-0.222-0.182-0.403-0.403-0.403s-0.403,0.182-0.403,0.403v1.193c-2.792-0.198-5.027-2.434-5.224-5.225h1.193c0.222,0,0.403-0.182,0.403-0.403S5.787,9.597,5.565,9.597H4.373C4.57,6.805,6.805,4.57,9.597,4.373v1.193c0,0.222,0.182,0.403,0.403,0.403s0.403-0.182,0.403-0.403V4.373c2.791,0.197,5.026,2.433,5.225,5.224h-1.193c-0.222,0-0.403,0.182-0.403,0.403S14.213,10.403,14.435,10.403"></path>
 			        </svg>
                                 By Country
                             </li>
-                            <li class="sidebar_show sidebar-heading m-1 p-1" target="#compare">
+                            <li class="sidebar_show sidebar-heading m-1 p-1" target="#compare" id="button_compare">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
 				    <path d="M12.319,5.792L8.836,2.328C8.589,2.08,8.269,2.295,8.269,2.573v1.534C8.115,4.091,7.937,4.084,7.783,4.084c-2.592,0-4.7,2.097-4.7,4.676c0,1.749,0.968,3.337,2.528,4.146c0.352,0.194,0.651-0.257,0.424-0.529c-0.415-0.492-0.643-1.118-0.643-1.762c0-1.514,1.261-2.747,2.787-2.747c0.029,0,0.06,0,0.09,0.002v1.632c0,0.335,0.378,0.435,0.568,0.245l3.483-3.464C12.455,6.147,12.455,5.928,12.319,5.792 M8.938,8.67V7.554c0-0.411-0.528-0.377-0.781-0.377c-1.906,0-3.457,1.542-3.457,3.438c0,0.271,0.033,0.542,0.097,0.805C4.149,10.7,3.775,9.762,3.775,8.76c0-2.197,1.798-3.985,4.008-3.985c0.251,0,0.501,0.023,0.744,0.069c0.212,0.039,0.412-0.124,0.412-0.34v-1.1l2.646,2.633L8.938,8.67z M14.389,7.107c-0.34-0.18-0.662,0.244-0.424,0.529c0.416,0.493,0.644,1.118,0.644,1.762c0,1.515-1.272,2.747-2.798,2.747c-0.029,0-0.061,0-0.089-0.002v-1.631c0-0.354-0.382-0.419-0.558-0.246l-3.482,3.465c-0.136,0.136-0.136,0.355,0,0.49l3.482,3.465c0.189,0.186,0.568,0.096,0.568-0.245v-1.533c0.153,0.016,0.331,0.022,0.484,0.022c2.592,0,4.7-2.098,4.7-4.677C16.917,9.506,15.948,7.917,14.389,7.107 M12.217,15.238c-0.251,0-0.501-0.022-0.743-0.069c-0.212-0.039-0.411,0.125-0.411,0.341v1.101l-2.646-2.634l2.646-2.633v1.116c0,0.174,0.126,0.318,0.295,0.343c0.158,0.024,0.318,0.034,0.486,0.034c1.905,0,3.456-1.542,3.456-3.438c0-0.271-0.032-0.541-0.097-0.804c0.648,0.719,1.022,1.659,1.022,2.66C16.226,13.451,14.428,15.238,12.217,15.238"></path>
 			        </svg>
                                 Compare
                             </li>
+                            <li class="sidebar_show sidebar-heading m-1 p-1 text-warning" target="#issues" id="button_issues">
+                                <svg class="svg-icon" viewBox="0 0 20 20">
+				    <path d="M15.684,16.959L10.879,8.52c0.886-0.343,1.517-1.193,1.517-2.186c0-1.296-1.076-2.323-2.396-2.323S7.604,5.037,7.604,6.333c0,0.993,0.63,1.843,1.517,2.186l-4.818,8.439c-0.189,0.311,0.038,0.708,0.412,0.708h10.558C15.645,17.667,15.871,17.27,15.684,16.959 M8.562,6.333c0-0.778,0.645-1.382,1.438-1.382s1.438,0.604,1.438,1.382c0,0.779-0.645,1.412-1.438,1.412S8.562,7.113,8.562,6.333 M5.55,16.726L10,8.91l4.435,7.815H5.55z M15.285,9.62c1.26-2.046,1.26-4.525,0-6.572c-0.138-0.223-0.064-0.512,0.162-0.646c0.227-0.134,0.521-0.063,0.658,0.16c1.443,2.346,1.443,5.2,0,7.546c-0.236,0.382-0.641,0.17-0.658,0.159C15.221,10.131,15.147,9.842,15.285,9.62 M13.395,8.008c0.475-1.063,0.475-2.286,0-3.349c-0.106-0.238,0.004-0.515,0.246-0.62c0.242-0.104,0.525,0.004,0.632,0.242c0.583,1.305,0.583,2.801,0,4.106c-0.214,0.479-0.747,0.192-0.632,0.242C13.398,8.523,13.288,8.247,13.395,8.008 M3.895,10.107c-1.444-2.346-1.444-5.2,0-7.546c0.137-0.223,0.431-0.294,0.658-0.16c0.226,0.135,0.299,0.424,0.162,0.646c-1.26,2.047-1.26,4.525,0,6.572c0.137,0.223,0.064,0.512-0.162,0.646C4.535,10.277,4.131,10.489,3.895,10.107 M5.728,8.387c-0.583-1.305-0.583-2.801,0-4.106c0.106-0.238,0.39-0.346,0.631-0.242c0.242,0.105,0.353,0.382,0.247,0.62c-0.475,1.063-0.475,2.286,0,3.349c0.106,0.238-0.004,0.515-0.247,0.62c-0.062,0.027-0.128,0.04-0.192,0.04C5.982,8.668,5.807,8.563,5.728,8.387"></path>
+				</svg>
+                                Data issues
+                            </li>
                             <li class="fixed-bottom p-3" style="background-color: inherit;">
-                                Dark Mode <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
+                                <svg class="svg-icon" viewBox="0 0 20 20">
+				    <path fill="none" d="M10,0.625c-5.178,0-9.375,4.197-9.375,9.375S4.822,19.375,10,19.375s9.375-4.197,9.375-9.375S15.178,0.625,10,0.625 M10,18.522V1.478c4.707,0,8.522,3.815,8.522,8.522S14.707,18.522,10,18.522"></path>
+				</svg> <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
                             </li>
                         </ul>
                     </nav>
-                    <main class="col-12 col-md-10 order-md-2">
+                    <main class="col-12 col-md-10 order-md-2" id="main">
                         <div class="content" id="by_country">
                             <div class="container mb-2">
                                 <div class="row">
@@ -92,7 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="container mb-4">
+                            <div class="container mb-4" id="summary_container">
                                 <div class="row text-center" id="summary_stats">
                                     <div class="col-4">
                                         <p class="col-title">Confirmed</p>
@@ -130,8 +129,23 @@
                                     <label class="custom-control-label text-muted" for="barSwitch">Bars</label>
                                 </div>
                             </form>
-                            <div class="mt-4" id="country_graph"></div>
+                            
+                            <div class="country_graph_container mt-4 mb-4">
+                                <h4>Confirmed cases, recovered cases & deaths - <span class="country_name"></span></h4>
+                                <div class="" id="country_graph"></div>
+                            </div>
+                            <div class="country_graph_new_cases_container mt-4 mb-4">
+                                <h4>New cases - <span class="country_name"></span></h4>
+                                <div class="" id="country_graph_new_cases"></div>
+                            </div>
+                            <div class="country_graph_rates_container mt-4 mb-4">
+                                <h4>Recovered & deaths rates - <span class="country_name"></span></h4>
+                                <div id="country_graph_rates"></div>
+                            </div>
+
                         </div>
+
+                        <!-- COMPARE -->
                         <div class="content" id="compare">
                             <div id="compare_elements">
                                 <h2 class="mb-2">Compare by countries</h2>
@@ -153,11 +167,26 @@
                                 <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
                                 </select>
                                 <div class="my-1 mr-2 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="barSwitch2">
+                                    <label class="custom-control-label text-muted" for="barSwitch2">Bars</label>
+                                </div>
+                                <div class="my-1 mr-2 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="percPopulation2">
                                     <label class="custom-control-label text-muted" for="percPopulation2">as % of population</label>
                                 </div>
                             </form>
                             <div class="mt-4" id="compare_graph"></div>
+                        </div>
+                        <div class="content p-4" id="issues">
+                            <center><h3>Content and data issues</h3></center>
+                            <hr>
+                            <p>Data of COVID-19 cases is retrieved from Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">github repository</a>. Browse it to know more about potential errors or data issues.</p>
+                            <p>Population data is from the <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a> for most of the countries and from national statistics institute for others. Population data is from 2018 and is stored here <a href="https://github.com/louisdecharson/covid-19/blob/master/population_data.csv">github.com/louisdecharson/covid-19/population_data.csv</a>.</p>
+                            <p>The code is on <a href="http://github.com/louisdecharson/covid-19">Github.</a></p>
+                            <h4>Known data issues</h4>
+                            <ul>
+                                <li>12/03/2019: Data for <strong>12/03/2019</strong> appears to be wrong on some European countries. No new cases has been reported in the data contrary to figures reported in other sources. Read more <a href="https://github.com/CSSEGISandData/COVID-19/issues/599">here</a>.</li>
+                            </ul>
                         </div>
                     </main>
                 </div>
