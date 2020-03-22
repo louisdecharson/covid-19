@@ -19,6 +19,9 @@ body {
     color: var(--color-text);
     font-color: 10px;
 }
+a.title {
+    color: var(--color-text);
+}
 .text-muted {
     color: var(--text-muted) !important;
 }

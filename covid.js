@@ -4,7 +4,7 @@ let el_style = el.currentStyle || window.getComputedStyle(el),
     el_margin = parseFloat(el_style.marginLeft) + parseFloat(el_style.marginRight),
     el_padding = parseFloat(el_style.paddingLeft) + parseFloat(el_style.paddingRight);
 const widthMainGraph = el_width - el_padding;
-const heightMainGraph = Math.max(400, screen.height*0.5);
+const heightMainGraph = Math.max(400, screen.height*0.4);
 const root = document.documentElement,
       rootStyle = getComputedStyle(root);
 
@@ -361,17 +361,26 @@ function updateGraph(id, data, xVar, yVar,
             }
         return [extent[0], addOneDay(extent[1])];
     }
+    let xExtent = (lines ? d3.extent(data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar])));
     let x = d3.scaleTime()
-        .domain((lines ? d3.extent(data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar]))))
+        .domain(xExtent)
         .range([0, width]);
 
+    let nb_ticks = parseInt((w - 100) / 100); // a tick takes 40 px;
+        // nb_days  = d3.timeDay.count(...xExtent);
+    // console.log(nb_days, nb_ticks, parseInt(nb_days/nb_ticks));
     svg.append("g")
         .attr('class','x axis')
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom()
-              .scale(x)
+        .call(d3.axisBottom(x)
+              .ticks(nb_ticks)
               .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
+    // .call(d3.axisBottom()
+    //           .scale(x)
+    //           .ticks(d3.timeDay.every(parseInt(nb_days/nb_ticks)))
+    //           .tickFormat(d3.timeFormat("%d/%m/%y"))
+    //          );
 
     // Second X-axis (bars)
     let x2 = d3.scaleBand()
@@ -660,11 +669,12 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar]))))
         .range([0, width]);
 
+    let nb_ticks = parseInt((w - 100) / 100);
     svg.append("g")
         .attr('class','x axis')
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom()
-              .scale(x)
+        .call(d3.axisBottom(x)
+              .ticks(nb_ticks)
               .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
 
