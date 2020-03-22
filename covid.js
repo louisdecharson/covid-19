@@ -653,7 +653,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     });
 
     // Get the list of dates
-    let dates = d3.set(data.map(d => d[xVar])).values();
+    let dates = d3.set(y_data.map(d => d[xVar])).values();
     
     // X-axis
     function extendOneDay(extent) {
@@ -666,7 +666,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         return [extent[0], addOneDay(extent[1])];
     }
     let x = d3.scaleTime()
-        .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar]))))
+        .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(y_data, d => d[xVar]))))
         .range([0, width]);
 
     let nb_ticks = parseInt((w - 100) / 100);
@@ -681,7 +681,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     // Second X-axis (bars)
     let x2 = d3.scaleBand()
         .domain(keys)
-        .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
+        .rangeRound([0, width/d3.set(y_data.map(d => d[xVar])).values().length]);
 
     // Y-axis
     let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
