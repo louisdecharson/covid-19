@@ -218,3 +218,12 @@ tooltip_text {
         left: 20%;
     }
 }
+
+
+.download_data {
+    cursor: pointer;
+    color: var(--text-muted);
+    stroke: var(--text-muted);
+    fill: var(--text-muted);
+    border: 1px solid var(--text-muted);
+}

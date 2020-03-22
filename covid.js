@@ -27,17 +27,60 @@ let data = [],
     countries = [],
     list_dates = [],
     population_data = [],
-    data_country;
+    data_country,
+    data_graph = {};
+
+// Continental Aggre
+const EU_countries = ['Austria', 'Belgium','Bulgaria', 'Croatia', 'Cyprus',
+                      'Czechia', 'Denmark', 'Estonia','Finland', 'France',
+                      'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy', 'Latvia',
+                      'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Poland',
+                      'Portugal', 'Romania','Slovakia', 'Slovenia', 'Spain', 'Sweden'],
+      Asia_countries = ["Afghanistan","Azerbaijan","Bangladesh","Bhutan","Brunei",
+                        "Cambodia","Cameroon","China","East Timor","India","Indonesia",
+                        "Japan","Kazakhstan","Korea, South","Kuwait","Kyrgyzstan",
+                        "Malaysia","Maldives","Mongolia","Nepal","Oman","Pakistan",
+                        "Philippines","Singapore","Sri Lanka","Taiwan*","Thailand",
+                        "Uzbekistan","Vietnam"],
+      Africa_countries = ["Algeria","Angola","Benin","Burkina Faso","Cabo Verde",
+                          "Cape Verde","Central African Republic","Chad",
+                          "Congo (Brazzaville)","Congo (Kinshasa)","Cote d'Ivoire",
+                          "Djibouti","Egypt","Equatorial Guinea","Eritrea","Gabon",
+                          "Gambia, The","Ghana","Guinea","Kenya","Liberia","Madagascar",
+                          "Mauritania","Mauritius","Morocco","Namibia","Niger","Nigeria",
+                          "Rwanda","Senegal","Seychelles","Somalia","South Africa",
+                          "Tanzania","Togo","Tunisia","Uganda","Zambia","Zimbabwe"],
+      Carribean_countries = ["Antigua and Barbuda","Bahamas, The","Barbados",
+                             "Cuba","Dominican Republic","Haiti","Saint Lucia",
+                             "Saint Vincent and the Grenadines","Trinidad and Tobago"],
+      Central_America_countries = ["Costa Rica","Ecuador","El Salvador",
+                                   "Guatemala","Honduras","Jamaica","Nicaragua",
+                                   "Panama","Belize"],
+      Europe_countries = ["Albania","Andorra","Armenia","Austria","Belarus",
+                          "Belgium","Bosnia and Herzegovina","Bulgaria","Croatia",
+                          "Cyprus","Czechia","Denmark","Estonia","Eswatini","Ethiopia",
+                          "Finland","France","Georgia","Germany","Greece","Holy See",
+                          "Hungary","Iceland","Ireland","Italy","Kosovo","Latvia",
+                          "Liechtenstein","Lithuania","Luxembourg","Malta","Martinique",
+                          "Moldova","Monaco","Montenegro","Netherlands","North Macedonia",
+                          "Norway","Poland","Portugal","Romania","Russia","San Marino",
+                          "Serbia","Slovakia","Slovenia","Spain","Sudan","Sweden","Switzerland",
+                          "Ukraine","United Kingdom"],
+      Middle_East_countries = ["Bahrain","Iran","Iraq","Israel","Jordan","Lebanon",
+                               "Qatar","Saudi Arabia","Turkey","United Arab Emirates",
+                               "Yemen","Syria"],
+      North_America_countries = ["Canada", "Mexico", "US"],
+      Oceania_countries = ['Australia','Fiji','New Zealand','Papua New Guinea'],
+      South_America_countries = ["Argentina","Bolivia","Brazil","Chile","Colombia",
+                                 "Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela"];
+
+      
+      
+      
+
 
 // Default values
-let // logScale = false,
-    // logScale2 = false,
-    // lines = true,
-    // country = "World",
-    // darkMode = true,
-    // percPopulation = false,
-    // percPopulation2 = false,
-    startDate,
+let startDate,
     endDate;
 
 let elements = [
@@ -223,6 +266,36 @@ function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
             return out;
         });
 }
+function computeAggregate(name_aggregate, fltr = false,
+                          data = data_by_country,
+                          colSum = ['field_value','Population'],
+                          colFirst = ['field_id','date', 'category']) {
+    return d3.nest()
+        .key(d => d.category + d.field_id)
+        .rollup(function(d) {
+            let out = {};
+            colSum.forEach(function(k) {
+                out[k] = d3.sum(d, v => v[k]);
+            });
+            colFirst.forEach(function(k) {
+                out[k] = d[0][k];
+            });
+            return out;
+        })
+        .entries((fltr ? data.filter(fltr) : data))
+        .map(function(g) {
+            let out = {};
+            [...colSum, ...colFirst].forEach(function(k) {
+                out[k] = g.value[k];
+            });
+            out['Country/Region'] = name_aggregate;
+            out['key'] = out.category + out['Country/Region'] + out['field_id'];
+            out['field_value_pop'] = out['field_value'] / out['Population'];
+            return out;
+        });
+}
+
+
 function get_list_countries(data) {
     countries = d3.set(data.map(f => f['Country/Region'])).values().sort();
 
@@ -367,8 +440,6 @@ function updateGraph(id, data, xVar, yVar,
         .range([0, width]);
 
     let nb_ticks = parseInt((w - 100) / 100); // a tick takes 40 px;
-        // nb_days  = d3.timeDay.count(...xExtent);
-    // console.log(nb_days, nb_ticks, parseInt(nb_days/nb_ticks));
     svg.append("g")
         .attr('class','x axis')
         .attr("transform", "translate(0," + height + ")")
@@ -376,11 +447,6 @@ function updateGraph(id, data, xVar, yVar,
               .ticks(nb_ticks)
               .tickFormat(d3.timeFormat("%d/%m/%y"))
              );
-    // .call(d3.axisBottom()
-    //           .scale(x)
-    //           .ticks(d3.timeDay.every(parseInt(nb_days/nb_ticks)))
-    //           .tickFormat(d3.timeFormat("%d/%m/%y"))
-    //          );
 
     // Second X-axis (bars)
     let x2 = d3.scaleBand()
@@ -389,7 +455,7 @@ function updateGraph(id, data, xVar, yVar,
 
     // Y-axis
     let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
-        .domain(d3.extent(data, d => d[yVar]))
+        .domain(d3.extent(data, d => d[yVar]).map(d => d < 0 ? 0 : d))
         .nice()
         .range([height, 0]);
 
@@ -533,6 +599,9 @@ function updateGraph(id, data, xVar, yVar,
     
     // Add legend
     addLegend(id+'_svg',categories,3*margin.right,margin.top);
+
+    // Save data
+    data_graph[id.slice(1)] = data;
 }
 function addLegend(id, keys, px, py, colors_ = colors) {
     var color = d3.scaleOrdinal()
@@ -601,15 +670,27 @@ function addLegend(id, keys, px, py, colors_ = colors) {
 }
 
 function computeWorldData() {
-    let data_ = groupBy(data_by_country,'key_world',['field_value','Population'],[],['field_id','Country/Region','date','category','Lat','Long','Province/State']);
-    data_.forEach(function(d){
-        d['Country/Region'] = 'World';
-        d['Province/State'] = '';
-        d['key'] = d.category + d['Country/Region'] + d['field_id'];
-        d['field_value_pop'] = d['field_value'] / d['Population'];
-    });
-    return data_by_country.concat(data_);
+    // let data_ = groupBy(data_by_country,'key_world',['field_value','Population'],[],['field_id','date','category']);
+    // data_.forEach(function(d){
+    //     d['Country/Region'] = 'World';
+    //     d['key'] = d.category + d['Country/Region'] + d['field_id'];
+    //     d['field_value_pop'] = d['field_value'] / d['Population'];
+    // });
+    // return data_by_country.concat(data_);
+    return [...data_by_country, ...computeAggregate('World'),
+            ...computeAggregate('European Union', (d => EU_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Europe', (d => Europe_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Asia', (d => Asia_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('North America', (d => North_America_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Oceania', (d => Oceania_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Middle East', (d => Middle_East_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Africa', (d => Africa_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Central America', (d => Central_America_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Carribean', (d => Carribean_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('South America', (d => South_America_countries.indexOf(d['Country/Region']) > -1))
+           ];
 }
+
 function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                                lines = true, id = "#compare_graph", 
                                w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
@@ -839,6 +920,9 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
 
     // Add legend
     addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
+
+    // Save data
+    data_graph[id.slice(1)] = y_data;
 }
 
 function build_elements_compare() {
@@ -846,7 +930,7 @@ function build_elements_compare() {
         categories = d3.set(data_by_country.map(d => d['category'])).values();
     for (const [index, element] of navigation.elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
-        html += `<div class="col-lg-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
+        html += `<div class="col-xl-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
         for (const country of countries) {
             let selected = country === element['Country/Region'] ? 'selected' : '';
             html += '<option ' + selected + '>' + country + '</option>';
@@ -940,6 +1024,32 @@ function updateNavigation(j) {
     });
     document.location.hash = JSON.stringify(navigation);
 }
+
+// Download data
+function download_data(id) {
+    console.log("Download ", id);
+    let el = document.createElement("a");
+    el.id = "download";
+    el.download = `louisdecharson_data_covid19_${id}_${Date.now()}.csv`;
+    el.href = URL.createObjectURL(new Blob([to_csv(data_graph[id])]));
+    el.click();
+}
+function to_csv(j) {
+    let csv = '';
+    if (j.length > 0) {
+        let keys = Object.keys(j[0]);
+        csv += keys.join(',') + "\n";
+        csv += j.map(function(d) {
+            let a = [];
+            for (const k of keys) {
+                a.push('"' + d[k] + '"');
+            }
+            return a.join(',');
+        }).join('\n');
+    }
+    return csv.toString();
+}
+
 // ====================================================================== //
 
 // Create graphs
@@ -978,7 +1088,7 @@ let timer = setInterval(() => {
         
         // Group By Data
         data_by_country = groupBy(data,'key',['field_value'],[],
-                                  ['field_id','Country/Region','date','category','Lat','Long','key_world']);
+                                  ['field_id','Country/Region','date','category','key_world']);
 
         // Add Population Data
         addPopulationData();
