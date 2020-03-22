@@ -187,6 +187,9 @@ tooltip_text {
     display: inline-block;
     font-size: 0.8rem;
 }
+.text-orange {
+    color: #e57e22;
+}
 /* popup */
 #crossquit{
     position:absolute;
