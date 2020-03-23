@@ -454,15 +454,22 @@ function updateGraph(id, data, xVar, yVar,
         .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
 
     // Y-axis
-    let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
-        .domain(d3.extent(data, d => d[yVar]).map(d => d < 0 ? 0 : d))
+    let minY = logScale ? percentage ? d3.min(data.filter(d => d[yVar] > 0), d => d[yVar]) : 1 : 0,
+        maxY = d3.max(data, d=>d[yVar]);
+    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
+        .domain([minY,maxY])
         .nice()
         .range([height, 0]);
 
+    function get_optimal_precision(n) {
+        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
+    }
+    let precision_percentage = get_optimal_precision(maxY),
+        formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
     let yGrid = svg => svg
         .call(d3.axisRight(y)
               .tickSize(width)
-              .tickFormat(d3.format((percentage ? '.3%' : '.3s'))))
+              .tickFormat(formatTick))
         .call(g => g.selectAll('.domain').remove())
         .call(g => g.selectAll(".tick:not(:first-of-type) line")
               .attr("stroke-opacity", 0.5)
@@ -477,7 +484,7 @@ function updateGraph(id, data, xVar, yVar,
     svg.append("g")
         .attr('class','y axis')
         .call(d3.axisLeft(y)
-              .tickFormat(d3.format((percentage ? '.2%' : '.3s'))));
+              .tickFormat(formatTick));
         
     // Add the content
     svg.selectAll('path.lines').remove();
@@ -491,8 +498,9 @@ function updateGraph(id, data, xVar, yVar,
                 .attr('stroke',  d => color(category))
                 .attr("stroke-width", 3)
                 .attr('d', d3.line()
-                      .x(d => x(d[xVar]))
-                      .y(d => y(d[yVar])));
+                      .y(d => y(d[yVar]))
+                      .defined(d => logScale ? (d[yVar] <= 0 ? false : true ) : true)
+                      .x(d => x(d[xVar])));
             
         } else {
             svg.selectAll(`rect.${category.replace(/ /g,'_')}`)
@@ -532,7 +540,7 @@ function updateGraph(id, data, xVar, yVar,
         
         if (lines) {
             const dots = g.selectAll("circle")
-                  .data(data.slice(1))
+                  .data(data.slice(1).filter(d => logScale ? d[yVar] > 0 : true))
                   .join("circle")
                   .style("fill", d => color(d.category))
                   .attr("r", 5)
@@ -557,7 +565,7 @@ function updateGraph(id, data, xVar, yVar,
                     .attr("class","tooltip_text")
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.category))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percentage ? '.2%' : ','))(d[yVar])}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percentage ? precision_percentage : ','))(d[yVar])}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
 
         // Make sure the tooltip is always in the graph area (and visible)
@@ -765,14 +773,25 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         .rangeRound([0, width/d3.set(y_data.map(d => d[xVar])).values().length]);
 
     // Y-axis
-    let y = d3[logScale ? "scaleSymlog" : "scaleLinear"]()
-        .domain(d3.extent(y_data, d => d[yVar]))
+    let percentage = navigation.percPopulation2 || y_data[0].category.includes('rate');
+    let minY = logScale ? percentage ? d3.min(y_data.filter(d => d[yVar] > 0), d => d[yVar]) : 1 : 0,
+        maxY = d3.max(y_data, d=>d[yVar]);
+
+    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
+        .domain([minY,maxY])
         .nice()
         .range([height, 0]);
 
+    function get_optimal_precision(n) {
+        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
+    }
+    let precision_percentage = get_optimal_precision(maxY),
+        formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
+    
     let yGrid = svg => svg
         .call(d3.axisRight(y)
-              .tickSize(width))
+              .tickSize(width)
+              .tickFormat(formatTick))
         .call(g => g.selectAll('.domain').remove())
         .call(g => g.selectAll(".tick:not(:first-of-type) line")
               .attr("stroke-opacity", 0.5)
@@ -787,8 +806,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     svg.append("g")
         .attr('class','y axis')
         .call(d3.axisLeft(y)
-              .tickFormat(d3.format((navigation.percPopulation2 ? '%' : y_data[0].category.includes('rate') ? '.2%' : '.3s'))));
-
+              .tickFormat(formatTick));
     
     // Colors
     let color = d3.scaleOrdinal()
@@ -810,9 +828,9 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                 .attr('stroke', color(getKey(element)))
                 .attr("stroke-width", 3)
                 .attr('d',d3.line()
-                      .x(d => x(d[xVar]))
                       .y(d => y(d[yVar]))
-                     );
+                      .defined(d => logScale ? (d[yVar] <= 0 ? false : true ) : true)
+                      .x(d => x(d[xVar])));
         } else {
             svg.selectAll(`rect.bars.id_${element.id}`)
                 .data(_)
@@ -857,7 +875,7 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         
         if (lines) {
             const dots = g.selectAll("circle")
-                  .data(data.slice(1))
+                  .data(data.slice(1).filter(d => logScale ? d[yVar] > 0 : true))
                   .join("circle")
                   .style("fill", (d, i) => color(getKey(d)))
                   .attr("r", 5)
@@ -1103,7 +1121,7 @@ let timer = setInterval(() => {
         // Graph
         data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
         load_summary_data(data_country);
-        updateGraph('#country_graph', data_country, 'date','field_value', navigation.logScale, navigation.lines);
+        updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
         updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
         updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
         $('.country_name').each(function() {$(this).html(navigation.country);});
@@ -1144,20 +1162,20 @@ $('#chooseCountry').change(function(){
     load_summary_data(data_country);
 
     $('.country_name').each(function() {$(this).html(navigation.country);});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 $('#logScaleSwitch').change(function(){
     updateNavigation({"logScale": navigation.logScale ? false : true});
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 $('#barSwitch').change(function(){
     updateNavigation({"lines": navigation.lines ? false : true});
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
@@ -1165,14 +1183,14 @@ $('#barSwitch').change(function(){
 $('#percPopulation').change(function() {
     updateNavigation({"percPopulation": navigation.percPopulation ? false : true});
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'),  navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'),  navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
 $('#startDate').change(function() {
     startDate = $('#startDate option:selected').text();
     updateNavigation({"startDate": startDate});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 
@@ -1180,7 +1198,7 @@ $('#startDate').change(function() {
 $('#endDate').change(function() {
     endDate = $('#endDate option:selected').text();
     updateNavigation({'endDate': endDate});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines);
+    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
 });
