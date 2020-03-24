@@ -227,3 +227,11 @@ tooltip_text {
     fill: var(--text-muted);
     border: 1px solid var(--text-muted);
 }
+table.list-issues {
+    color: var(--color-text) !important;
+    background-color: var(--background-color) !important;
+}
+table.list-issues > tbody > tr:hover{
+    color: var(--background-color) !important;
+    background-color: var(--color-text) !important;
+}

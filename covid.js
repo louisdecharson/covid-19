@@ -10,7 +10,7 @@ const root = document.documentElement,
 
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-const colors = ['#2ecb71','#f29b12','#e64c3c']; // red, green orange for dead, confirmed and recovered cases
+const colors = ['#f29b12','#e64c3c']; // red for deaths, orange for cases
 let colorVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
 let colorsValues = {};
 colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
@@ -21,9 +21,9 @@ colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPro
 let data = [],
     data_by_country = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
-    cases_categories = ['Recovered','Confirmed','Deaths'],
-    rates_categories = ['Deaths rate', 'Recovered rate'],
-    new_cases_categories = ['New Recovered cases','New Confirmed cases','New Deaths cases'],
+    cases_categories = ['Confirmed','Deaths'],
+    rates_categories = ['Deaths rate'],
+    new_cases_categories = ['New Confirmed cases','New Deaths cases'],
     countries = [],
     list_dates = [],
     population_data = [],
@@ -189,22 +189,6 @@ function addRates(data) {
         .entries(data)
         .map(g => g.value);
 
-    let recovered_rates = d3.nest()
-        .key(d => d['Country/Region']+d['field_id'])
-        .rollup(function(d) {
-            let out = $.extend(true, {}, d[0]);
-            let confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
-                recovered = d.filter(e => e['category'] === 'Recovered')[0]['field_value'],
-                recovered_rate = confirmed === 0 ? 0 : recovered / confirmed;
-            out['category'] = 'Recovered rate';
-            out['field_value'] = recovered_rate;
-            out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
-            out['field_value_pop'] = NaN;
-            return out;
-        })
-        .entries(data)
-        .map(g => g.value);
-
     let new_cases = [];
     d3.nest()
         .key(d => d['Country/Region'] + d['category'])
@@ -228,7 +212,7 @@ function addRates(data) {
         });
     
     
-    return [...data, ...death_rates, ...recovered_rates, ...new_cases];
+    return [...data, ...death_rates, ...new_cases];
 }
 
 
@@ -316,7 +300,7 @@ function load_summary_data() {
         $(`#nb_${category.toLowerCase()}`).html(last_value);
 
         // Add this data to DOM
-        if (category === 'Deaths' || category === 'Recovered') {
+        if (category === 'Deaths') {
             let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
             $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
         } 
@@ -1080,7 +1064,7 @@ createGraph('#compare_graph');
 // Load Data (async)
 let nb_process_ended = 0;
 for (const element of cases_categories) {
-    let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-${element}.csv`;
+    let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${element.toLowerCase()}_global.csv`;
     d3.csv(data_link)
         .then(function(d) {
             console.log(`Loaded data for ${element}. Length: ${d.length}`);
@@ -1098,7 +1082,7 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
 
 // Process Data
 let timer = setInterval(() => {
-    if (nb_process_ended === 4) {
+    if (nb_process_ended === 3) {
         clearInterval(timer);
 
         // Add Dates to select

@@ -7,14 +7,14 @@
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://louisdecharson.github.io/covid-19/" />
         <meta property="og:image" content="https://louisdecharson.github.io/covid-19/og_image.png"/>
-        <meta property="og:description" content="Compare the viral spread across countries of COVID-19 by confirmed cases, deaths cases and recovered cases."/>
+        <meta property="og:description" content="Compare the viral spread across countries of COVID-19 by confirmed cases and deaths cases."/>
 
 
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@louisdecharson">
         <meta name="twitter:creator" content="@louisdecharson">
         <meta name="twitter:title" content="Coronavirus Data Dashboard">
-        <meta name="twitter:description" content="Compare the viral spread across countries of COVID-19 by confirmed cases, deaths cases and recovered cases.">
+        <meta name="twitter:description" content="Compare the viral spread across countries of COVID-19 by confirmed cases and deaths cases.">
         <meta name="twitter:image" content="https://louisdecharson.github.io/covid-19/og_image.png">
         
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -93,19 +93,13 @@
                             </div>
                             <div class="container mb-4" id="summary_container">
                                 <div class="row text-center" id="summary_stats">
-                                    <div class="col-4">
+                                    <div class="col-6">
                                         <p class="col-title">Confirmed</p>
                                         <h3 id="nb_confirmed" class="confirmed"></h3>
                                         <h6><span>&#8203;</span></h6>
                                         <div id="sparkline_confirmed"></div>
                                     </div>
-                                    <div class="col-4">
-                                        <p class="col-title">Recovered</p>
-                                        <h3 id="nb_recovered" class="recovered"></h3>
-                                        <h6 id="nb_recovered_rate" class="recovered"></h6>
-                                        <div id="sparkline_recovered"></div>
-                                    </div>
-                                    <div class="col-4">
+                                    <div class="col-6">
                                         <p class="col-title">Deaths</p>
                                         <h3 id="nb_deaths" class="deaths"></h3>
                                         <h6 id="nb_deaths_rate" class="deaths"></h6>
@@ -131,7 +125,7 @@
                             </form>
                             
                             <div class="country_graph_container mt-4 mb-4">
-                                <h4 class="">Confirmed cases, recovered cases & deaths - <span class="country_name"></span></h4>
+                                <h4 class="">Confirmed cases & deaths - <span class="country_name"></span></h4>
                                 <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('country_graph')">
                                     <svg class="svg-icon" viewBox="0 0 20 20">
 				        <path fill="none" d="M15.608,6.262h-2.338v0.935h2.338c0.516,0,0.934,0.418,0.934,0.935v8.879c0,0.517-0.418,0.935-0.934,0.935H4.392c-0.516,0-0.935-0.418-0.935-0.935V8.131c0-0.516,0.419-0.935,0.935-0.935h2.336V6.262H4.392c-1.032,0-1.869,0.837-1.869,1.869v8.879c0,1.031,0.837,1.869,1.869,1.869h11.216c1.031,0,1.869-0.838,1.869-1.869V8.131C17.478,7.099,16.64,6.262,15.608,6.262z M9.513,11.973c0.017,0.082,0.047,0.162,0.109,0.226c0.104,0.106,0.243,0.143,0.378,0.126c0.135,0.017,0.274-0.02,0.377-0.126c0.064-0.065,0.097-0.147,0.115-0.231l1.708-1.751c0.178-0.183,0.178-0.479,0-0.662c-0.178-0.182-0.467-0.182-0.645,0l-1.101,1.129V1.588c0-0.258-0.204-0.467-0.456-0.467c-0.252,0-0.456,0.209-0.456,0.467v9.094L8.443,9.553c-0.178-0.182-0.467-0.182-0.645,0c-0.178,0.184-0.178,0.479,0,0.662L9.513,11.973z"></path>
@@ -151,7 +145,7 @@
                                 <div class="" id="country_graph_new_cases"></div>
                             </div>
                             <div class="country_graph_rates_container mt-4 mb-4">
-                                <h4 class="">Recovered & deaths rates - <span class="country_name"></span></h4>
+                                <h4 class="">Deaths rate - <span class="country_name"></span></h4>
                                 <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('country_graph_rates')">
                                     <svg class="svg-icon" viewBox="0 0 20 20">
 				        <path fill="none" d="M15.608,6.262h-2.338v0.935h2.338c0.516,0,0.934,0.418,0.934,0.935v8.879c0,0.517-0.418,0.935-0.934,0.935H4.392c-0.516,0-0.935-0.418-0.935-0.935V8.131c0-0.516,0.419-0.935,0.935-0.935h2.336V6.262H4.392c-1.032,0-1.869,0.837-1.869,1.869v8.879c0,1.031,0.837,1.869,1.869,1.869h11.216c1.031,0,1.869-0.838,1.869-1.869V8.131C17.478,7.099,16.64,6.262,15.608,6.262z M9.513,11.973c0.017,0.082,0.047,0.162,0.109,0.226c0.104,0.106,0.243,0.143,0.378,0.126c0.135,0.017,0.274-0.02,0.377-0.126c0.064-0.065,0.097-0.147,0.115-0.231l1.708-1.751c0.178-0.183,0.178-0.479,0-0.662c-0.178-0.182-0.467-0.182-0.645,0l-1.101,1.129V1.588c0-0.258-0.204-0.467-0.456-0.467c-0.252,0-0.456,0.209-0.456,0.467v9.094L8.443,9.553c-0.178-0.182-0.467-0.182-0.645,0c-0.178,0.184-0.178,0.479,0,0.662L9.513,11.973z"></path>
@@ -209,9 +203,10 @@
                             <p>Data of COVID-19 cases is retrieved from Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">github repository</a>. Browse it to know more about potential errors or data issues.</p>
                             <p>Population data is from the <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a> for most of the countries and from national statistics institute for others. Population data is from 2018 and is stored here <a href="https://github.com/louisdecharson/covid-19/blob/master/population_data.csv">github.com/louisdecharson/covid-19/population_data.csv</a>.</p>
                             <p>The code is on <a href="http://github.com/louisdecharson/covid-19">Github.</a></p>
-                            <h4 class="mt-4">Known data issues</h4>
-                            <ul>
-                                <li>12/03/2019: Data for <strong>12/03/2019</strong> appears to be wrong for some European countries. No new cases has been reported in the data contrary to figures reported in other sources. Read more <a href="https://github.com/CSSEGISandData/COVID-19/issues/599">here</a>.</li>
+                            <h4 class="mt-4 text-orange">Issues</h4>
+                            <table class="list-issues">
+                                <tr><td class="align-top pr-2">12/03/2020</td><td>Data for <strong>12/03/2020</strong> appears to be wrong for some European countries. No new cases has been reported in the data contrary to figures reported in other sources. Read more <a href="https://github.com/CSSEGISandData/COVID-19/issues/599">here</a>.</td></tr>
+                                <tr><td class="align-top pr-2">23/03/2020</td><td>Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19/commit/6eab8cc908dff4d44b631053582ad4311f50ebcb#diff-eb3e961500680278537f38c751212d2e">has stopped</a> publishing recovered cases data.</td></tr>
                             </ul>
                         </div>
                     </main>
