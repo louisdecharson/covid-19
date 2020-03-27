@@ -173,21 +173,25 @@ function parseData(wide_data, pivot_columns, category) {
 }
 
 function addRates(data) {
-    let death_rates = d3.nest()
+    let rates = d3.nest()
         .key(d => d['Country/Region']+d['field_id'])
         .rollup(function(d) {
-            let out = $.extend(true, {}, d[0]);
-            let confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
-                deaths = d.filter(e => e['category'] === 'Deaths')[0]['field_value'],
-                death_rate = confirmed === 0 ? 0 : deaths / confirmed;
-            out['category'] = 'Deaths rate';
-            out['field_value'] = death_rate;
-            out['key'] = 'Deaths rate ' + out['Country/Region'] + out['field_id'];
-            out['field_value_pop'] = NaN;
-            return out;
+            let _ = [];
+            for (const category of cases_categories.filter(e => d !== 'Confirmed')) {
+                let out = $.extend(true, {}, d[0]),
+                    confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
+                    nb = d.filter(e => e['category'] === category )[0]['field_value'],
+                    rate = confirmed === 0 ? 0 : nb / confirmed;
+                out['category'] = `${category} rate`;
+                out['field_value'] = rate;
+                out['key'] = out['category'] + out['Country/Region'] + out['field_id'];
+                out['field_value_pop'] = NaN;
+                _.push(out);
+            }
+            return _;
         })
         .entries(data)
-        .map(g => g.value);
+        .map(g => g.value).flat();
 
     let new_cases = [];
     d3.nest()
@@ -210,9 +214,32 @@ function addRates(data) {
         .forEach(function(array) {
             array.forEach(a => new_cases.push(a));
         });
+
+    let growth_rates = [];
+    d3.nest()
+        .key(d => d['Country/Region'] + d['category'])
+        .rollup(function(array) {
+            let new_array = $.extend(true, [], array);
+            for(const [i, e] of new_array.entries()) {
+                if (i > 0) {
+                    e['field_value'] = array[i-1]['field_value'] > 0 ? array[i]['field_value']/array[i-1]['field_value']-1 : null;
+                    e['previous_date'] = array[i-1]['field_id'];
+                } else {
+                    e['field_value'] = null;
+                }
+                e['category'] = `${e['category']} growth rate`;
+                e['key'] = e['category'] + e['Country/Region'] + e['field_id'];
+                e['field_value_pop'] = e['field_value'] / e['Population'];
+            }
+            return new_array;
+        })
+        .entries(data_by_country)
+        .map(g => g.value)
+        .forEach(function(array) {
+            array.forEach(a => growth_rates.push(a));
+        });
     
-    
-    return [...data, ...death_rates, ...new_cases];
+    return [...data, ...rates, ...new_cases, ...growth_rates];
 }
 
 
@@ -932,12 +959,12 @@ function build_elements_compare() {
         categories = d3.set(data_by_country.map(d => d['category'])).values();
     for (const [index, element] of navigation.elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
-        html += `<div class="col-xl-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
+        html += `<div class="col-xl-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><svg style="position:absolute;top:0.2rem;right:0.1rem;" class="svg-icon delete-element" onclick=delete_element('${element.id}') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
         for (const country of countries) {
             let selected = country === element['Country/Region'] ? 'selected' : '';
             html += '<option ' + selected + '>' + country + '</option>';
         }
-        html += '</select><svg class="ml-2 svg-icon delete-element" onclick=delete_element('+ element.id +') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>';
+        html += '</select></div>';
         html += `<div class="category_element mb-1 mt-1"><select onchange="update_element(this,'category')" class="select-category-element" element_id="${element.id}">`;
         for (const category of categories) {
             let selected = category === element['category'] ? 'selected' : '';
@@ -1082,7 +1109,7 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
 
 // Process Data
 let timer = setInterval(() => {
-    if (nb_process_ended === 3) {
+    if (nb_process_ended === cases_categories.length + 1) {
         clearInterval(timer);
 
         // Add Dates to select

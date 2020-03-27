@@ -116,7 +116,7 @@ select option{
     background-color: var(--background-color);
     border: 2px solid rgba(200, 200, 200, .4);
     border-radius: 1rem;
-    padding: 0.75em;
+    padding: 0.6em;
 }
 .card-title {
     margin: auto;
