@@ -473,7 +473,7 @@ function updateGraph(id, data, xVar, yVar,
         .range([height, 0]);
 
     function get_optimal_precision(n) {
-        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
+        return `.${Math.abs(Math.floor(Math.log10((n > 0 ? n : 1))))+1}%`;
     }
     let precision_percentage = get_optimal_precision(maxY),
         formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
