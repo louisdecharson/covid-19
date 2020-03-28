@@ -1079,6 +1079,16 @@ function to_csv(j) {
     return csv.toString();
 }
 
+// Simple analytics
+function action(event) {
+    try {
+        sa_event(event);
+    }
+    catch(error) {
+        console.log(`Error in action. Action: ${event} | Error: ${error}`);
+    }
+}
+
 // ====================================================================== //
 
 // Create graphs
@@ -1171,6 +1181,7 @@ $('#percPopulation2').prop('checked', navigation.percPopulation2);
 // Nav actions
 $('.sidebar_show').click(function(){
     loadPage($(this), $(this).attr('target'));
+    action([navigation.page,'change_page',navigation.page].join('_').replace(/ /g,'_'));
 });
 
 
@@ -1184,6 +1195,7 @@ $('#chooseCountry').change(function(){
     updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'chooseCountry',navigation.country].join('_').replace(/ /g,'_'));
 });
 $('#logScaleSwitch').change(function(){
     updateNavigation({"logScale": navigation.logScale ? false : true});
@@ -1191,12 +1203,14 @@ $('#logScaleSwitch').change(function(){
     updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'log_scale',navigation.logScale].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch').change(function(){
     updateNavigation({"lines": navigation.lines ? false : true});
     updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'barSwitch',navigation.lines].join('_').replace(/ /g,'_'));
 });
 
 $('#percPopulation').change(function() {
@@ -1205,6 +1219,7 @@ $('#percPopulation').change(function() {
     updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'),  navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'percPopulation',navigation.percPopulation].join('_').replace(/ /g,'_'));
 });
 $('#startDate').change(function() {
     startDate = $('#startDate option:selected').text();
@@ -1212,6 +1227,7 @@ $('#startDate').change(function() {
     updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'startDate',navigation.startDate].join('_').replace(/ /g,'_'));
 
 });
 $('#endDate').change(function() {
@@ -1220,36 +1236,42 @@ $('#endDate').change(function() {
     updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
     updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
     updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    action([navigation.page,'endDate',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 
 // Graph Comparison -  actions
 $('#logScaleSwitch2').change(function(){
     updateNavigation({"logScale2": navigation.logScale2 ? false : true});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    action([navigation.page,'logScaleSwitch2',navigation.logScaleSwitch2].join('_').replace(/ /g,'_'));
 });
 $('#percPopulation2').change(function() {
     updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    action([navigation.page,'percPopulation2',navigation.percPopulation2].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch2').change(function(){
     updateNavigation({"lines2": navigation.lines2 ? false : true});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    action([navigation.page,'barSwitch2',navigation.lines2].join('_').replace(/ /g,'_'));
 });
 $('#startDate2').change(function() {
     startDate = $('#startDate2 option:selected').text();
     updateNavigation({"startDate": startDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
-
+    action([navigation.page,'startDate2',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate2').change(function() {
     endDate = $('#endDate2 option:selected').text();
     updateNavigation({"endDate": endDate});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    action([navigation.page,'endDate2',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {
     toggleDarkMode(!navigation.darkMode);
+    action([navigation.page,'darkMode',navigation.darkMode].join('_').replace(/ /g,'_'));
 });
 
 
