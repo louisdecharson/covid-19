@@ -1107,6 +1107,14 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
 
+
+// let ecdc_data;
+// d3.json('https://opendata.ecdc.europa.eu/covid19/casedistribution/json/')
+//     .then(d => ecdc_data = d)
+//     .catch(e => console.log(e));
+
+
+
 // Process Data
 let timer = setInterval(() => {
     if (nb_process_ended === cases_categories.length + 1) {
