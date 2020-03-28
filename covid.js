@@ -1243,7 +1243,7 @@ $('#endDate').change(function() {
 $('#logScaleSwitch2').change(function(){
     updateNavigation({"logScale2": navigation.logScale2 ? false : true});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
-    action([navigation.page,'logScaleSwitch2',navigation.logScaleSwitch2].join('_').replace(/ /g,'_'));
+    action([navigation.page,'logScaleSwitch2',navigation.logScale2].join('_').replace(/ /g,'_'));
 });
 $('#percPopulation2').change(function() {
     updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
