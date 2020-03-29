@@ -36,6 +36,14 @@ select#chooseCountry {
     -webkit-appearance: none;
 
 }
+select#ft_add_country {
+    padding: 0.3em;
+    color: var(--color-text);
+    font-size: 1rem;
+    background: transparent;
+    -webkit-appearance: none;
+
+}
 select option{
     background-color: var(--background-color);;
 }
@@ -175,6 +183,10 @@ hr {
     stroke: var(--color-text)
 }
 tooltip_text {
+    fill: var(--color-text);
+}
+
+.axis_title {
     fill: var(--color-text);
 }
 

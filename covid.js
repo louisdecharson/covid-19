@@ -100,7 +100,6 @@ let elements = [
         "offset": 0
     }
 ];
-
 let navigation = {
     "page": 'by_country',
     "darkMode": true,
@@ -113,7 +112,10 @@ let navigation = {
     "percPopulation": false,
     "percPopulation2": false,
     "startDate": '',
-    "endDate":''
+    "endDate":'',
+    "ft_countries": ['Korea, South','China','France','Italy','Spain','Japan','US','United Kingdom'],
+    "logScale3": true,
+    "hideLegend": false
 };
 
 // DARK MODE
@@ -311,13 +313,23 @@ function get_list_countries(data) {
     countries = d3.set(data.map(f => f['Country/Region'])).values().sort();
 
     // Add countries to selector
-    let chooseCountryHTML = '';
+    let chooseCountryHTML = '',
+        ft_countries_html = '<option selected>Add country</option>';
     for (const [index, country] of countries.entries()) {
         let selected = country === navigation.country ? 'selected' : '';
         chooseCountryHTML += `<option ${selected}>${country}</option>`;
+        ft_countries_html += navigation.ft_countries.indexOf(country) == -1 ? `<option>${country}</option>` : '';
     }
     $('#chooseCountry').html(chooseCountryHTML);
     $('#chooseCountry').show();
+    $('#ft_add_country').html(ft_countries_html);
+}
+function build_ft_countries_select() {
+    let ft_countries_html = '<option selected>Add country</option>';
+    for (const [index, country] of countries.entries()) {
+        ft_countries_html += navigation.ft_countries.indexOf(country) == -1 ? `<option>${country}</option>` : '';
+    }
+    $('#ft_add_country').html(ft_countries_html);
 }
 function load_summary_data() {
     let last_date = data.map(d => d['date']).slice(-1)[0];
@@ -338,6 +350,24 @@ function load_summary_data() {
 }
 function get_dates(data) {
     list_dates = d3.set(data.map(d => d['date'])).values();
+}
+
+// PLOTS
+// =====
+
+// Utilities
+// ---------
+function extendOneDay(extent) {
+    // in case of bars, we extend by one day the x-axis
+    function addOneDay(date) {
+        let nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 1);
+        return nextDay;
+    }
+    return [extent[0], addOneDay(extent[1])];
+}
+function get_optimal_precision(n) {
+        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
 }
 function sparkline(elemId, data, xVar, yVar, logScale = false) {
     // Plot a Sparkline (see Edward Tufte)
@@ -535,7 +565,6 @@ function updateGraph(id, data, xVar, yVar,
                 });
         }
     });
-
     // Add Tooltip (vertical line + tooltip)
     function addTooltip(g, data, mx, my) {
         if (!data) return g.style("display", "none");
@@ -756,15 +785,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     let dates = d3.set(y_data.map(d => d[xVar])).values();
     
     // X-axis
-    function extendOneDay(extent) {
-        // in case of bars, we extend by one day the x-axis
-        function addOneDay(date) {
-                let nextDay = new Date(date);
-                nextDay.setDate(nextDay.getDate() + 1);
-                return nextDay;
-            }
-        return [extent[0], addOneDay(extent[1])];
-    }
     let x = d3.scaleTime()
         .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(y_data, d => d[xVar]))))
         .range([0, width]);
@@ -793,9 +813,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
         .nice()
         .range([height, 0]);
 
-    function get_optimal_precision(n) {
-        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
-    }
     let precision_percentage = get_optimal_precision(maxY),
         formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
     
@@ -864,7 +881,8 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                 });
         }
     });
-    
+
+    // TOOLTIP
     // Add Tooltip (vertical line + tooltip)
     function addTooltip(g, data, mx, my) {
         if (!data) {
@@ -949,7 +967,6 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
 
     // Add legend
     addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
-
     // Save data
     data_graph[id.slice(1)] = y_data;
 }
@@ -974,6 +991,24 @@ function build_elements_compare() {
     }
     $('#compare_elements_container').html(html);
 }
+
+function build_ft_countries() {
+    let html = '';
+    for (const [i, country] of navigation.ft_countries.entries()) {
+        html += `
+        <div class="p-2 ml-1 mr-1 mt-1 mb-1 badge" style="display:inline-block; background-color:${colors_countries[i]};"><span>${country}</span>
+        <svg class="svg-icon delete-element mb-1" onclick=remove_ft_country(${i}) viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>`;
+    }
+    $('#ft_countries_container').html(html);
+}
+function remove_ft_country(index) {
+    navigation.ft_countries.splice(index,1);
+    updateNavigation({"ft_countries": navigation.ft_countries});
+    build_ft_countries();
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+}
+
+
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
     navigation.elements.forEach(function(it, ind) {
@@ -1016,7 +1051,6 @@ function addDatestoSelect() {
     let html_start_dates = '',
         html_end_dates = '';
     for (const d of list_dates) {
-        //        console.log(d3.timeFormat("%d-%b-%y")(new Date(d)));
         html_start_dates += '<option ' + (d === startDate ? 'selected' : '') + '>' + d + '</option>';
         html_end_dates += '<option ' + (d === endDate ? 'selected' : '') + '>' + d + '</option>';
     }
@@ -1089,6 +1123,189 @@ function action(event) {
     }
 }
 
+// FT Graph
+function ft_interactive_graph(data, keys, logScale, hideLegend,
+                              id = "#ft_graph", category = 'Deaths',
+                              yVar = 'field_value', w = widthMainGraph, h = heightMainGraph, threshold=10) {
+    // keys = list of countries
+    
+    var margin = {top: 10, right: 30, bottom: 50, left: 60};
+    var width = w - margin.left - margin.right;
+    var height = h - margin.top - margin.bottom;
+
+    // Select the id
+    var svg = d3.select(id + '_g');
+    
+    // Delete the axis
+    svg.selectAll('g.x.axis').remove();
+    svg.selectAll('g.y.axis').remove();
+    svg.selectAll('g.yGrid').remove();
+
+    // Prepare data
+    let ft_data = d3.nest()
+        .key(d => d['Country/Region'])
+        .rollup(function(a) {
+            let na = $.extend(true, [], a),
+                date_threshold = d3.min(na.map(d => d['date']));
+            for (const [i, e] of na.entries()) {
+                e['x'] = Math.round((e['date'] - date_threshold)/(24*3600*1000));
+                e['y'] = e[yVar];
+            }
+            return na;
+        })
+        .entries(data.filter(d => (d[yVar] >= threshold &&
+                                   keys.indexOf(d['Country/Region']) > -1 &&
+                                  d['category'] === category)))
+        .map( g => g.value).flat();
+    
+    // X-axis
+    let x = d3.scaleLinear()
+        .domain([d3.min(ft_data.map(d => d.x)),d3.max(ft_data.map(d => d.x))+10])
+        .range([0, width]);
+    let nb_ticks = parseInt((w - 100) / 100);
+    svg.append("g")
+        .attr('class','x axis')
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x)
+              .ticks(nb_ticks)
+             );
+
+    // Y-axis
+    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
+        .domain(d3.extent(ft_data.map(d => d.y)))
+        .nice()
+        .range([height, 0]);
+
+    let formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format('.3s')(d) : "" ) : d3.format('.3s')(d);
+    
+    let yGrid = svg => svg
+        .call(d3.axisRight(y)
+              .ticks(Math.round(Math.log10(d3.max(ft_data.map(d => d.y)))))
+              .tickSize(width)
+              .tickFormat(formatTick))
+        .call(g => g.selectAll('.domain').remove())
+        .call(g => g.selectAll(".tick:not(:first-of-type) line")
+              .attr("stroke-opacity", 0.5)
+              .attr("stroke-dasharray", "2,2"))
+        .call(g => g.selectAll(".tick text")
+              .remove());
+    
+    svg.append("g")
+        .attr('class','yGrid')
+        .call(yGrid);
+
+    svg.append("g")
+        .attr('class','y axis')
+        .call(d3.axisLeft(y)
+              .tickFormat(formatTick));
+
+    svg.selectAll('text.axis_title').remove();
+    svg.append("text")
+        .attr('class','axis_title')
+        .attr("transform",
+              "translate(" + (width/2) + " ," + 
+              (height + margin.top + 25) + ")")
+        .style("text-anchor", "middle")
+        .text("Number of days since 10th deaths");
+    
+    // Colors
+    let color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(colors_countries);
+
+    // Add lines
+    svg.selectAll('path.lines').remove();
+    keys.forEach(function(e,i) {
+        let _ = ft_data.filter(d => d['Country/Region'] === e);
+        svg.append('path')
+            .datum(_)
+            .attr('class','lines')
+            .attr('fill','none')
+            .attr('stroke', color(e))
+            .attr("stroke-width", 3)
+            .attr('d',d3.line()
+                  .y(d => y(d.y))
+                  .x(d => x(d.x)));
+    });
+
+    // TOOLTIP
+    // Add Tooltip (vertical line + tooltip)
+    function addTooltip(g, data, mx, my) {
+        if (!data) return g.style("display", "none");
+        
+        g.style("display", null);
+        
+        const dots = g.selectAll("circle")
+              .data(data.slice(1).filter(d => logScale ? d.y > 0 : true))
+              .join("circle")
+              .style("fill", d => color(d['Country/Region']))
+              .attr("r", 5)
+              .attr("cx", (d, i) => x(d.x))
+              .attr("cy", (d, i) => y(d.y));
+
+        const path = g.selectAll("rect")
+              .data([null])
+              .join("rect")
+              .attr("class","rect_tooltip");
+
+        const text = g.selectAll("text")
+              .data([null])
+              .join("text")
+              .call(text => text
+                    .selectAll('tspan')
+                    .data(data)
+                    .join("tspan")
+                    .attr("x", 0)
+                    .attr("y", (d, i) => `${i * 1.1}em`)
+                    .attr("class","tooltip_text")
+                    .style("font-weight","bold")
+                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d['Country/Region']))
+                    .text((d,i) => i === 0 ? `D+${d}` : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d.y)}`));
+        const {xx, yy, width: w, height: h} = text.node().getBBox();
+
+        // Make sure the tooltip is always in the graph area (and visible)
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
+            text_y = h + my - 20 > height ? my - h : my;
+        text.attr("transform", `translate(${text_x},${text_y})`);
+
+        path.attr("x", text_x-5)
+            .attr("y", text_y - 20)
+            .attr("rx", 5)
+            .attr("width", w + 10)
+            .attr("height", h + 10);
+        
+        return true;
+    };
+    function getMouseData(mx) {
+        const bisect = d3.bisector(d => d.x).left;
+        let mouseDate = x.invert(mx),
+            date = Math.round(mouseDate),
+            values = ft_data.filter(d => d.x === date)
+            .sort((a,b) => b.y - a.y);
+        return [date].concat(values);
+    }
+    svg.selectAll("g.tooltip_container").remove();
+    const tooltip = svg.append("g").attr("class","tooltip_container");
+    svg.on("touchmove mousemove", function() {
+        let mouse_x = d3.mouse(this)[0],
+            mouse_y = d3.mouse(this)[1],
+            mouseData = getMouseData(mouse_x);
+        tooltip
+            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+    });
+    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
+
+    // Add legend
+    if (!hideLegend) {
+        addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
+    } else {
+        d3.select(id + '_svg').select('g.legend').remove();
+    }
+    // Save data
+    data_graph[id.slice(1)] = ft_data;
+}
+
+
 // ====================================================================== //
 
 // Create graphs
@@ -1096,7 +1313,7 @@ createGraph('#country_graph');
 createGraph('#country_graph_rates');
 createGraph('#country_graph_new_cases');
 createGraph('#compare_graph');
-
+createGraph('#ft_graph');
 
 // Load Data (async)
 let nb_process_ended = 0;
@@ -1158,6 +1375,10 @@ let timer = setInterval(() => {
         // Compare
         build_elements_compare();
         updateGraphComparison(data_by_country, navigation.logScale2, 'field_value', navigation.lines2);
+
+        // FT Graph
+        build_ft_countries();
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
     }
 }, 100);
 
@@ -1174,6 +1395,9 @@ $('#percPopulation').prop('checked', navigation.percPopulation);
 $('#logScaleSwitch2').prop('checked', navigation.logScale2);
 $('#barSwitch2').prop('checked', !navigation.lines2);
 $('#percPopulation2').prop('checked', navigation.percPopulation2);
+$('#logScaleSwitch3').prop('checked', navigation.logScale3);
+$('#hideLegend').prop('checked', navigation.hideLegend);
+
 
 // ACTIONS
 // =======
@@ -1268,6 +1492,27 @@ $('#endDate2').change(function() {
     action([navigation.page,'endDate2',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 
+// FT Graph
+$('#logScaleSwitch3').change(function(){
+    updateNavigation({"logScale3": navigation.logScale3 ? false : true});
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    action([navigation.page,'logScaleSwitch3',navigation.logScale3].join('_').replace(/ /g,'_'));
+});
+$('#hideLegend').change(function(){
+    updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
+    console.log(navigation.logScale3, navigation.hideLegend);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
+});
+$('#ft_add_country').change(function(){
+    let c = $('#ft_add_country option:selected').text();
+    if (countries.indexOf(c) > -1) {
+        updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
+        build_ft_countries();
+        build_ft_countries_select();
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    }
+});
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {
     toggleDarkMode(!navigation.darkMode);
