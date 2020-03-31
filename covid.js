@@ -10,7 +10,7 @@ const root = document.documentElement,
 
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-const colors = ['#f29b12','#e64c3c']; // red for deaths, orange for cases
+const colors = ['#f29b12','#e64c3c','#2ecb71']; // red for deaths, orange for cases
 let colorVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
 let colorsValues = {};
 colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
@@ -21,7 +21,8 @@ colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPro
 let data = [],
     data_by_country = [],
     pivot_columns = ['Province/State','Country/Region','Lat','Long'],
-    cases_categories = ['Confirmed','Deaths'],
+    // cases_categories = ['Confirmed','Deaths'],
+    cases_categories = ['Confirmed','Deaths','Recovered'],
     rates_categories = ['Deaths rate'],
     new_cases_categories = ['New Confirmed cases','New Deaths cases'],
     countries = [],
@@ -115,7 +116,8 @@ let navigation = {
     "endDate":'',
     "ft_countries": ['Korea, South','China','France','Italy','Spain','Japan','US','United Kingdom'],
     "logScale3": true,
-    "hideLegend": false
+    "hideLegend": false,
+    "ft_threshold": 100
 };
 
 // DARK MODE
@@ -339,7 +341,7 @@ function load_summary_data() {
         $(`#nb_${category.toLowerCase()}`).html(last_value);
 
         // Add this data to DOM
-        if (category === 'Deaths') {
+        if (category === 'Deaths' || category === 'Recovered') {
             let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
             $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
         } 
@@ -1000,12 +1002,19 @@ function build_ft_countries() {
         <svg class="svg-icon delete-element mb-1" onclick=remove_ft_country(${i}) viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>`;
     }
     $('#ft_countries_container').html(html);
+    update_ft_threshold();
+}
+function update_ft_threshold() {
+    let max_value = Math.min(d3.max(data_by_country.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1) &&
+                                                  (d['category'] === 'Deaths'))
+                                  .map(d => d['field_value'])),1000);
+    $('#thresholdRange').attr('max', max_value.toString());
 }
 function remove_ft_country(index) {
     navigation.ft_countries.splice(index,1);
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
 }
 
 
@@ -1124,9 +1133,9 @@ function action(event) {
 }
 
 // FT Graph
-function ft_interactive_graph(data, keys, logScale, hideLegend,
+function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
                               id = "#ft_graph", category = 'Deaths',
-                              yVar = 'field_value', w = widthMainGraph, h = heightMainGraph, threshold=10) {
+                              yVar = 'field_value', w = widthMainGraph, h = heightMainGraph) {
     // keys = list of countries
     
     var margin = {top: 10, right: 30, bottom: 50, left: 60};
@@ -1206,7 +1215,7 @@ function ft_interactive_graph(data, keys, logScale, hideLegend,
               "translate(" + (width/2) + " ," + 
               (height + margin.top + 25) + ")")
         .style("text-anchor", "middle")
-        .text("Number of days since 10th deaths");
+        .text("Number of days since " + threshold.toString() + "th deaths");
     
     // Colors
     let color = d3.scaleOrdinal()
@@ -1378,7 +1387,7 @@ let timer = setInterval(() => {
 
         // FT Graph
         build_ft_countries();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
     }
 }, 100);
 
@@ -1397,6 +1406,8 @@ $('#barSwitch2').prop('checked', !navigation.lines2);
 $('#percPopulation2').prop('checked', navigation.percPopulation2);
 $('#logScaleSwitch3').prop('checked', navigation.logScale3);
 $('#hideLegend').prop('checked', navigation.hideLegend);
+$('#thresholdRange').prop('value', navigation.ft_threshold);
+$('#thresholdValue').html(navigation.ft_threshold);
 
 
 // ACTIONS
@@ -1495,13 +1506,13 @@ $('#endDate2').change(function() {
 // FT Graph
 $('#logScaleSwitch3').change(function(){
     updateNavigation({"logScale3": navigation.logScale3 ? false : true});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
     action([navigation.page,'logScaleSwitch3',navigation.logScale3].join('_').replace(/ /g,'_'));
 });
 $('#hideLegend').change(function(){
     updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
     console.log(navigation.logScale3, navigation.hideLegend);
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
     action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
 });
 $('#ft_add_country').change(function(){
@@ -1510,8 +1521,14 @@ $('#ft_add_country').change(function(){
         updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
         build_ft_countries();
         build_ft_countries_select();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend);
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
     }
+});
+$("#thresholdRange").on('change mousemouve', function() {
+    let threshold = $(this).val();
+    $('#thresholdValue').html(threshold);
+    updateNavigation({"ft_threshold": threshold});
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
 });
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {

@@ -100,18 +100,24 @@
                             </div>
                             <div class="container mb-4" id="summary_container">
                                 <div class="row text-center" id="summary_stats">
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <p class="col-title">Confirmed</p>
                                         <h3 id="nb_confirmed" class="confirmed"></h3>
                                         <h6><span>&#8203;</span></h6>
                                         <div id="sparkline_confirmed"></div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <p class="col-title">Deaths</p>
                                         <h3 id="nb_deaths" class="deaths"></h3>
                                         <h6 id="nb_deaths_rate" class="deaths"></h6>
                                         <div id="sparkline_deaths"></div>
                                     </div>
+                                    <div class="col-4">
+                                        <p class="col-title">Recovered</p>
+                                        <h3 id="nb_recovered" class="recovered"></h3>
+                                        <h6 id="nb_recovered_rate" class="recovered"></h6>
+                                        <div id="sparkline_recovered"></div>
+                                    </div>                                    
                                 </div>
                             </div>
                             <form class="form-inline">
@@ -222,6 +228,11 @@
                                     <input type="checkbox" class="custom-control-input" id="hideLegend">
                                     <label class="custom-control-label text-muted" for="hideLegend">Hide Legend</label>
                                 </div>
+                                <div class="my-1 mr-2 text-muted custom-switch">
+                                    <label for="thresholdRange">Threshold</label>
+                                    <input type="range" class="custom-range" min="10" max="1000" step="10" id="thresholdRange">
+                                </div>
+                                <span class="text-muted" id="thresholdValue"></span>
                             </form>
                             <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('ft_graph')">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
