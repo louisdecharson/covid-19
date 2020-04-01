@@ -1186,10 +1186,10 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
         .range([height, 0]);
 
     let formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format('.3s')(d) : "" ) : d3.format('.3s')(d);
-    
+    let nbTicks = logScale ? Math.round(Math.log10(d3.max(ft_data.map(d => d.y)))-Math.log10(d3.min(ft_data.map(d => d.y)))) + 1 : parseInt(h / 40);
     let yGrid = svg => svg
         .call(d3.axisRight(y)
-              .ticks(Math.round(Math.log10(d3.max(ft_data.map(d => d.y)))))
+              .ticks(nbTicks)
               .tickSize(width)
               .tickFormat(formatTick))
         .call(g => g.selectAll('.domain').remove())
