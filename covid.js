@@ -8,6 +8,9 @@ const heightMainGraph = Math.max(400, screen.height*0.4);
 const root = document.documentElement,
       rootStyle = getComputedStyle(root);
 
+// SparkLine size
+const sparklineWidth = Math.min(document.getElementById('summary_stats').offsetWidth / 3 - 30, 150);
+const sparklineHeight = 25;
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
 const colors = ['#f29b12','#e64c3c','#2ecb71']; // red for deaths, orange for cases
@@ -375,8 +378,8 @@ function sparkline(elemId, data, xVar, yVar, logScale = false) {
     // Plot a Sparkline (see Edward Tufte)
 
     // elemId
-    var width = 120;
-    var height = 25;
+    var width = sparklineWidth;
+    var height = sparklineHeight;
     var x = d3.scaleLinear().range([0, width - 2]);
     let y;
     if (logScale) {
@@ -420,8 +423,17 @@ function sparkline(elemId, data, xVar, yVar, logScale = false) {
         .attr('class','sparklines-number')
         .text(d3.format((navigation.percPopulation ? '%' : '.3s'))(data[data.length-1].y));
 }
+function getMarginGraph(w) {
+    return {
+        top: 10,
+        right: w < 400 ? 20 : 30, // smaller margin for mobile
+        bottom: 30,
+        left: w < 400 ? 40 : 60 // smaller margin for mobile
+    };
+}
 function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
-    var margin = {top: 10, right: 30, bottom: 30, left: 60};
+    // var margin = {top: 10, right: w < 400 ? 20 : 30, bottom: 30, left: w < 400 ? 20 : 60};
+    let margin = getMarginGraph(w);
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
     var svg = d3.select(id)
@@ -446,7 +458,8 @@ function updateGraph(id, data, xVar, yVar,
                      logScale = navigation.logScale, lines = true, categories = cases_categories, percentage = false,
                      w = widthMainGraph, h = heightMainGraph)
 {
-    var margin = {top: 10, right: 30, bottom: 30, left: 60};
+    // var margin = {top: 10, right: 30, bottom: 30, left: 60};
+    let margin = getMarginGraph(w);
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
 
@@ -639,10 +652,12 @@ function updateGraph(id, data, xVar, yVar,
     const tooltip = svg.append("g").attr("class","tooltip_container");
     svg.on("touchmove mousemove", function() {
         let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1],
-            mouseData = getMouseData(mouse_x);
-        tooltip
-            .call(addTooltip, mouseData, lines ? x(mouseData[0]) : mouse_x, mouse_y+30);            
+            mouse_y = d3.mouse(this)[1];
+        if (mouse_x > 0) {
+            let mouseData = getMouseData(mouse_x);
+            tooltip
+                .call(addTooltip, mouseData, lines ? x(mouseData[0]) : mouse_x, mouse_y+30);
+        }
     });
     svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
 
@@ -744,7 +759,8 @@ function computeWorldData() {
 function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                                lines = true, id = "#compare_graph", 
                                w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
-    var margin = {top: 10, right: 30, bottom: 30, left: 60};
+    let margin = getMarginGraph(w);
+    // var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
 
@@ -960,10 +976,12 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
     const tooltip = svg.append("g").attr("class","tooltip_container");
     svg.on("touchmove mousemove", function() {
         let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1],
-            mouseData = getMouseData(mouse_x);
-        tooltip
-            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+            mouse_y = d3.mouse(this)[1];
+        if (mouse_x > 0) {
+            let mouseData = getMouseData(mouse_x);
+            tooltip
+                .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);
+        }
     });
     svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
 
@@ -1138,7 +1156,9 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
                               yVar = 'field_value', w = widthMainGraph, h = heightMainGraph) {
     // keys = list of countries
     
-    var margin = {top: 10, right: 30, bottom: 50, left: 60};
+    let margin = getMarginGraph(w);
+    margin.bottom = 50;
+    // var margin = {top: 10, right: 30, bottom: 50, left: 60};
     var width = w - margin.left - margin.right;
     var height = h - margin.top - margin.bottom;
 
@@ -1297,10 +1317,12 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
     const tooltip = svg.append("g").attr("class","tooltip_container");
     svg.on("touchmove mousemove", function() {
         let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1],
-            mouseData = getMouseData(mouse_x);
-        tooltip
-            .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);            
+            mouse_y = d3.mouse(this)[1];
+        if (mouse_x > 0) {
+            let mouseData = getMouseData(mouse_x);
+            tooltip
+                .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);
+        }
     });
     svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
 

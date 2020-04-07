@@ -17,7 +17,19 @@ body {
     font: "Helvetica", Arial;
     background-color: var(--background-color); 
     color: var(--color-text);
-    font-color: 10px;
+}
+@media (max-width: 600px) {
+    body {
+        margin: 1%;
+        font-size: 0.8rem;
+    }
+    h3 {
+        font-size: 1.2rem;
+    }
+    .col-12 {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
 }
 a.title {
     color: var(--color-text);
@@ -74,6 +86,8 @@ select option{
         max-width: inherit;
     }
 }
+
+
 /* SVG Icons */
 .svg-icon {
     width: 1.5em;
@@ -87,6 +101,9 @@ select option{
 .svg-icon circle {
     stroke: var(--color-text);
     stroke-width: 1;
+}
+svg.text {
+    font-size: 5px;
 }
 
 /* Nav Bar */
