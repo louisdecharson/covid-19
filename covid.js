@@ -117,10 +117,14 @@ let navigation = {
     "percPopulation2": false,
     "startDate": '',
     "endDate":'',
+    "maCompare": 1,
     "ft_countries": ['Korea, South','China','France','Italy','Spain','Japan','US','United Kingdom'],
     "logScale3": true,
     "hideLegend": false,
-    "ft_threshold": 100
+    "ft_category": "Deaths",
+    "ft_threshold": 100,
+    "ft_thresholdCategory": "Deaths",
+    "ft_ma": 1
 };
 
 // DARK MODE
@@ -153,6 +157,17 @@ function zip() {
     return shortest.map(function(_,i){
         return args.map(function(array){return array[i];});
     });
+}
+function ma_json(array, yVar, period=1) {
+    // Compute the moving average on yVar with period 'period' where array
+    // is a JSON array
+    let ma = [];
+    for (let i = array.length; i >= 0 + period; i--) {
+        let e = $.extend(true, {}, array[i - 1]);
+        e[yVar] = array.slice(i-period,i).reduce((t,n) => t + n[yVar],0)/period;
+        ma.push(e);
+    }
+    return ma.reverse();
 }
 function parseData(wide_data, pivot_columns, category) {
     let long_data = [],
@@ -336,6 +351,20 @@ function build_ft_countries_select() {
     }
     $('#ft_add_country').html(ft_countries_html);
 }
+function build_ft_categories_select() {
+    let ft_categories_html = '',
+        ft_categories_threshold_html = '',
+        categories = d3.set(data_by_country.map(d => d['category'])).values().filter(d => !d.includes('rate'));
+    for (const category of categories) {
+        let ft_category_select = navigation.ft_category === category ? 'selected' : '',
+            ft_category_threshold_select = navigation.ft_thresholdCategory === category ? 'selected' : '';
+        ft_categories_html += `<option ${ft_category_select}>${category}</option>`;
+        ft_categories_threshold_html += `<option ${ft_category_threshold_select}>${category}</option>`;
+    }
+    $('#ftCategory').html(ft_categories_html);
+    $('#ftThresholdCategory').html(ft_categories_threshold_html);
+};
+
 function load_summary_data() {
     let last_date = data.map(d => d['date']).slice(-1)[0];
     for (const category of cases_categories) {
@@ -455,7 +484,8 @@ function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
 
 }
 function updateGraph(id, data, xVar, yVar,
-                     logScale = navigation.logScale, lines = true, categories = cases_categories, percentage = false,
+                     logScale = navigation.logScale, lines = true, categories = cases_categories,
+                     percentage = false,
                      w = widthMainGraph, h = heightMainGraph)
 {
     // var margin = {top: 10, right: 30, bottom: 30, left: 60};
@@ -720,7 +750,6 @@ function addLegend(id, keys, px, py, colors_ = colors) {
         w = _.width,
         h = _.height;
     } catch(err) {
-        console.log(err);
         x = 85,
         y = 5,
         w = 0,
@@ -757,8 +786,21 @@ function computeWorldData() {
 }
 
 function updateGraphComparison(data, logScale = false, yVar = 'field_value',
-                               lines = true, id = "#compare_graph", 
+                               lines = true, maPeriod = 1, id = "#compare_graph", 
                                w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
+    // Update graph 'compare' with new data
+    // ------------------------------------
+    // data : raw data to use
+    // logScale : boolean (true to use a logScale)
+    // yVar: y axis variable
+    // lines : boolean (true : use line, false: use bars)
+    // maPeriod : number of days for computing moving average
+    // id : id of the graph container
+    // w : width of the graph DOM
+    // h : height of the graph DOM
+    // xVar : x axis variable
+    
+    
     let margin = getMarginGraph(w);
     // var margin = {top: 10, right: 30, bottom: 30, left: 60};
     var width = w - margin.left - margin.right;
@@ -794,7 +836,8 @@ function updateGraphComparison(data, logScale = false, yVar = 'field_value',
                                   d['Country/Region'] === element['Country/Region'] &&
                                   d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
                                   d['date'] <= d3.timeParse('%d-%b-%y')(endDate)));
-        _ = offset_data($.extend(true, [], _), element['offset']);
+        // _ = offset_data($.extend(true, [], _), element['offset']);
+        _ = ma_json(offset_data($.extend(true, [], _), element['offset']),yVar, maPeriod);
         y_data = y_data.concat(_);
         keys.push(getKey(element));
     });
@@ -1032,7 +1075,8 @@ function remove_ft_country(index) {
     navigation.ft_countries.splice(index,1);
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
 }
 
 
@@ -1045,7 +1089,7 @@ function update_offset(el, value) {
         }
     });
     updateNavigation({});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
@@ -1055,7 +1099,7 @@ function update_element(el, property) {
         }
     });
     updateNavigation({});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 }
 function add_element() {
     let last_el = navigation.elements.length > 0 ? $.extend(true, {}, navigation.elements[navigation.elements.length-1]) : {
@@ -1066,12 +1110,12 @@ function add_element() {
     last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
     navigation.elements = navigation.elements.concat(last_el);
     build_elements_compare();
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 }
 function delete_element(id) {
     navigation.elements = navigation.elements.filter(d => d.id != id);
     build_elements_compare();
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 }
 
 function addDatestoSelect() {
@@ -1117,7 +1161,6 @@ function updateNavigation(j) {
 
 // Download data
 function download_data(id) {
-    console.log("Download ", id);
     let el = document.createElement("a");
     el.id = "download";
     el.download = `louisdecharson_data_covid19_${id}_${Date.now()}.csv`;
@@ -1152,7 +1195,8 @@ function action(event) {
 
 // FT Graph
 function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
-                              id = "#ft_graph", category = 'Deaths',
+                              category = 'Deaths',
+                              thresholdCategory = 'Deaths', maPeriod = 1, id = "#ft_graph", 
                               yVar = 'field_value', w = widthMainGraph, h = heightMainGraph) {
     // keys = list of countries
     
@@ -1174,17 +1218,18 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
     let ft_data = d3.nest()
         .key(d => d['Country/Region'])
         .rollup(function(a) {
-            let na = $.extend(true, [], a),
-                date_threshold = d3.min(na.map(d => d['date']));
-            for (const [i, e] of na.entries()) {
+            let na = $.extend(true, [], a).filter(d => d['category'] === category),
+                date_threshold = d3.min(a.filter(d => d['category'] === thresholdCategory &&
+                                                 d[yVar] >= threshold)
+                                        .map(d => d['date']));
+            for (let i = na.length; i >= 0 + maPeriod; i--) {
+                let e = na[i-1];
                 e['x'] = Math.round((e['date'] - date_threshold)/(24*3600*1000));
-                e['y'] = e[yVar];
+                e['y'] = maPeriod === 1 ? e[yVar] : na.slice(i-maPeriod,i).reduce((t,n) => t + n[yVar],0)/maPeriod;
             }
-            return na;
+            return na.reverse().slice(maPeriod-1).filter(d => d['x'] >= 0);
         })
-        .entries(data.filter(d => (d[yVar] >= threshold &&
-                                   keys.indexOf(d['Country/Region']) > -1 &&
-                                  d['category'] === category)))
+        .entries(data.filter(d => (keys.indexOf(d['Country/Region']) > -1)))
         .map( g => g.value).flat();
     
     // X-axis
@@ -1200,8 +1245,10 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
              );
 
     // Y-axis
+    let minY = d3.min(ft_data.filter(d => d.y > 0), d => d.y),
+        maxY = d3.max(ft_data, d => d.y);
     let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
-        .domain(d3.extent(ft_data.map(d => d.y)))
+        .domain([minY,maxY])
         .nice()
         .range([height, 0]);
 
@@ -1235,7 +1282,7 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
               "translate(" + (width/2) + " ," + 
               (height + margin.top + 25) + ")")
         .style("text-anchor", "middle")
-        .text("Number of days since " + threshold.toString() + "th deaths");
+        .text("Number of days since " + threshold.toString() + ` ${thresholdCategory} first recorded ->`);
     
     // Colors
     let color = d3.scaleOrdinal()
@@ -1254,6 +1301,7 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
             .attr("stroke-width", 3)
             .attr('d',d3.line()
                   .y(d => y(d.y))
+                  .defined(d => logScale ? (d.y <= 0 ? false : true ) : true)
                   .x(d => x(d.x)));
     });
 
@@ -1405,11 +1453,14 @@ let timer = setInterval(() => {
         
         // Compare
         build_elements_compare();
-        updateGraphComparison(data_by_country, navigation.logScale2, 'field_value', navigation.lines2);
+        updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'),
+                              navigation.lines2, navigation.maCompare);
 
         // FT Graph
         build_ft_countries();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+        build_ft_categories_select();
     }
 }, 100);
 
@@ -1423,14 +1474,20 @@ toggleDarkMode(navigation.darkMode);
 $('#logScaleSwitch').prop('checked', navigation.logScale);
 $('#barSwitch').prop('checked', !navigation.lines);
 $('#percPopulation').prop('checked', navigation.percPopulation);
+//Compare
 $('#logScaleSwitch2').prop('checked', navigation.logScale2);
 $('#barSwitch2').prop('checked', !navigation.lines2);
 $('#percPopulation2').prop('checked', navigation.percPopulation2);
+$('#movingAverageCompareRange').prop('value', navigation.maCompare);
+$('#movingAverageCompareValue').html(navigation.maCompare);
+// FT
 $('#logScaleSwitch3').prop('checked', navigation.logScale3);
 $('#hideLegend').prop('checked', navigation.hideLegend);
 $('#thresholdRange').prop('value', navigation.ft_threshold);
-$('#thresholdValue').html(navigation.ft_threshold);
-
+// for ranges, we need to update both the range (position of the cursor) and the span value
+$('#thresholdValue').html(navigation.ft_threshold); 
+$('#movingAverageFTRange').prop('value', navigation.ft_ma);
+$('#movingAverageFTValue').html(navigation.ft_ma); 
 
 // ACTIONS
 // =======
@@ -1499,42 +1556,49 @@ $('#endDate').change(function() {
 // Graph Comparison -  actions
 $('#logScaleSwitch2').change(function(){
     updateNavigation({"logScale2": navigation.logScale2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
     action([navigation.page,'logScaleSwitch2',navigation.logScale2].join('_').replace(/ /g,'_'));
 });
 $('#percPopulation2').change(function() {
     updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
     action([navigation.page,'percPopulation2',navigation.percPopulation2].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch2').change(function(){
     updateNavigation({"lines2": navigation.lines2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
     action([navigation.page,'barSwitch2',navigation.lines2].join('_').replace(/ /g,'_'));
 });
 $('#startDate2').change(function() {
     startDate = $('#startDate2 option:selected').text();
     updateNavigation({"startDate": startDate});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
     action([navigation.page,'startDate2',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate2').change(function() {
     endDate = $('#endDate2 option:selected').text();
     updateNavigation({"endDate": endDate});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2);
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
     action([navigation.page,'endDate2',navigation.endDate].join('_').replace(/ /g,'_'));
+});
+$("#movingAverageCompareRange").on('change mousemouve', function() {
+    let ma = $(this).val();
+    $('#movingAverageCompareValue').html(ma);
+    updateNavigation({"maCompare": ma});
+    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 });
 
 // FT Graph
 $('#logScaleSwitch3').change(function(){
     updateNavigation({"logScale3": navigation.logScale3 ? false : true});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
     action([navigation.page,'logScaleSwitch3',navigation.logScale3].join('_').replace(/ /g,'_'));
 });
 $('#hideLegend').change(function(){
     updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
-    console.log(navigation.logScale3, navigation.hideLegend);
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
     action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
 });
 $('#ft_add_country').change(function(){
@@ -1543,20 +1607,40 @@ $('#ft_add_country').change(function(){
         updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
         build_ft_countries();
         build_ft_countries_select();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
-    }
+        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);}
+});
+$('#ftCategory').change(function(){
+    updateNavigation({"ft_category":$('#ftCategory option:selected').text()});
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+
 });
 $("#thresholdRange").on('change mousemouve', function() {
     let threshold = $(this).val();
     $('#thresholdValue').html(threshold);
     updateNavigation({"ft_threshold": threshold});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend, navigation.ft_threshold);
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
 });
+$('#ftThresholdCategory').change(function(){
+    updateNavigation({"ft_thresholdCategory":$('#ftThresholdCategory option:selected').text()});
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+
+});
+$("#movingAverageFTRange").on('change mousemouve', function() {
+    let ma = $(this).val();
+    $('#movingAverageFTValue').html(ma);
+    updateNavigation({"ft_ma": ma});
+    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
+                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+});
+
+
+
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {
     toggleDarkMode(!navigation.darkMode);
     action([navigation.page,'darkMode',navigation.darkMode].join('_').replace(/ /g,'_'));
 });
-
-
-

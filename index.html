@@ -121,17 +121,19 @@
                                 </div>
                             </div>
                             <form class="form-inline">
-                                <div class="my-1 mr-2 text-muted custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
-                                    <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale | </label>
+                                <div class="form-inline mr-3">
+                                    <label class="my-1 mr-2 text-muted">Range:</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="startDate">
+                                    </select>
+                                    <label class="my-1 mr-2 text-muted">To</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
+                                    </select>
                                 </div>
-                                <label class="my-1 mr-2 text-muted">Range:</label>
-                                <select class="select-dates custom-select my-1 mr-sm-2" id="startDate">
-                                </select>
-                                <label class="my-1 mr-2 text-muted">To</label>
-                                <select class="select-dates custom-select my-1 mr-sm-2" id="endDate">
-                                </select>
-                                <div class="my-1 mr-2 text-muted custom-switch">
+                                <div class="my-1 mr-3 text-muted custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="logScaleSwitch">
+                                    <label class="custom-control-label text-muted" for="logScaleSwitch">Log Scale</label>
+                                </div>
+                                <div class="my-1 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="barSwitch">
                                     <label class="custom-control-label text-muted" for="barSwitch">Bars</label>
                                 </div>
@@ -181,16 +183,18 @@
                             </div>
                             <div class="btn btn-sm btn-secondary mb-2" id="compare_add" onclick="add_element()">Add Country</div>
                             <form class="form-inline">
+                                <div class="form-inline mr-3">
+                                    <label class="my-1 mr-2 text-muted">Range:</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="startDate2">
+                                    </select>
+                                    <label class="my-1 mr-2 text-muted">To</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
+                                    </select>
+                                </div>
                                 <div class="my-1 mr-2 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="logScaleSwitch2">
-                                    <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale | </label>
+                                    <label class="custom-control-label text-muted" for="logScaleSwitch2">Log Scale</label>
                                 </div>
-                                <label class="my-1 mr-2 text-muted">Range:</label>
-                                <select class="select-dates custom-select my-1 mr-sm-2" id="startDate2">
-                                </select>
-                                <label class="my-1 mr-2 text-muted">To</label>
-                                <select class="select-dates custom-select my-1 mr-sm-2" id="endDate2">
-                                </select>
                                 <div class="my-1 mr-2 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="barSwitch2">
                                     <label class="custom-control-label text-muted" for="barSwitch2">Bars</label>
@@ -199,6 +203,11 @@
                                     <input type="checkbox" class="custom-control-input" id="percPopulation2">
                                     <label class="custom-control-label text-muted" for="percPopulation2">as % of population</label>
                                 </div>
+                                <div class="my-1 text-muted custom-switch" data-toggle="tooltip">
+                                    <label for="movingAverageCompareRange">Moving average</label>
+                                    <input type="range" class="custom-range" min="1" max="10" step="1" id="movingAverageCompareRange">
+                                </div>
+                                <span class="text-muted ml-2" id="movingAverageCompareValue"></span><span class="ml-1 text-muted">days</span>
                             </form>
                             <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('compare_graph')">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
@@ -212,7 +221,7 @@
                         <!-- FT -->
                         <div class="content" id="ft">
                             <h2 class="mt-2 mb-2">Coronavirus Deaths Tracker</h2>
-                            <p class="text-muted">This graph is an interactive version of the graph designed by the <a href="https://www.ft.com/coronavirus-latest">Financial Times</a>. The y-axis is the cumulative number of deaths due to Covid-19 reported (on a log-scale) while the x-axis is the number of days since the 10th deaths due to Covid-19.</p>
+                            <p class="text-muted">This graph is an interactive version of the graph designed by the <a href="https://www.ft.com/coronavirus-latest">Financial Times</a>. The y-axis is the cumulative number of deaths due to Covid-19 reported (on a log-scale) while the x-axis is the number of days since the 10th deaths due to Covid-19. The graph has been updated many times by the FT with different thresholds and y-axis (new daily deaths, cumulative number of deaths, rolling average of daily deaths, etc.) The controls below let you customized the graph at your will.</p>
                             <hr>
                             <div id="ft_countries_container"></div>
                             <form class="mt-4 mb-2 form-inline">
@@ -220,19 +229,37 @@
                                     <select class="mr-sm-2" id="ft_add_country">
                                     </select>
                                 </div>
-                                <div class="my-1 mr-2 text-muted custom-switch">
+                                <div class="my-1 mr-3 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="logScaleSwitch3">
                                     <label class="custom-control-label text-muted" for="logScaleSwitch3">Log Scale</label>
                                 </div>
-                                <div class="my-1 mr-2 text-muted custom-switch">
+                                <div class="my-1 mr-3 text-muted custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="hideLegend">
                                     <label class="custom-control-label text-muted" for="hideLegend">Hide Legend</label>
                                 </div>
-                                <div class="my-1 mr-2 text-muted custom-switch">
-                                    <label for="thresholdRange">Threshold</label>
-                                    <input type="range" class="custom-range" min="10" max="1000" step="10" id="thresholdRange">
+                                <div class="form-group text-muted">
+                                    <div class="input-group-prepend">
+                                        <label class="mr-1" for="ftCategory">Y-axis:</label>
+                                    </div>
+                                    <select class="mr-sm-2" id="ftCategory">
+                                    </select>
                                 </div>
-                                <span class="text-muted" id="thresholdValue"></span>
+                                <div class="form-inline mr-2 ml-2">
+                                    <div class="my-1 text-muted">
+                                        <label for="thresholdRange">Since</label>
+                                        <input type="range" class="custom-range" min="10" max="1000" step="10" id="thresholdRange">
+                                    </div>
+                                    <span class="text-muted ml-2" id="thresholdValue"></span>
+                                    <span class="ml-1 text-muted mr-1">
+                                        <select class="mr-sm-2" id="ftThresholdCategory">
+                                        </select>
+                                    </span>
+                                </div>
+                                <div class="my-1 text-muted" data-toggle="tooltip">
+                                    <label for="movingAverageFTRange">Moving average</label>
+                                    <input type="range" class="custom-range" min="1" max="10" step="1" id="movingAverageFTRange">
+                                </div>
+                                <span class="text-muted ml-2" id="movingAverageFTValue"></span><span class="ml-1 text-muted">days</span>
                             </form>
                             <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('ft_graph')">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
