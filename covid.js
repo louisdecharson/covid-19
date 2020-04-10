@@ -13,7 +13,8 @@ const sparklineWidth = Math.min(document.getElementById('summary_stats').offsetW
 const sparklineHeight = 25;
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-const colors = ['#f29b12','#e64c3c','#2ecb71']; // red for deaths, orange for cases
+// const colors = ['#f29b12','#e64c3c','#2ecb71']; // red for deaths, orange for cases
+const colors = ['#FFC107','#ff073a','#2ecb71']; // red for deaths, orange for cases
 let colorVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
 let colorsValues = {};
 colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
@@ -105,7 +106,7 @@ let elements = [
     }
 ];
 let navigation = {
-    "page": 'by_country',
+    "page": "by_country",
     "darkMode": true,
     "country": "World",
     "elements": elements,
@@ -115,10 +116,10 @@ let navigation = {
     "lines2": true,
     "percPopulation": false,
     "percPopulation2": false,
-    "startDate": '',
-    "endDate":'',
+    "startDate":"",
+    "endDate":"",
     "maCompare": 1,
-    "ft_countries": ['Korea, South','China','France','Italy','Spain','Japan','US','United Kingdom'],
+    "ft_countries": ["Korea, South","China","France","Italy","Spain","Japan","US","United Kingdom"],
     "logScale3": true,
     "hideLegend": false,
     "ft_category": "Deaths",
@@ -377,7 +378,7 @@ function load_summary_data() {
             let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
             $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
         } 
-        sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
+        // sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
     }
     $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
 
