@@ -29,13 +29,16 @@ let data = [],
     cases_categories = ['Confirmed','Deaths','Recovered'],
     rates_categories = ['Deaths rate'],
     new_cases_categories = ['New Confirmed cases','New Deaths cases'],
+    testing_yaxis = ['Cumulative total','Cumulative total per thousand','Daily change in cumulative total','Daily change in cumulative total per thousand'],
+    testing_countries = [],
     countries = [],
     list_dates = [],
     population_data = [],
+    testing_data = [],
     data_country,
     data_graph = {};
 
-// Continental Aggre
+// Continental Aggregates
 const EU_countries = ['Austria', 'Belgium','Bulgaria', 'Croatia', 'Cyprus',
                       'Czechia', 'Denmark', 'Estonia','Finland', 'France',
                       'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy', 'Latvia',
@@ -125,7 +128,9 @@ let navigation = {
     "ft_category": "Deaths",
     "ft_threshold": 100,
     "ft_thresholdCategory": "Deaths",
-    "ft_ma": 1
+    "ft_ma": 1,
+    "testing_yVar": "Cumulative total",
+    "testing_countries": []
 };
 
 // DARK MODE
@@ -194,6 +199,19 @@ function parseData(wide_data, pivot_columns, category) {
     endDate = navigation.endDate.length > 0 ? navigation.endDate : list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
+
+function parseTestingData(data) {
+    for (const el of data) {
+        el['Country/Region'] = el['Entity'].split(' - ')[0];
+        el['units'] = el['Entity'].split(' - ')[1];
+        el['key'] = el['Entity'];
+        el['date'] = d3.timeParse("%Y-%m-%d")(el['Date']);
+    }
+    testing_countries = d3.set(data.map(d => d.key)).values();
+    navigation.testing_countries = testing_countries.slice(1, 4);
+    return data;
+}
+
 
 function addRates(data) {
     let rates = d3.nest()
@@ -365,6 +383,20 @@ function build_ft_categories_select() {
     $('#ftCategory').html(ft_categories_html);
     $('#ftThresholdCategory').html(ft_categories_threshold_html);
 };
+function build_testing_countries_select() {
+    let testing_countries_html = '<option selected>Add country</option>';
+    for (const [index, country] of testing_countries.entries()) {
+        testing_countries_html+= navigation.testing_countries.indexOf(country) == -1 ? `<option>${country}</option>` : '';
+    }
+    $('#testing_add_country').html(testing_countries_html);
+}
+function build_testing_yaxis() {
+    let testing_yaxis_html = '';
+    for (const yaxis of testing_yaxis) {
+        testing_yaxis_html += navigation.testing_yVar == yaxis ? `<option selected>${yaxis}</option>` : `<option>${yaxis}</option>`;
+    }
+    $('#testingYAxis').html(testing_yaxis_html);
+}
 
 function load_summary_data() {
     let last_date = data.map(d => d['date']).slice(-1)[0];
@@ -1066,6 +1098,16 @@ function build_ft_countries() {
     $('#ft_countries_container').html(html);
     update_ft_threshold();
 }
+function build_testing_countries() {
+    let html = '';
+    for (const [i, country] of navigation.testing_countries.entries()) {
+        html += `
+        <div class="p-2 ml-1 mr-1 mt-1 mb-1 badge" style="display:inline-block; background-color:${colors_countries[i]};"><span>${country}</span>
+        <svg class="svg-icon delete-element mb-1" onclick=remove_testing_country(${i}) viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg></div>`;
+    }
+    $('#testing_countries_container').html(html);
+}
+
 function update_ft_threshold() {
     let max_value = Math.min(d3.max(data_by_country.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1) &&
                                                   (d['category'] === 'Deaths'))
@@ -1076,11 +1118,17 @@ function remove_ft_country(index) {
     navigation.ft_countries.splice(index,1);
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
+    build_ft_countries_select();
     ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
                          navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
 }
-
-
+function remove_testing_country(index) {
+    navigation.testing_countries.splice(index,1);
+    updateNavigation({"testing_countries": navigation.testing_countries});
+    build_testing_countries();
+    build_testing_countries_select();
+    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+}
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
     navigation.elements.forEach(function(it, ind) {
@@ -1089,7 +1137,6 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    updateNavigation({});
     updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
 }
 function update_element(el, property) {
@@ -1130,6 +1177,8 @@ function addDatestoSelect() {
     $('#endDate').html(html_end_dates);
     $('#startDate2').html(html_start_dates);
     $('#endDate2').html(html_end_dates);
+    $('#startDate3').html(html_start_dates);
+    $('#endDate3').html(html_end_dates);
 
 }
 function addPopulationData() {
@@ -1386,6 +1435,194 @@ function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
 }
 
 
+
+// Testing data
+function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total',
+                       xVar = 'date',
+                       id = "#testing_graph",
+                       w = widthMainGraph, h = heightMainGraph) {    
+    let margin = getMarginGraph(w);
+    var width = w - margin.left - margin.right;
+    var height = h - margin.top - margin.bottom;
+
+    // Select the id
+    var svg = d3.select(id + '_g');
+
+    // Data Filtered
+    data = data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
+                       d['date'] <= d3.timeParse('%d-%b-%y')(endDate) &&
+                       keys.indexOf(d['key']) > -1);
+    data.forEach(e => {e.y = +e[yVar];});
+
+    
+    // Delete the axis
+    svg.selectAll('g.x.axis').remove();
+    svg.selectAll('g.y.axis').remove();
+    svg.selectAll('g.yGrid').remove();
+
+    // X-axis
+    let x = d3.scaleTime()
+        .domain(d3.extent(data, d => d[xVar]))
+        .range([0, width]);
+    
+    svg.append("g")
+        .attr('class','x axis')
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%d/%m/%y")));
+
+    // Y-axis
+    let y = d3.scaleLinear()
+        .domain(d3.extent(data, d => d.y))
+        .nice()
+        .range([height, 0]);
+
+    let formatTick = d => d3.format('.3s')(d);
+    let yGrid = svg => svg
+        .call(d3.axisRight(y)
+              .tickSize(width)
+              .tickFormat(formatTick))
+        .call(g => g.selectAll('.domain').remove())
+        .call(g => g.selectAll(".tick:not(:first-of-type) line")
+              .attr("stroke-opacity", 0.5)
+              .attr("stroke-dasharray", "2,2"))
+        .call(g => g.selectAll(".tick text")
+              .remove());
+    
+    svg.append("g")
+        .attr('class','yGrid')
+        .call(yGrid);
+
+    svg.append("g")
+        .attr('class','y axis')
+        .call(d3.axisLeft(y)
+              .tickFormat(formatTick));    
+    // Colors
+    let color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(colors_countries);
+
+    // Add lines
+    svg.selectAll('path.lines').remove();
+    keys.forEach(function(e,i) {
+        let _ = data.filter(d => d.key === e);
+        svg.append('path')
+            .datum(_)
+            .attr('class','lines')
+            .attr('fill','none')
+            .attr('stroke', color(e))
+            .attr("stroke-width", 3)
+            .attr('d',d3.line()
+                  .y(d => y(d.y))
+                  .defined(d => d.y ? true : false)
+                  .x(d => x(d[xVar])));
+    });
+
+    // Add dots
+    const dots = svg.selectAll("circle")
+          .data(data)
+          .join("circle")
+          .style("fill", d => color(d.key))
+          .attr("r", 4)
+          .attr("cx", (d, i) => x(d[xVar]))
+          .attr("cy", (d, i) => y(d[yVar]));
+
+    // TOOLTIP
+    // Add Tooltip (vertical line + tooltip)
+    function addTooltip(g, data, mx, my) {
+        if (!data) {
+            g.selectAll("line").remove();
+            g.selectAll("circle").remove();
+            g.selectAll("text").remove();
+            return g.style("display", "none");
+        }
+        
+        g.style("display", null);
+
+
+        const xLine = g.selectAll("line")
+              .data([null])
+              .join("line")
+              .attr("class", "tooltip_line")
+              .attr("x1", mx).attr("x2", mx) 
+              .attr("y1", 0).attr("y2", height);
+        
+        const dots = g.selectAll("circle")
+              .data(data.slice(1))
+              .join("circle")
+              .style("fill", d => color(d.key))
+              .attr("r", 5)
+              .attr("cx", (d, i) => x(d[xVar]))
+              .attr("cy", (d, i) => y(d.y));
+
+        const path = g.selectAll("rect")
+              .data([null])
+              .join("rect")
+              .attr("class","rect_tooltip");
+
+        const text = g.selectAll("text")
+              .data([null])
+              .join("text")
+              .call(text => text
+                    .selectAll('tspan')
+                    .data(data)
+                    .join("tspan")
+                    .attr("x", 0)
+                    .attr("y", (d, i) => `${i * 1.1}em`)
+                    .attr("class","tooltip_text")
+                    .style("font-weight","bold")
+                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.key))
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(new Date(d)) : `${d.key}: ${d3.format(',')(d.y)}`));
+        const {xx, yy, width: w, height: h} = text.node().getBBox();
+
+        // Make sure the tooltip is always in the graph area (and visible)
+        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
+            text_y = h + my - 20 > height ? my - h : my;
+        text.attr("transform", `translate(${text_x},${text_y})`);
+
+        path.attr("x", text_x-5)
+            .attr("y", text_y - 20)
+            .attr("rx", 5)
+            .attr("width", w + 10)
+            .attr("height", h + 10);
+        
+        return true;
+    };
+    let dates = d3.set(data.map(d => d['date'])).values().sort((a,b) => new Date(a) - new Date(b));
+    function getMouseData(mx) {
+        let mouseDate = x.invert(mx),
+            i = d3.bisector(d => new Date(d)).left(dates, mouseDate),
+            a = new Date(dates[i-1]),
+            b = i > dates.length - 1 ? new Date(dates.slice(-1)[0]) : new Date(dates[i]);
+        let date = mouseDate - a > b - mouseDate ? b : a,
+            values = data.filter(d => d['date'] == date.toString());
+        return [date].concat(values);
+    }
+    svg.selectAll("g.tooltip_container").remove();
+    const tooltip = svg.append("g").attr("class","tooltip_container");
+    svg.on("touchmove mousemove", function() {
+        let mouse_x = d3.mouse(this)[0],
+            mouse_y = d3.mouse(this)[1];
+        if (mouse_x > 0) {
+            let mouseData = getMouseData(mouse_x);
+            tooltip
+                .call(addTooltip, mouseData, x(new Date(mouseData[0])), mouse_y+30);
+        }
+    });
+    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
+
+    // Add legend
+    if (!hideLegend) {
+        addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
+    } else {
+        d3.select(id + '_svg').select('g.legend').remove();
+    }
+    // Save data
+    data_graph[id.slice(1)] = data;
+}
+
+
+
+
 // ====================================================================== //
 
 // Create graphs
@@ -1394,6 +1631,7 @@ createGraph('#country_graph_rates');
 createGraph('#country_graph_new_cases');
 createGraph('#compare_graph');
 createGraph('#ft_graph');
+createGraph('#testing_graph');
 
 // Load Data (async)
 let nb_process_ended = 0;
@@ -1414,17 +1652,15 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
 
-
-// let ecdc_data;
-// d3.json('https://opendata.ecdc.europa.eu/covid19/casedistribution/json/')
-//     .then(d => ecdc_data = d)
-//     .catch(e => console.log(e));
-
+d3.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv')
+    .then(d => testing_data = parseTestingData(d))
+    .catch(e => console.log(e))
+    .finally(_ => nb_process_ended += 1);
 
 
 // Process Data
 let timer = setInterval(() => {
-    if (nb_process_ended === cases_categories.length + 1) {
+    if (nb_process_ended === cases_categories.length + 2) {
         clearInterval(timer);
 
         // Add Dates to select
@@ -1459,9 +1695,15 @@ let timer = setInterval(() => {
 
         // FT Graph
         build_ft_countries();
+        build_ft_categories_select();
         ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
                              navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
-        build_ft_categories_select();
+
+        // Testing Graph
+        build_testing_countries();
+        build_testing_countries_select();
+        build_testing_yaxis();
+        testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
     }
 }, 100);
 
@@ -1638,7 +1880,32 @@ $("#movingAverageFTRange").on('change mousemouve', function() {
                          navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
 });
 
-
+// Testing Graph
+$('#testing_add_country').change(function(){
+    let c = $('#testing_add_country option:selected').text();
+    if (testing_countries.indexOf(c) > -1) {
+        updateNavigation({"testing_countries":navigation.testing_countries.concat([c])});
+        build_testing_countries();
+        build_testing_countries_select();
+        testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    }
+});
+$('#testingYAxis').change(function(){
+    updateNavigation({"testing_yVar":$('#testingYAxis option:selected').text()});
+    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+});
+$('#startDate3').change(function() {
+    startDate = $('#startDate3 option:selected').text();
+    updateNavigation({"startDate": startDate});
+    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    action([navigation.page,'startDate3',navigation.startDate].join('_').replace(/ /g,'_'));
+});
+$('#endDate3').change(function() {
+    endDate = $('#endDate3 option:selected').text();
+    updateNavigation({"endDate": endDate});
+    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
+});
 
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {

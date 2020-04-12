@@ -30,7 +30,7 @@
         </div>
         <h1 class="bd-masthead"><a href="#" class="bd-masthead title">Coronavirus Data Dashboard</a></h1>
         <div class="m-2">
-            <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a> and population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
+            <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>, population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>, testing data from <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">Our World in Data</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
             </div>
             <!-- <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div> -->
             <div class="container" id="container">
@@ -55,11 +55,34 @@
 				</svg>
                                 Deaths tracker
                             </li>
+                            <li class="sidebar_show sidebar-heading m-1 p-1" target="#testing" id="button_testing">
+                                <svg class="svg-icon" viewBox="0 0 512 512"><g><path d="m331 222.458v-192.458h30v-30h-210v30h30v192.458l-146.386 219.581c-9.224 13.835-10.079 31.536-2.233 46.196 7.845 14.659 23.047 23.765 39.674 23.765h367.89c16.627 0 31.829-9.106 39.675-23.766s6.99-32.361-2.233-46.196zm-120 9.084v-201.542h90v201.542l38.554 57.831c-7.511-1.431-15.502-2.373-23.554-2.373-33.16 0-65.354 15.906-66.708 16.583-7.464 3.732-31.586 13.417-53.292 13.417-13.421 0-27.137-3.555-37.301-7.007zm242.169 242.537c-1.274 2.381-5.115 7.921-13.225 7.921h-367.889c-8.109 0-11.95-5.54-13.225-7.921-1.274-2.382-3.754-8.651.744-15.399l81.989-122.983c12.62 4.859 33.325 11.303 54.437 11.303 33.16 0 65.354-15.906 66.708-16.583 7.463-3.732 31.585-13.417 53.292-13.417 20.542 0 41.785 8.324 49.878 11.857l86.548 129.822c4.497 6.749 2.018 13.017.743 15.4z"/><path d="m301 362h30v30h-30z"/><path d="m241 422h30v30h-30z"/><path d="m181 392h30v30h-30z"/><path d="m241 242h30v30h-30z"/></g></svg>
+                                Testing
+                            </li>
                             <li class="sidebar_show sidebar-heading m-1 p-1 text-orange" target="#issues" id="button_issues">
-                                <svg class="svg-icon" viewBox="0 0 20 20">
-				    <path d="M15.684,16.959L10.879,8.52c0.886-0.343,1.517-1.193,1.517-2.186c0-1.296-1.076-2.323-2.396-2.323S7.604,5.037,7.604,6.333c0,0.993,0.63,1.843,1.517,2.186l-4.818,8.439c-0.189,0.311,0.038,0.708,0.412,0.708h10.558C15.645,17.667,15.871,17.27,15.684,16.959 M8.562,6.333c0-0.778,0.645-1.382,1.438-1.382s1.438,0.604,1.438,1.382c0,0.779-0.645,1.412-1.438,1.412S8.562,7.113,8.562,6.333 M5.55,16.726L10,8.91l4.435,7.815H5.55z M15.285,9.62c1.26-2.046,1.26-4.525,0-6.572c-0.138-0.223-0.064-0.512,0.162-0.646c0.227-0.134,0.521-0.063,0.658,0.16c1.443,2.346,1.443,5.2,0,7.546c-0.236,0.382-0.641,0.17-0.658,0.159C15.221,10.131,15.147,9.842,15.285,9.62 M13.395,8.008c0.475-1.063,0.475-2.286,0-3.349c-0.106-0.238,0.004-0.515,0.246-0.62c0.242-0.104,0.525,0.004,0.632,0.242c0.583,1.305,0.583,2.801,0,4.106c-0.214,0.479-0.747,0.192-0.632,0.242C13.398,8.523,13.288,8.247,13.395,8.008 M3.895,10.107c-1.444-2.346-1.444-5.2,0-7.546c0.137-0.223,0.431-0.294,0.658-0.16c0.226,0.135,0.299,0.424,0.162,0.646c-1.26,2.047-1.26,4.525,0,6.572c0.137,0.223,0.064,0.512-0.162,0.646C4.535,10.277,4.131,10.489,3.895,10.107 M5.728,8.387c-0.583-1.305-0.583-2.801,0-4.106c0.106-0.238,0.39-0.346,0.631-0.242c0.242,0.105,0.353,0.382,0.247,0.62c-0.475,1.063-0.475,2.286,0,3.349c0.106,0.238-0.004,0.515-0.247,0.62c-0.062,0.027-0.128,0.04-0.192,0.04C5.982,8.668,5.807,8.563,5.728,8.387"></path>
-				</svg>
-                                Data issues
+                                <svg class="svg-icon" viewBox="0 0 512 512">
+                                    <g>
+		                        <path d="M503.839,395.379l-195.7-338.962C297.257,37.569,277.766,26.315,256,26.315c-21.765,0-41.257,11.254-52.139,30.102
+			                         L8.162,395.378c-10.883,18.85-10.883,41.356,0,60.205c10.883,18.849,30.373,30.102,52.139,30.102h391.398
+			                         c21.765,0,41.256-11.254,52.14-30.101C514.722,436.734,514.722,414.228,503.839,395.379z M477.861,440.586
+			                         c-5.461,9.458-15.241,15.104-26.162,15.104H60.301c-10.922,0-20.702-5.646-26.162-15.104c-5.46-9.458-5.46-20.75,0-30.208
+			                         L229.84,71.416c5.46-9.458,15.24-15.104,26.161-15.104c10.92,0,20.701,5.646,26.161,15.104l195.7,338.962
+			                         C483.321,419.836,483.321,431.128,477.861,440.586z">
+                                        </path>
+                                    </g>
+                                    <g>
+	                                <g>
+		                            <rect x="241.001" y="176.01" width="29.996" height="149.982"/>
+	                                </g>
+                                    </g>
+                                    <g>
+	                                <g>
+		                            <path d="M256,355.99c-11.027,0-19.998,8.971-19.998,19.998s8.971,19.998,19.998,19.998c11.026,0,19.998-8.971,19.998-19.998
+			                             S267.027,355.99,256,355.99z"/>
+	                                </g>
+                                    </g>
+                                </svg>
+                                            Data issues
                             </li>
                             <li class="fixed-bottom p-3" style="background-color: inherit;">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
@@ -222,7 +245,7 @@
                         <!-- FT -->
                         <div class="content" id="ft">
                             <h2 class="mt-2 mb-2">Coronavirus Deaths Tracker</h2>
-                            <p class="text-muted">This graph is an interactive version of the graph designed by the <a href="https://www.ft.com/coronavirus-latest">Financial Times</a>. The y-axis is the cumulative number of deaths due to Covid-19 reported (on a log-scale) while the x-axis is the number of days since the 10th deaths due to Covid-19. The graph has been updated many times by the FT with different thresholds and y-axis (new daily deaths, cumulative number of deaths, rolling average of daily deaths, etc.) The controls below let you customized the graph at your will.</p>
+                            <p class="text-muted">This graph is an interactive version of the one designed by the <a href="https://www.ft.com/coronavirus-latest">Financial Times</a>. The y-axis is the cumulative number of deaths due to Covid-19 reported (on a log-scale) while the x-axis is the number of days since the 10th deaths due to Covid-19. The graph has been updated many times by the FT with different thresholds and y-axis (new daily deaths, cumulative number of deaths, rolling average of daily deaths, etc.) The controls below let you customized the graph at your will.</p>
                             <hr>
                             <div id="ft_countries_container"></div>
                             <form class="mt-4 mb-2 form-inline">
@@ -271,6 +294,46 @@
                             <div class="mt-4" id="ft_graph"></div>
                         </div>
 
+
+                        <!-- FT -->
+                        <div class="content" id="testing">
+                            <h2 class="mt-2 mb-2">Covid testing data</h2>
+                            <p class="text-muted">Testing data is retrieved from Our World In Data <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">github repository</a>. Testing data is very heterogeneous among countries: it's often unclear what the provided numbers really mean and there are not always comparable cross-country. Our World in Data has made an amazing job explaining what we know and what we don't about the test numbers reported in <a href="https://ourworldindata.org/covid-testing">this article</a>.</p>
+                            <hr>
+                            <div id="testing_countries_container"></div>
+                            <form class="mt-4 mb-2 form-inline">
+                                <div class="form-group mr-2">
+                                    <select class="mr-sm-2" id="testing_add_country">
+                                    </select>
+                                </div>
+                                <div class="form-inline mr-3">
+                                    <label class="my-1 mr-2 text-muted">Range:</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="startDate3">
+                                    </select>
+                                    <label class="my-1 mr-2 text-muted">To</label>
+                                    <select class="select-dates custom-select my-1 mr-sm-2" id="endDate3">
+                                    </select>
+                                </div>
+                                <div class="form-group text-muted">
+                                    <div class="input-group-prepend">
+                                        <label class="mr-1" for="testingYAxis">Y-axis:</label>
+                                    </div>
+                                    <select class="mr-sm-2" id="testingYAxis">
+                                    </select>
+                                </div>
+                            </form>
+                            <div class="download_data badge-pill badge float-right mb-1" onclick="download_data('testing_graph')">
+                                <svg class="svg-icon" viewBox="0 0 20 20">
+				    <path fill="none" d="M15.608,6.262h-2.338v0.935h2.338c0.516,0,0.934,0.418,0.934,0.935v8.879c0,0.517-0.418,0.935-0.934,0.935H4.392c-0.516,0-0.935-0.418-0.935-0.935V8.131c0-0.516,0.419-0.935,0.935-0.935h2.336V6.262H4.392c-1.032,0-1.869,0.837-1.869,1.869v8.879c0,1.031,0.837,1.869,1.869,1.869h11.216c1.031,0,1.869-0.838,1.869-1.869V8.131C17.478,7.099,16.64,6.262,15.608,6.262z M9.513,11.973c0.017,0.082,0.047,0.162,0.109,0.226c0.104,0.106,0.243,0.143,0.378,0.126c0.135,0.017,0.274-0.02,0.377-0.126c0.064-0.065,0.097-0.147,0.115-0.231l1.708-1.751c0.178-0.183,0.178-0.479,0-0.662c-0.178-0.182-0.467-0.182-0.645,0l-1.101,1.129V1.588c0-0.258-0.204-0.467-0.456-0.467c-0.252,0-0.456,0.209-0.456,0.467v9.094L8.443,9.553c-0.178-0.182-0.467-0.182-0.645,0c-0.178,0.184-0.178,0.479,0,0.662L9.513,11.973z"></path>
+				</svg>
+                                <span class="badge badge-pill">Download Data</span>
+                            </div>
+                            <div class="mt-4" id="testing_graph"></div>
+                        </div>
+
+
+
+                        
                         <!-- ISSUES -->
                         <div class="content p-4" id="issues">
                             <center><h3>Content and data issues</h3></center>
@@ -278,6 +341,7 @@
                             <p class="alert alert-secondary">This website does not store data. Data is fetched from the repositories listed below and processed every time this website loads.</p>
                             <p>Data of COVID-19 cases is retrieved from Johns Hopkins University <a href="https://github.com/CSSEGISandData/COVID-19">github repository</a>. Browse it to know more about potential errors or data issues.</p>
                             <p>Population data is from the <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a> for most of the countries and from national statistics institute for others. Population data is from 2018 and is stored here <a href="https://github.com/louisdecharson/covid-19/blob/master/population_data.csv">github.com/louisdecharson/covid-19/population_data.csv</a>.</p>
+                            <p>Testing data is retrieved <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">Our World in Data github repository</a>. They wrote an amazing article on the pitfalls of testing data which you can read <a href="https://ourworldindata.org/covid-testing">here</a>.</p>
                             <p>The code is on <a href="http://github.com/louisdecharson/covid-19">Github.</a></p>
                             <h4 class="mt-4 text-orange">Issues</h4>
                             <table class="list-issues">
