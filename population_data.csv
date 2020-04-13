@@ -1,48 +1,78 @@
-Country/Region,Population,Source
 Afghanistan,37172386,World Bank
 Albania,2866376,World Bank
 Algeria,42228429,World Bank
 Andorra,77006,World Bank
+Angola,30809762,World Bank
+Antigua and Barbuda,96286,World Bank
 Argentina,44494502,World Bank
 Armenia,2951776,World Bank
 Australia,24992369,World Bank
 Austria,8847037,World Bank
 Azerbaijan,9942334,World Bank
+Bahamas,385640,World Bank
 Bahrain,1569439,World Bank
 Bangladesh,161356039,World Bank
+Barbados,286641,World Bank
 Belarus,9485386,World Bank
 Belgium,11422068,World Bank
+Belize,383071,World Bank
+Benin,11485048,World Bank
 Bhutan,754394,World Bank
 Bolivia,11353142,World Bank
 Bosnia and Herzegovina,3323929,World Bank
+Botswana,2254126,World Bank
 Brazil,209469333,World Bank
 Brunei,428962,World Bank
 Bulgaria,7024216,World Bank
 Burkina Faso,19751535,World Bank
+Burma,53708395,World Bank
+Burundi,11175378,World Bank
+Cabo Verde,543767,World Bank
 Cambodia,16249798,World Bank
 Cameroon,25216237,World Bank
 Canada,37058856,World Bank
+Central African Republic,4666377,World Bank
+Chad,15477751,World Bank
 Chile,18729160,World Bank
 China,1392730000,World Bank
 Colombia,49648685,World Bank
+Congo (Brazzaville),5244363,World Bank
 Congo (Kinshasa),84068091,World Bank
 Costa Rica,4999441,World Bank
 Cote d'Ivoire,25069229,World Bank
+Country/Region,Population,Source
 Croatia,4089400,World Bank
-Cruise Ship,3711,GlobalNews.ca
+Cuba,11338138,World Bank
 Cyprus,1189265,World Bank
 Czechia,10625695,World Bank
 Denmark,5797446,World Bank
+Diamond Princess,3711,GlobalNews.ca
+Djibouti,958920,World Bank
+Dominica,71625,World Bank
 Dominican Republic,10627165,World Bank
 Ecuador,17084357,World Bank
 Egypt,98423595,World Bank
+El Salvador,6420744,World Bank
+Equatorial Guinea,1308974,World Bank
 Estonia,1320884,World Bank
+Eswatini,1136191,World Bank
+Ethiopia,109224559,World Bank
+Fiji,883483,World Bank
 Finland,5518050,World Bank
 France,66987244,World Bank
 French Guiana,290691,Insee
+Gabon,2119275,World Bank
+Gambia,2280102,World Bank
 Georgia,3731000,World Bank
 Germany,82927922,World Bank
+Ghana,29767108,World Bank
 Greece,10727668,World Bank
+Grenada,111454,World Bank
+Guatemala,17247807,World Bank
+Guinea,12414318,World Bank
+Guinea-Bissau,1874309,World Bank
+Guyana,779004,World Bank
+Haiti,11123176,World Bank
 Holy See,1000,CIA World Factbook
 Honduras,9587522,World Bank
 Hungary,9768785,World Bank
@@ -57,31 +87,50 @@ Italy,60431283,World Bank
 Jamaica,2934855,World Bank
 Japan,126529100,World Bank
 Jordan,9956011,World Bank
+Kazakhstan,18276499,World Bank
+Kenya,51393010,World Bank
 "Korea, South",51635256,World Bank
+Kosovo,1845300,World Bank
 Kuwait,4137309,World Bank
+Kyrgyzstan,6315800,World Bank
+Laos,7061507,World Bank
 Latvia,1926542,World Bank
 Lebanon,6848925,World Bank
+Liberia,4818977,World Bank
+Libya,6678567,World Bank
 Liechtenstein,37910,World Bank
 Lithuania,2789533,World Bank
 Luxembourg,607728,World Bank
+MS Zaandam,1432,Wikipedia
+Madagascar,26262368,World Bank
+Malawi,18143315,World Bank
 Malaysia,31528585,World Bank
 Maldives,515696,World Bank
+Mali,19077690,World Bank
 Malta,483530,World Bank
 Martinique,368050,Insee
+Mauritania,4403319,World Bank
+Mauritius,1265303,World Bank
 Mexico,126190788,World Bank
 Moldova,3545883,World Bank
 Monaco,38682,World Bank
 Mongolia,3170208,World Bank
+Montenegro,622345,World Bank
 Morocco,36029138,World Bank
+Mozambique,29495962,World Bank
+Namibia,2448255,World Bank
 Nepal,28087871,World Bank
 Netherlands,17231017,World Bank
 New Zealand,4885500,World Bank
+Nicaragua,6465513,World Bank
+Niger,22442948,World Bank
 Nigeria,195874740,World Bank
 North Macedonia,2082958,World Bank
 Norway,5314336,World Bank
 Oman,4829483,World Bank
 Pakistan,212215030,World Bank
 Panama,4176873,World Bank
+Papua New Guinea,8606316,World Bank
 Paraguay,6956071,World Bank
 Peru,31989256,World Bank
 Philippines,106651922,World Bank
@@ -91,26 +140,49 @@ Qatar,2781677,World Bank
 Reunion,856148,Insee
 Romania,19473936,World Bank
 Russia,144478050,World Bank
+Rwanda,12301939,World Bank
+Saint Kitts and Nevis,52441,World Bank
+Saint Lucia,181889,World Bank
+Saint Vincent and the Grenadines,110210,World Bank
 San Marino,33785,World Bank
+Sao Tome and Principe,211028,World Bank
 Saudi Arabia,33699947,World Bank
 Senegal,15854360,World Bank
 Serbia,6982084,World Bank
+Seychelles,96762,World Bank
+Sierra Leone,7650154,World Bank
 Singapore,5638676,World Bank
 Slovakia,5447011,World Bank
 Slovenia,2067372,World Bank
+Somalia,15008154,World Bank
 South Africa,57779622,World Bank
+South Sudan,10975920,World Bank
 Spain,46733038,INE
 Sri Lanka,21670000,World Bank
+Sudan,41801533,World Bank
+Suriname,575991,World Bank
 Sweden,10183175,World Bank
 Switzerland,8516543,World Bank
+Syria,16906283,World Bank
 Taiwan*,23780452,Taiwan Statistics Bureau
+Tanzania,56318348,World Bank
 Thailand,69428524,World Bank
+Timor-Leste,1267972,World Bank
 Togo,7889094,World Bank
+Trinidad and Tobago,1389858,World Bank
 Tunisia,11565204,World Bank
 Turkey,82319724,World Bank
+US,327167434,World Bank
+Uganda,42723139,World Bank
 Ukraine,44622516,World Bank
 United Arab Emirates,9630959,World Bank
 United Kingdom,66488991,World Bank
-US,327167434,World Bank
 Uruguay,3449299,World Bank
+Uzbekistan,32955400,World Bank
+Venezuela,28870195,World Bank
 Vietnam,95540395,World Bank
+West Bank and Gaza,4569087,World Bank
+Western Sahara,567402,United Nations World Population Prospects
+Yemen,28498687,World Bank
+Zambia,17351822,World Bank
+Zimbabwe,14439018,World Bank

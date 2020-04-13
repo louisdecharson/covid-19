@@ -201,26 +201,36 @@ function parseData(wide_data, pivot_columns, category) {
 }
 
 function parseTestingData(data) {
+    let confirmed_cases = d3.nest().key(d => d.key).map(data_by_country
+                                                        .filter(d => d['category'] === 'Confirmed'));
     for (const el of data) {
         el['Country/Region'] = el['Entity'].split(' - ')[0];
         el['units'] = el['Entity'].split(' - ')[1];
         el['key'] = el['Entity'];
         el['date'] = d3.timeParse("%Y-%m-%d")(el['Date']);
+        let cases = confirmed_cases.get(`Confirmed${el['Country/Region']}${d3.timeFormat('%-m/%d/%y')(el.date)}`);
+        if (cases) {
+            el['Cumulative cases per tests'] = el['Cumulative total'] > 0 ? cases[0]['field_value'] / el['Cumulative total'] : null;
+        } else {
+            el['Cumulative cases per tests'] = null;
+        }
     }
     testing_countries = d3.set(data.map(d => d.key)).values();
     navigation.testing_countries = testing_countries.slice(1, 4);
+    testing_yaxis.push('Cumulative cases per tests');
     return data;
 }
 
 
 function addRates(data) {
+    let rates_categories = cases_categories.filter(d => d !== 'Confirmed');
     let rates = d3.nest()
         .key(d => d['Country/Region']+d['field_id'])
         .rollup(function(d) {
-            let _ = [];
-            for (const category of cases_categories.filter(e => d !== 'Confirmed')) {
+            let _ = [],
+                confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'];
+            for (const category of rates_categories) {
                 let out = $.extend(true, {}, d[0]),
-                    confirmed = d.filter(e => e['category'] === 'Confirmed')[0]['field_value'],
                     nb = d.filter(e => e['category'] === category )[0]['field_value'],
                     rate = confirmed === 0 ? 0 : nb / confirmed;
                 out['category'] = `${category} rate`;
@@ -234,53 +244,34 @@ function addRates(data) {
         .entries(data)
         .map(g => g.value).flat();
 
-    let new_cases = [];
-    d3.nest()
-        .key(d => d['Country/Region'] + d['category'])
-        .rollup(function(array) {
-            let new_array = $.extend(true, [], array);
-            for(const [i, e] of new_array.entries()) {
+    let new_and_growth_cases = d3.nest()
+        .key( d => d['Country/Region'] + d.category)
+        .rollup(function(a) {
+            let new_case = $.extend(true, [], a),
+                growth_rate = $.extend(true, [], a);
+            for (const [i, e] of a.entries()) {
                 if (i > 0) {
-                    e['field_value'] = array[i]['field_value']-array[i-1]['field_value'];
-                    e['previous_date'] = array[i-1]['field_id'];
-                }
-                e['category'] = `New ${e['category']} cases`;
-                e['key'] = e['category'] + e['Country/Region'] + e['field_id'];
-                e['field_value_pop'] = e['field_value'] / e['Population'];
-            }
-            return new_array;
-        })
-        .entries(data_by_country)
-        .map(g => g.value)
-        .forEach(function(array) {
-            array.forEach(a => new_cases.push(a));
-        });
-
-    let growth_rates = [];
-    d3.nest()
-        .key(d => d['Country/Region'] + d['category'])
-        .rollup(function(array) {
-            let new_array = $.extend(true, [], array);
-            for(const [i, e] of new_array.entries()) {
-                if (i > 0) {
-                    e['field_value'] = array[i-1]['field_value'] > 0 ? array[i]['field_value']/array[i-1]['field_value']-1 : null;
-                    e['previous_date'] = array[i-1]['field_id'];
+                    new_case[i]['field_value'] = a[i]['field_value']-a[i-1]['field_value'];
+                    new_case[i]['previous_date'] = a[i-1]['field_id'];
+                    growth_rate[i]['field_value'] = a[i-1]['field_value'] > 0 ? a[i]['field_value']/a[i-1]['field_value']-1 : null;
                 } else {
-                    e['field_value'] = null;
+                    new_case[i]['field_value'] = null;
+                    growth_rate[i]['field_value'] = null;
                 }
-                e['category'] = `${e['category']} growth rate`;
-                e['key'] = e['category'] + e['Country/Region'] + e['field_id'];
-                e['field_value_pop'] = e['field_value'] / e['Population'];
+                new_case[i]['category'] = `New ${e['category']} cases`;
+                new_case[i]['key'] = e['category'] + e['Country/Region'] + e['field_id'];
+                new_case[i]['field_value_pop'] = e['field_value'] / e['Population'];
+                growth_rate[i]['category'] = `${e['category']} growth rate`;
+                growth_rate[i]['key'] = e['category'] + e['Country/Region'] + e['field_id'];
+                growth_rate[i]['field_value_pop'] = e['field_value'] / e['Population'];
             }
-            return new_array;
+            return [...new_case, ...growth_rate];
         })
         .entries(data_by_country)
-        .map(g => g.value)
-        .forEach(function(array) {
-            array.forEach(a => growth_rates.push(a));
-        });
+        .map(g => g.value).flat();
     
-    return [...data, ...rates, ...new_cases, ...growth_rates];
+    
+    return [...data, ...rates, ...new_and_growth_cases];
 }
 
 
@@ -1182,12 +1173,23 @@ function addDatestoSelect() {
 
 }
 function addPopulationData() {
-    data_by_country.forEach(function(e) {
-        e['Population'] = population_data
-            .filter(d => d['Country/Region'] === e['Country/Region'])
-            .map(d => +d['Population'])[0];
-        e['field_value_pop'] = e['field_value'] / e['Population'];
-    });
+    let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
+    data_by_country = d3.nest()
+        .key(d => d['Country/Region'])
+        .rollup(function(a) {
+            let popDataEl = popData.get(a[0]['Country/Region']);
+            if (popDataEl) {
+                for (const e of a) {
+                    e['Population'] = +popDataEl[0].Population;
+                    e['field_value_pop'] = e['field_value'] / e['Population'];
+                }
+            } else {
+                console.log(a[0]['Country/Region']);
+            }
+            return a;
+        })
+        .entries(data_by_country)
+        .map(d => d.value).flat();
 }
 
 // Navigation
@@ -1478,8 +1480,8 @@ function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total'
         .domain(d3.extent(data, d => d.y))
         .nice()
         .range([height, 0]);
-
-    let formatTick = d => d3.format('.3s')(d);
+    console.log(d3.extent(data, d => d.y));
+    let formatTick = d => d3.format((yVar == 'Cumulative cases per tests' ? '.2%' : '.3s'))(d);
     let yGrid = svg => svg
         .call(d3.axisRight(y)
               .tickSize(width)
@@ -1574,7 +1576,7 @@ function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total'
                     .attr("class","tooltip_text")
                     .style("font-weight","bold")
                     .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.key))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(new Date(d)) : `${d.key}: ${d3.format(',')(d.y)}`));
+                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(new Date(d)) : `${d['Country/Region']} - ${yVar} (${d.units}): ${formatTick(d.y)}`));
         const {xx, yy, width: w, height: h} = text.node().getBBox();
 
         // Make sure the tooltip is always in the graph area (and visible)
@@ -1656,7 +1658,7 @@ d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/populat
     .finally(_ => nb_process_ended += 1);
 
 d3.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv')
-    .then(d => testing_data = parseTestingData(d))
+    .then(d => testing_data = d)
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
 
@@ -1667,46 +1669,74 @@ let timer = setInterval(() => {
         clearInterval(timer);
 
         // Add Dates to select
+        console.time("addDatestoSelect");
         addDatestoSelect();
+        console.timeEnd("addDatestoSelect");
         
         // Group By Data
+        console.time("groupBy");
         data_by_country = groupBy(data,'key',['field_value'],[],
                                   ['field_id','Country/Region','date','category','key_world']);
+        console.timeEnd("groupBy");
 
         // Add Population Data
+        console.time("addPopulationData");
         addPopulationData();
+        console.timeEnd("addPopulationData");
 
         // Compute data for the world
+        console.time("computeWorldData");
         data_by_country = computeWorldData();
+        console.timeEnd("computeWorldData");
+
+        console.time("get_list_countries");
         get_list_countries(data_by_country);
+        console.timeEnd("get_list_countries");
 
         // Add rates
+        console.time("addRates");
         data_by_country = addRates(data_by_country);
+        console.timeEnd("addRates");
+
+        // Parse testing data
+        console.time("parseTestingData");
+        testing_data = parseTestingData(testing_data);
+        console.timeEnd("parseTestingData");
 
         // Graph
+        console.time("Graph1");
         data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
         load_summary_data(data_country);
         updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
         updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
         updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
         $('.country_name').each(function() {$(this).html(navigation.country);});
+        console.timeEnd("Graph1");
         
         // Compare
+        console.time("build_elements_compare");
         build_elements_compare();
+        console.timeEnd("build_elements_compare");
+        console.time("Graph2");
         updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'),
                               navigation.lines2, navigation.maCompare);
+        console.timeEnd("Graph2");
 
         // FT Graph
+        console.time("GraphFT");
         build_ft_countries();
         build_ft_categories_select();
         ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
                              navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+        console.timeEnd("GraphFT");
 
         // Testing Graph
+        console.time("GraphTesting");
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
         testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+        console.timeEnd("GraphTesting");
     }
 }, 100);
 
