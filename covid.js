@@ -208,22 +208,23 @@ function parseTestingData(data) {
         el['units'] = el['Entity'].split(' - ')[1];
         el['key'] = el['Entity'];
         el['date'] = d3.timeParse("%Y-%m-%d")(el['Date']);
-        let cases = confirmed_cases.get(`Confirmed${el['Country/Region']}${d3.timeFormat('%-m/%d/%y')(el.date)}`);
-        if (cases) {
-            el['Cumulative cases per tests'] = el['Cumulative total'] > 0 ? cases[0]['field_value'] / el['Cumulative total'] : null;
+        let cases = confirmed_cases.get(`Confirmed${el['Country/Region']}${d3.timeFormat('%-m/%-d/%y')(el.date)}`);
+        if (cases !== undefined) {
+            el['Cumulative cases per test'] = el['Cumulative total'] > 0 ? cases[0]['field_value'] / el['Cumulative total'] : null;
         } else {
-            el['Cumulative cases per tests'] = null;
+            el['Cumulative cases per test'] = null;
         }
     }
     testing_countries = d3.set(data.map(d => d.key)).values();
     navigation.testing_countries = testing_countries.slice(1, 4);
-    testing_yaxis.push('Cumulative cases per tests');
+    testing_yaxis.push('Cumulative cases per test');
     return data;
 }
 
 
 function addRates(data) {
     let rates_categories = cases_categories.filter(d => d !== 'Confirmed');
+
     let rates = d3.nest()
         .key(d => d['Country/Region']+d['field_id'])
         .rollup(function(d) {
@@ -1480,7 +1481,6 @@ function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total'
         .domain(d3.extent(data, d => d.y))
         .nice()
         .range([height, 0]);
-    console.log(d3.extent(data, d => d.y));
     let formatTick = d => d3.format((yVar == 'Cumulative cases per tests' ? '.2%' : '.3s'))(d);
     let yGrid = svg => svg
         .call(d3.axisRight(y)
