@@ -1465,10 +1465,13 @@ function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total'
         .domain(d3.extent(data, d => d[xVar]))
         .range([0, width]);
     
+    let nb_ticks = parseInt((w - 100) / 100);
     svg.append("g")
         .attr('class','x axis')
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%d/%m/%y")));
+        .call(d3.axisBottom(x)
+              .ticks(nb_ticks)
+              .tickFormat(d3.timeFormat("%d/%m/%y")));
 
     // Y-axis
     let y = d3.scaleLinear()
