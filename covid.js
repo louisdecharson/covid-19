@@ -1481,7 +1481,7 @@ function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total'
         .domain(d3.extent(data, d => d.y))
         .nice()
         .range([height, 0]);
-    let formatTick = d => d3.format((yVar == 'Cumulative cases per tests' ? '.2%' : '.3s'))(d);
+    let formatTick = d => d3.format((yVar == 'Cumulative cases per test' ? '.2%' : '.3s'))(d);
     let yGrid = svg => svg
         .call(d3.axisRight(y)
               .tickSize(width)
