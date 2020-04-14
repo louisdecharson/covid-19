@@ -1179,13 +1179,14 @@ function addPopulationData() {
         .key(d => d['Country/Region'])
         .rollup(function(a) {
             let popDataEl = popData.get(a[0]['Country/Region']);
+            console.log(popDataEl);
             if (popDataEl) {
                 for (const e of a) {
                     e['Population'] = +popDataEl[0].Population;
                     e['field_value_pop'] = e['field_value'] / e['Population'];
                 }
-            } else {
-                console.log(a[0]['Country/Region']);
+            // } else {
+                // console.log(a[0]['Country/Region']);
             }
             return a;
         })
