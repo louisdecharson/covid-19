@@ -1175,18 +1175,15 @@ function addDatestoSelect() {
 }
 function addPopulationData() {
     let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
-    data_by_country = d3.nest()
+    Data_by_country = d3.nest()
         .key(d => d['Country/Region'])
         .rollup(function(a) {
             let popDataEl = popData.get(a[0]['Country/Region']);
-            console.log(popDataEl);
             if (popDataEl) {
                 for (const e of a) {
                     e['Population'] = +popDataEl[0].Population;
                     e['field_value_pop'] = e['field_value'] / e['Population'];
                 }
-            // } else {
-                // console.log(a[0]['Country/Region']);
             }
             return a;
         })
