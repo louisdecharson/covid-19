@@ -82,9 +82,20 @@ const EU_countries = ['Austria', 'Belgium','Bulgaria', 'Croatia', 'Cyprus',
       South_America_countries = ["Argentina","Bolivia","Brazil","Chile","Colombia",
                                  "Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela"];
 
-      
-      
-      
+
+// Mapping between testing and JHU data
+const testing_equivalence_country = {
+    "Czech Republic": "Czechia",
+    "United States":"US",
+    "South Korea": "Korea, South"
+};
+const map_testing_country = function(country) {
+    if (Object.keys(testing_equivalence_country).indexOf(country) > -1) {
+        return testing_equivalence_country[country];
+    } else {
+        return country;
+    }
+};
 
 
 // Default values
@@ -204,7 +215,7 @@ function parseTestingData(data) {
     let confirmed_cases = d3.nest().key(d => d.key).map(data_by_country
                                                         .filter(d => d['category'] === 'Confirmed'));
     for (const el of data) {
-        el['Country/Region'] = el['Entity'].split(' - ')[0];
+        el['Country/Region'] = map_testing_country(el['Entity'].split(' - ')[0]);
         el['units'] = el['Entity'].split(' - ')[1];
         el['key'] = el['Entity'];
         el['date'] = d3.timeParse("%Y-%m-%d")(el['Date']);
@@ -1175,7 +1186,7 @@ function addDatestoSelect() {
 }
 function addPopulationData() {
     let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
-    Data_by_country = d3.nest()
+    data_by_country = d3.nest()
         .key(d => d['Country/Region'])
         .rollup(function(a) {
             let popDataEl = popData.get(a[0]['Country/Region']);
