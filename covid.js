@@ -1,25 +1,31 @@
-const el = document.getElementById('main');
-let el_style = el.currentStyle || window.getComputedStyle(el),
-    el_width = el.offsetWidth,
-    el_margin = parseFloat(el_style.marginLeft) + parseFloat(el_style.marginRight),
-    el_padding = parseFloat(el_style.paddingLeft) + parseFloat(el_style.paddingRight);
-const widthMainGraph = el_width - el_padding;
-const heightMainGraph = Math.max(400, screen.height*0.4);
-const root = document.documentElement,
-      rootStyle = getComputedStyle(root);
+/**
+ * @copyright: Louis de Charsonville
+ * 
+ */
 
-// SparkLine size
-const sparklineWidth = Math.min(document.getElementById('summary_stats').offsetWidth / 3 - 30, 150);
-const sparklineHeight = 25;
+const main = document.getElementById('main'),
+      mainStyle = main.currentStyle || window.getComputedStyle(main),
+      mainWidth = main.offsetWidth,
+      mainSideMargin = parseFloat(mainStyle.marginLeft) + parseFloat(mainStyle.marginRight),
+      mainSidePadding = parseFloat(mainStyle.paddingLeft) + parseFloat(mainStyle.paddingRight),
+      graphWidth = mainWidth - mainSidePadding,
+      graphHeight = Math.max(400, screen.height * 0.4);
+
+const root = document.documentElement,
+      rootStyle = window.getComputedStyle(root);
+
+
+// Dark Mode
+const cssVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
+let cssMapping = {};
+for (const v of cssVariables) {
+    cssMapping[ v + '-light'] = rootStyle.getPropertyValue(v + '-light');
+    cssMapping[ v + '-dark'] = rootStyle.getPropertyValue(v + '-dark');
+}
+
 // Colors
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
-// const colors = ['#f29b12','#e64c3c','#2ecb71']; // red for deaths, orange for cases
-const colors = ['#FFC107','#ff073a','#2ecb71']; // red for deaths, orange for cases
-let colorVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
-let colorsValues = {};
-colorVariables.forEach(function(it){colorsValues[it+'-light'] = rootStyle.getPropertyValue(it+'-light');
-                                    colorsValues[it+'-dark'] = rootStyle.getPropertyValue(it+'-dark');});     
-
+const colors = ['#FFC107','#ff073a','#2ecb71'];
 
 // Initiate variables
 let data = [],
@@ -37,6 +43,7 @@ let data = [],
     testing_data = [],
     data_country,
     data_graph = {};
+
 
 // Continental Aggregates
 const EU_countries = ['Austria', 'Belgium','Bulgaria', 'Croatia', 'Cyprus',
@@ -82,7 +89,6 @@ const EU_countries = ['Austria', 'Belgium','Bulgaria', 'Croatia', 'Cyprus',
       South_America_countries = ["Argentina","Bolivia","Brazil","Chile","Colombia",
                                  "Guyana","Paraguay","Peru","Suriname","Uruguay","Venezuela"];
 
-
 // Mapping between testing and JHU data
 const testing_equivalence_country = {
     "Czech Republic": "Czechia",
@@ -97,41 +103,41 @@ const map_testing_country = function(country) {
     }
 };
 
+// ========================================================================== //
 
-// Default values
-let startDate,
-    endDate;
+// NAVIGATION
+// ----------
 
-let elements = [
-    {
-        "Country/Region": "France",
-        "category": "Confirmed",
-        "offset": 0
-    },
-    {
-        "Country/Region": "Italy",
-        "category": "Confirmed",
-        "offset": 0
-    },
-    {
-        "Country/Region": "Spain",
-        "category": "Confirmed",
-        "offset": 0
-    }
-];
+// Default navigation
 let navigation = {
     "page": "by_country",
-    "darkMode": true,
+    "darkMode": window.matchMedia("(prefers-color-scheme: dark)").matches || true,
     "country": "World",
-    "elements": elements,
+    "elements": [
+        {
+            "Country/Region": "France",
+            "category": "Confirmed",
+            "offset": 0
+        },
+        {
+            "Country/Region": "Italy",
+            "category": "Confirmed",
+            "offset": 0
+        },
+        {
+            "Country/Region": "Spain",
+            "category": "Confirmed",
+            "offset": 0
+        }
+    ],
     "logScale": false,
     "logScale2": false,
     "lines": true,
     "lines2": true,
     "percPopulation": false,
     "percPopulation2": false,
-    "startDate":"",
-    "endDate":"",
+    "startDate": null,
+    "endDate": null,
     "maCompare": 1,
     "ft_countries": ["Korea, South","China","France","Italy","Spain","Japan","US","United Kingdom"],
     "logScale3": true,
@@ -141,20 +147,79 @@ let navigation = {
     "ft_thresholdCategory": "Deaths",
     "ft_ma": 1,
     "testing_yVar": "Cumulative total",
-    "testing_countries": []
+    "testing_countries": [],
+    "hideNav": true
 };
+function loadPage(button, target) {
+    $('.sidebar_show.active').each(function() {
+        $(this).removeClass('active');
+    });
+    button.addClass('active');
+    $('.content').hide();
+    $(target).show();
+    updateNavigation({"page":target.slice(1)});
+}
+function updateNavigation(j) {
+    Object.keys(j).forEach(function(e,i) {
+        if (Object.keys(navigation).indexOf(e) > -1) {
+            navigation[e] = j[e];
+        }
+    });
+    document.location.hash = navigation.hideNav ? "" : JSON.stringify(navigation);    
+}
+// Simple analytics
+function action(event) {
+    try {
+        sa_event(event);
+    }
+    catch(error) {
+        console.log(`Error in action. Action: ${event} | Error: ${error}`);
+    }
+}
+
+// Navigation - load
+if (document.location.hash.length > 0) {
+    updateNavigation(JSON.parse(decodeURIComponent(document.location.hash.substring(1))));
+}
+loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
+toggleDarkMode(navigation.darkMode);
+$('#logScaleSwitch').prop('checked', navigation.logScale);
+$('#barSwitch').prop('checked', !navigation.lines);
+$('#percPopulation').prop('checked', navigation.percPopulation);
+
+//Compare
+$('#logScaleSwitch2').prop('checked', navigation.logScale2);
+$('#barSwitch2').prop('checked', !navigation.lines2);
+$('#percPopulation2').prop('checked', navigation.percPopulation2);
+$('#movingAverageCompareRange').prop('value', navigation.maCompare);
+$('#movingAverageCompareValue').html(navigation.maCompare);
+
+// FT
+$('#logScaleSwitch3').prop('checked', navigation.logScale3);
+$('#hideLegend').prop('checked', navigation.hideLegend);
+$('#thresholdRange').prop('value', navigation.ft_threshold);
+
+// for ranges, we need to update both the range (position of the cursor) and the span value
+$('#thresholdValue').html(navigation.ft_threshold); 
+$('#movingAverageFTRange').prop('value', navigation.ft_ma);
+$('#movingAverageFTValue').html(navigation.ft_ma); 
+
+
+// ========================================================================== //
 
 // DARK MODE
+// ---------
+
 function toggleDarkMode(darkMode) {
     let darkModeSwitch = $('#darkmodeSwitch');
     if (darkMode) {
-        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it+'-dark']);});
+        cssVariables.forEach(function(it) {root.style.setProperty(it,cssMapping[it+'-dark']);});
         darkModeSwitch.addClass('darkmode badge-primary');
         darkModeSwitch.removeClass('badge-secondary');
         darkModeSwitch.text('ON');
         updateNavigation({"darkMode":true});
     } else {
-        colorVariables.forEach(function(it) {root.style.setProperty(it,colorsValues[it + '-light']);});
+        cssVariables.forEach(function(it) {root.style.setProperty(it,cssMapping[it + '-light']);});
         darkModeSwitch.removeClass('darkmode badge-secondary');
         darkModeSwitch.addClass('badge-secondary');
         darkModeSwitch.text('OFF');
@@ -162,9 +227,12 @@ function toggleDarkMode(darkMode) {
     }
 }
 
-// ====================================================================== //
-// FUNCTIONS
-// ---------
+// ========================================================================== //
+
+// (DATA) FUNCTIONS 
+// -----------------
+
+// In this section, all the functions used to download and process data.
 function zip() {
     // This function mimics zip function in Python
     var args = [].slice.call(arguments);
@@ -206,8 +274,8 @@ function parseData(wide_data, pivot_columns, category) {
         }
     }
     list_dates = d3.set(data.map(d => d['date'])).values().map(d => d3.timeFormat("%d-%b-%y")(new Date(d)));
-    startDate = navigation.startDate.length > 0 ? navigation.startDate : list_dates[0];
-    endDate = navigation.endDate.length > 0 ? navigation.endDate : list_dates.slice(-1)[0];
+    navigation.startDate = navigation.startDate || list_dates[0];
+    navigation.endDate = navigation.endDate || list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
 
@@ -231,8 +299,6 @@ function parseTestingData(data) {
     testing_yaxis.push('Cumulative cases per test');
     return data;
 }
-
-
 function addRates(data) {
     let rates_categories = cases_categories.filter(d => d !== 'Confirmed');
 
@@ -285,8 +351,6 @@ function addRates(data) {
     
     return [...data, ...rates, ...new_and_growth_cases];
 }
-
-
 function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
     // This function mimics a groupby with sum as the agg function.
     // It uses D3.js
@@ -349,8 +413,6 @@ function computeAggregate(name_aggregate, fltr = false,
             return out;
         });
 }
-
-
 function get_list_countries(data) {
     countries = d3.set(data.map(f => f['Country/Region'])).values().sort();
 
@@ -366,6 +428,117 @@ function get_list_countries(data) {
     $('#chooseCountry').show();
     $('#ft_add_country').html(ft_countries_html);
 }
+function load_summary_data() {
+    let last_date = data.map(d => d['date']).slice(-1)[0];
+    for (const category of cases_categories) {
+        let data_category = data_country.filter(f => f['category'] === category),
+            last_value = d3.format((navigation.percPopulation ? '%' : ','))(data_category.slice(-1)[0][(navigation.percPopulation ? 'field_value_pop' : 'field_value')]);
+        $(`#nb_${category.toLowerCase()}`).html(last_value);
+
+        // Add this data to DOM
+        if (category === 'Deaths' || category === 'Recovered') {
+            let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
+            $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
+        } 
+        // sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
+    }
+    $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
+
+}
+function addPopulationData() {
+    let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
+    data_by_country = d3.nest()
+        .key(d => d['Country/Region'])
+        .rollup(function(a) {
+            let popDataEl = popData.get(a[0]['Country/Region']);
+            if (popDataEl) {
+                for (const e of a) {
+                    e['Population'] = +popDataEl[0].Population;
+                    e['field_value_pop'] = e['field_value'] / e['Population'];
+                }
+            }
+            return a;
+        })
+        .entries(data_by_country)
+        .map(d => d.value).flat();
+}
+function computeWorldData() {
+    return [...data_by_country, ...computeAggregate('World'),
+            ...computeAggregate('European Union', (d => EU_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Europe', (d => Europe_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Asia', (d => Asia_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('North America', (d => North_America_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Oceania', (d => Oceania_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Middle East', (d => Middle_East_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Africa', (d => Africa_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Central America', (d => Central_America_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('Carribean', (d => Carribean_countries.indexOf(d['Country/Region']) > -1)),
+            ...computeAggregate('South America', (d => South_America_countries.indexOf(d['Country/Region']) > -1))
+           ];
+}
+function get_dates(data) {
+    list_dates = d3.set(data.map(d => d['date'])).values();
+}
+function filterByDate(data) {
+    return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
+                       d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate));
+}
+/**
+ * Prepare data for compare graph: 
+ * 1. Filter data for the right date and countries
+ * 2. Offset data
+ * 3. Compute moving average
+ * 4. Retrieve keys
+ */
+function getCompareData(inputData) {
+    let data = [];
+    function offset_data(data, offset_value) {
+        // Compute offset and update key
+        data.forEach(function(it,ind) {
+            let value = ind + offset_value < data.length ? data[ind + offset_value]['field_value'] : NaN;
+            it['field_value'] = value; // update value
+            it.offset = offset_value; // add offset to the element
+            it.keyCompare = getKey(it);
+        });
+        return data;
+    }
+    function getKey(e) {
+        return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
+    }
+    navigation.elements.forEach(function(element,index) {
+        let _ = inputData.filter(d => (d['category'] === element['category'] &&
+                                       d['Country/Region'] === element['Country/Region'] &&
+                                       d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
+                                       d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate)));
+        _ = ma_json(offset_data($.extend(true, [], _), element['offset']),'field_value', navigation.maCompare);
+        data = data.concat(_);
+    });
+    return data;
+}
+
+function ftData(data, yVar='field_value') {
+    return d3.nest()
+        .key(d => d['Country/Region'])
+        .rollup(function(a) {
+            let na = $.extend(true, [], a).filter(d => d['category'] === navigation.ft_category),
+                date_threshold = d3.min(a.filter(d => d['category'] === navigation.ft_thresholdCategory &&
+                                                 d[yVar] >= navigation.ft_threshold)
+                                        .map(d => d['date']));
+            for (let i = na.length; i >= 0 + navigation.ft_ma; i--) {
+                let e = na[i-1];
+                e['x'] = Math.round((e['date'] - date_threshold)/(24*3600*1000));
+                e['y'] = navigation.ft_ma === 1 ? e[yVar] : na.slice(i-navigation.ft_ma,i).reduce((t,n) => t + n[yVar],0)/navigation.ft_ma;
+            }
+            return na.reverse().slice(navigation.ft_ma-1).filter(d => d['x'] >= 0);
+        })
+        .entries(data.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1)))
+        .map( g => g.value).flat();
+}
+// ========================================================================== //
+
+// FUNCTIONS INTERACTING WITH DOM
+// ==============================
+
 function build_ft_countries_select() {
     let ft_countries_html = '<option selected>Add country</option>';
     for (const [index, country] of countries.entries()) {
@@ -400,676 +573,6 @@ function build_testing_yaxis() {
     }
     $('#testingYAxis').html(testing_yaxis_html);
 }
-
-function load_summary_data() {
-    let last_date = data.map(d => d['date']).slice(-1)[0];
-    for (const category of cases_categories) {
-        let data_category = data_country.filter(f => f['category'] === category),
-            last_value = d3.format((navigation.percPopulation ? '%' : ','))(data_category.slice(-1)[0][(navigation.percPopulation ? 'field_value_pop' : 'field_value')]);
-        $(`#nb_${category.toLowerCase()}`).html(last_value);
-
-        // Add this data to DOM
-        if (category === 'Deaths' || category === 'Recovered') {
-            let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
-            $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
-        } 
-        // sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
-    }
-    $('#lastDataPoint').html(d3.timeFormat("%d-%b-%y")(last_date));
-
-}
-function get_dates(data) {
-    list_dates = d3.set(data.map(d => d['date'])).values();
-}
-
-// PLOTS
-// =====
-
-// Utilities
-// ---------
-function extendOneDay(extent) {
-    // in case of bars, we extend by one day the x-axis
-    function addOneDay(date) {
-        let nextDay = new Date(date);
-        nextDay.setDate(nextDay.getDate() + 1);
-        return nextDay;
-    }
-    return [extent[0], addOneDay(extent[1])];
-}
-function get_optimal_precision(n) {
-        return `.${Math.abs(Math.floor(Math.log10(n)))+1}%`;
-}
-function sparkline(elemId, data, xVar, yVar, logScale = false) {
-    // Plot a Sparkline (see Edward Tufte)
-
-    // elemId
-    var width = sparklineWidth;
-    var height = sparklineHeight;
-    var x = d3.scaleLinear().range([0, width - 2]);
-    let y;
-    if (logScale) {
-        y = d3.scaleSymlog().range([height - 4, 0]);
-    } else {
-        y = d3.scaleLinear().range([height - 4, 0]);
-    }
-    var parseDate = d3.timeParse("%m/%d/%y");
-    data.forEach(function(d) {
-        d.x = parseDate(d[xVar]);
-        d.y = +d[yVar];
-    });
-    var line = d3.line()
-        .curve(d3.curveBasis)
-        .x(function(d) { return x(d.x); })
-        .y(function(d) { return y(d.y); });
-    x.domain(d3.extent(data, function(d) { return d.x; }));
-    y.domain(d3.extent(data, function(d) { return d.y; }));
-
-    // remove existing
-    d3.select(elemId).selectAll('span').remove();
-    var svg = d3.select(elemId)
-        .append('span')
-        .attr('class','sparklines-plot')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .append('g')
-        .attr('transform', 'translate(0, 2)');
-    svg.append('path')
-        .datum(data)
-        .attr('class', 'sparkline')
-        .attr('d', line);
-    svg.append('circle')
-        .attr('class', 'sparkcircle')
-        .attr('cx', x(data[data.length-1].x))
-        .attr('cy', y(data[data.length-1].y))
-        .attr('r', 1.5);
-    d3.select(elemId)
-        .append('span')
-        .attr('class','sparklines-number')
-        .text(d3.format((navigation.percPopulation ? '%' : '.3s'))(data[data.length-1].y));
-}
-function getMarginGraph(w) {
-    return {
-        top: 10,
-        right: w < 400 ? 20 : 30, // smaller margin for mobile
-        bottom: 30,
-        left: w < 400 ? 40 : 60 // smaller margin for mobile
-    };
-}
-function createGraph(id, w = widthMainGraph, h = heightMainGraph) {
-    // var margin = {top: 10, right: w < 400 ? 20 : 30, bottom: 30, left: w < 400 ? 20 : 60};
-    let margin = getMarginGraph(w);
-    var width = w - margin.left - margin.right;
-    var height = h - margin.top - margin.bottom;
-    var svg = d3.select(id)
-        .append("svg")
-        .attr('id',id.substring(1,) + '_svg')
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr('id',id.substring(1,) + '_g')
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-
-    // Add overlay for focus & tooltip
-    // (useful to pointer events, see css)
-    svg.append("rect")
-        .attr("class", "overlay")
-        .attr("width", width)
-        .attr("height", height);
-
-}
-function updateGraph(id, data, xVar, yVar,
-                     logScale = navigation.logScale, lines = true, categories = cases_categories,
-                     percentage = false,
-                     w = widthMainGraph, h = heightMainGraph)
-{
-    // var margin = {top: 10, right: 30, bottom: 30, left: 60};
-    let margin = getMarginGraph(w);
-    var width = w - margin.left - margin.right;
-    var height = h - margin.top - margin.bottom;
-
-    // Select the id
-    var svg = d3.select(id + '_g');
-
-    // Data Filtered
-    data = data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
-                       d['date'] <= d3.timeParse('%d-%b-%y')(endDate) &&
-                       categories.indexOf(d['category']) > -1);
-    
-    var color = d3.scaleOrdinal()
-        .domain(categories)
-        .range(colors);
-    
-    // Delete the axis
-    svg.selectAll('g.x.axis').remove();
-    svg.selectAll('g.y.axis').remove();
-    svg.selectAll('g.yGrid').remove();
-    
-    // X-axis
-    function extendOneDay(extent) {
-        // in case of bars, we extend by one day the x-axis
-        function addOneDay(date) {
-                let nextDay = new Date(date);
-                nextDay.setDate(nextDay.getDate() + 1);
-                return nextDay;
-            }
-        return [extent[0], addOneDay(extent[1])];
-    }
-    let xExtent = (lines ? d3.extent(data, d => d[xVar]) : extendOneDay(d3.extent(data, d => d[xVar])));
-    let x = d3.scaleTime()
-        .domain(xExtent)
-        .range([0, width]);
-
-    let nb_ticks = parseInt((w - 100) / 100); // a tick takes 40 px;
-    svg.append("g")
-        .attr('class','x axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x)
-              .ticks(nb_ticks)
-              .tickFormat(d3.timeFormat("%d/%m/%y"))
-             );
-
-    // Second X-axis (bars)
-    let x2 = d3.scaleBand()
-        .domain(categories)
-        .rangeRound([0, width/d3.set(data.map(d => d[xVar])).values().length]);
-
-    // Y-axis
-    let minY = logScale ? percentage ? d3.min(data.filter(d => d[yVar] > 0), d => d[yVar]) : 1 : 0,
-        maxY = d3.max(data, d=>d[yVar]);
-    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
-        .domain([minY,maxY])
-        .nice()
-        .range([height, 0]);
-
-    function get_optimal_precision(n) {
-        return `.${Math.abs(Math.floor(Math.log10((n > 0 ? n : 1))))+1}%`;
-    }
-    let precision_percentage = get_optimal_precision(maxY),
-        formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
-    let yGrid = svg => svg
-        .call(d3.axisRight(y)
-              .tickSize(width)
-              .tickFormat(formatTick))
-        .call(g => g.selectAll('.domain').remove())
-        .call(g => g.selectAll(".tick:not(:first-of-type) line")
-              .attr("stroke-opacity", 0.5)
-              .attr("stroke-dasharray", "2,2"))
-        .call(g => g.selectAll(".tick text")
-              .remove());
-    
-    svg.append("g")
-        .attr('class','yGrid')
-        .call(yGrid);
-
-    svg.append("g")
-        .attr('class','y axis')
-        .call(d3.axisLeft(y)
-              .tickFormat(formatTick));
-        
-    // Add the content
-    svg.selectAll('path.lines').remove();
-    categories.forEach(function(category,index) {
-        if (lines) {
-            svg.selectAll(`rect.${category.replace(/ /g,'_')}`).remove();
-            svg.append('path')
-                .datum(data.filter(d => d.category === category))
-                .attr('class','lines')
-                .attr('fill','none')
-                .attr('stroke',  d => color(category))
-                .attr("stroke-width", 3)
-                .attr('d', d3.line()
-                      .y(d => y(d[yVar]))
-                      .defined(d => logScale ? (d[yVar] <= 0 ? false : true ) : true)
-                      .x(d => x(d[xVar])));
-            
-        } else {
-            svg.selectAll(`rect.${category.replace(/ /g,'_')}`)
-                .data(data.filter(d => d.category === category))
-                .join('rect')
-                .attr('class', category.replace(/ /g,'_'))
-                .attr('fill',  d => color(category))
-                .attr('x', d => x(d[xVar]) + x2(category))
-                .attr('width', x2.bandwidth())
-                .attr('y',  (d => y(d[yVar])))
-                .attr('height', d => (height - y(d[yVar])))
-                .on("mouseover", function(d) {
-	            d3.select(this).attr("fill", function() {
-                        return d3.rgb(d3.select(this).style("fill")).darker(0.5);
-                    });
-                })
-                .on("mouseout", function(d) {
-	            d3.select(this).attr("fill", function() {
-                        return d3.rgb(d3.select(this).style("fill")).brighter(0.5);
-                    });
-                });
-        }
-    });
-    // Add Tooltip (vertical line + tooltip)
-    function addTooltip(g, data, mx, my) {
-        if (!data) return g.style("display", "none");
-        
-        g.style("display", null);
-
-        const xLine = g.selectAll("line")
-              .data([null])
-              .join("line")
-              .attr("class", "tooltip_line")
-              .attr("x1", mx).attr("x2", mx) 
-              .attr("y1", 0).attr("y2", height);
-        
-        if (lines) {
-            const dots = g.selectAll("circle")
-                  .data(data.slice(1).filter(d => logScale ? d[yVar] > 0 : true))
-                  .join("circle")
-                  .style("fill", d => color(d.category))
-                  .attr("r", 5)
-                  .attr("cx", (d, i) => x(d[xVar]))
-                  .attr("cy", (d, i) => y(d[yVar]));
-        }
-
-        const path = g.selectAll("rect")
-              .data([null])
-              .join("rect")
-              .attr("class","rect_tooltip");
-
-        const text = g.selectAll("text")
-              .data([null])
-              .join("text")
-              .call(text => text
-                    .selectAll('tspan')
-                    .data(data)
-                    .join("tspan")
-                    .attr("x", 0)
-                    .attr("y", (d, i) => `${i * 1.1}em`)
-                    .attr("class","tooltip_text")
-                    .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.category))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${d['category']}: ${d3.format((percentage ? precision_percentage : ','))(d[yVar])}`));
-        const {xx, yy, width: w, height: h} = text.node().getBBox();
-
-        // Make sure the tooltip is always in the graph area (and visible)
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
-            text_y = h + my - 20 > height ? my - h : my;
-        text.attr("transform", `translate(${text_x},${text_y})`);
-
-        path.attr("x", text_x-5)
-            .attr("y", text_y - 20)
-            .attr("rx", 5)
-            .attr("width", w + 10)
-            .attr("height", h + 10);
-        
-        return true;
-    };
-    function getMouseData(mx) {
-        const bisect = d3.bisector(d => d[xVar]).left;
-        let mouseDate = x.invert(mx),
-            i = bisect(data, mouseDate),
-            a = data[i-1],
-            b = i > data.length - 1 ? data.slice(-1)[0] : data[i],
-            f_id = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b['field_id'] : a['field_id']) : (mouseDate < b[xVar] ? a['field_id'] : b['field_id'] )),
-            date = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b[xVar] : a[xVar]) : (mouseDate < b[xVar] ? a[xVar] : b[xVar])),
-            values = data.filter(d => d['field_id'] === f_id && categories.indexOf(d.category) > -1)
-            .sort((a,b) => b[yVar] - a[yVar]);
-        return [date].concat(values);
-    }
-    svg.selectAll("g.tooltip_container").remove();
-    const tooltip = svg.append("g").attr("class","tooltip_container");
-    svg.on("touchmove mousemove", function() {
-        let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1];
-        if (mouse_x > 0) {
-            let mouseData = getMouseData(mouse_x);
-            tooltip
-                .call(addTooltip, mouseData, lines ? x(mouseData[0]) : mouse_x, mouse_y+30);
-        }
-    });
-    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
-
-    
-    // Add legend
-    addLegend(id+'_svg',categories,3*margin.right,margin.top);
-
-    // Save data
-    data_graph[id.slice(1)] = data;
-}
-function addLegend(id, keys, px, py, colors_ = colors) {
-    var color = d3.scaleOrdinal()
-        .domain(keys)
-        .range(colors_);
-
-    const svg = d3.select(id);
-
-    // remove legend if exist
-    svg.selectAll('.legend').remove();
-    const legend = svg.append('g')
-          .attr('class','legend');
-
-    const  path = legend.selectAll("rect")
-          .data([null])
-          .join("rect")
-          .attr("class","rect_legend");
-    
-    const mydots = legend.selectAll(".dots-legend")
-          .data(keys);
-    mydots.exit().remove();
-    mydots.enter()
-        .append("circle")
-        .merge(mydots)
-        .attr("cx", px + 10)
-        .attr("cy", (d,i) =>  py + i*25) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("r", 3)
-        .attr('class','dots-legend')
-        .style("fill",d => color(d));
-
-    // Add one dot in the legend for each name.
-    var mylabels = legend.selectAll(".labels-legend")
-        .data(keys);
-    mylabels.exit().remove();
-    mylabels.enter()
-        .append("text")
-        .merge(mylabels)
-        .attr("x", px + 30)
-        .attr("y", (d,i) => py + i*25) // 100 is where the first dot appears. 25 is the distance between dots
-        .style("fill", d => color(d))
-        .text(t => t)
-        .attr("text-anchor", "left")
-        .style("alignment-baseline", "middle")
-        .attr('class','labels-legend');
-
-    let x, y, w, h;
-    try {
-        let _ = legend.node().getBBox();
-        x = _.x,
-        y = _.y,
-        w = _.width,
-        h = _.height;
-    } catch(err) {
-        x = 85,
-        y = 5,
-        w = 0,
-        h = 0;
-    }
-    path.attr('x',px-5)
-        .attr('y',py-5)
-        .attr('width', (w > 0 ? w + 10 : d3.max(keys.map(d => d.length))*10 + 10)) // if graph is not displayed the width and height will be zero (*)
-        .attr('height',(h > 0 ?  h + 10 : keys.length * 25 + 10));
-    // (*) we try to estimate the width and height based on max
-    //     nb of characthers of the legend text and nb of keys
-}
-
-function computeWorldData() {
-    // let data_ = groupBy(data_by_country,'key_world',['field_value','Population'],[],['field_id','date','category']);
-    // data_.forEach(function(d){
-    //     d['Country/Region'] = 'World';
-    //     d['key'] = d.category + d['Country/Region'] + d['field_id'];
-    //     d['field_value_pop'] = d['field_value'] / d['Population'];
-    // });
-    // return data_by_country.concat(data_);
-    return [...data_by_country, ...computeAggregate('World'),
-            ...computeAggregate('European Union', (d => EU_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Europe', (d => Europe_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Asia', (d => Asia_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('North America', (d => North_America_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Oceania', (d => Oceania_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Middle East', (d => Middle_East_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Africa', (d => Africa_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Central America', (d => Central_America_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('Carribean', (d => Carribean_countries.indexOf(d['Country/Region']) > -1)),
-            ...computeAggregate('South America', (d => South_America_countries.indexOf(d['Country/Region']) > -1))
-           ];
-}
-
-function updateGraphComparison(data, logScale = false, yVar = 'field_value',
-                               lines = true, maPeriod = 1, id = "#compare_graph", 
-                               w = widthMainGraph, h = heightMainGraph, xVar = 'date') {
-    // Update graph 'compare' with new data
-    // ------------------------------------
-    // data : raw data to use
-    // logScale : boolean (true to use a logScale)
-    // yVar: y axis variable
-    // lines : boolean (true : use line, false: use bars)
-    // maPeriod : number of days for computing moving average
-    // id : id of the graph container
-    // w : width of the graph DOM
-    // h : height of the graph DOM
-    // xVar : x axis variable
-    
-    
-    let margin = getMarginGraph(w);
-    // var margin = {top: 10, right: 30, bottom: 30, left: 60};
-    var width = w - margin.left - margin.right;
-    var height = h - margin.top - margin.bottom;
-
-    // Select the id
-    var svg = d3.select(id + '_g');
-    
-    // Delete the axis
-    svg.selectAll('g.x.axis').remove();
-    svg.selectAll('g.y.axis').remove();
-    svg.selectAll('g.yGrid').remove();
-
-    // Get y data with the offsets
-    let y_data = [],
-        keys = [];
-
-    // Offset
-    function offset_data(data, offset_value) {
-        data.forEach(function(it,ind) {
-            let value = ind + offset_value < data.length ? data[ind + offset_value][yVar] : NaN;
-            it[yVar] = value; // update value
-            it.offset = offset_value; // add offset to the element
-        });
-        return data;
-    }
-    function getKey(e) {
-        return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
-    }
-    // BUILD Y DATA
-    navigation.elements.forEach(function(element,index) {
-        let _ = data.filter(d => (d['category'] === element['category'] &&
-                                  d['Country/Region'] === element['Country/Region'] &&
-                                  d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
-                                  d['date'] <= d3.timeParse('%d-%b-%y')(endDate)));
-        // _ = offset_data($.extend(true, [], _), element['offset']);
-        _ = ma_json(offset_data($.extend(true, [], _), element['offset']),yVar, maPeriod);
-        y_data = y_data.concat(_);
-        keys.push(getKey(element));
-    });
-
-    // Get the list of dates
-    let dates = d3.set(y_data.map(d => d[xVar])).values();
-    
-    // X-axis
-    let x = d3.scaleTime()
-        .domain((lines ? d3.extent(y_data, d => d[xVar]) : extendOneDay(d3.extent(y_data, d => d[xVar]))))
-        .range([0, width]);
-
-    let nb_ticks = parseInt((w - 100) / 100);
-    svg.append("g")
-        .attr('class','x axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x)
-              .ticks(nb_ticks)
-              .tickFormat(d3.timeFormat("%d/%m/%y"))
-             );
-
-    // Second X-axis (bars)
-    let x2 = d3.scaleBand()
-        .domain(keys)
-        .rangeRound([0, width/d3.set(y_data.map(d => d[xVar])).values().length]);
-
-    // Y-axis
-    let percentage = navigation.percPopulation2 || y_data[0].category.includes('rate');
-    let minY = logScale ? percentage ? d3.min(y_data.filter(d => d[yVar] > 0), d => d[yVar]) : 1 : 0,
-        maxY = d3.max(y_data, d=>d[yVar]);
-
-    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
-        .domain([minY,maxY])
-        .nice()
-        .range([height, 0]);
-
-    let precision_percentage = get_optimal_precision(maxY),
-        formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format((percentage ? precision_percentage : '.3s'))(d) : "" ) : d3.format((percentage ? precision_percentage : '.3s'))(d);
-    
-    let yGrid = svg => svg
-        .call(d3.axisRight(y)
-              .tickSize(width)
-              .tickFormat(formatTick))
-        .call(g => g.selectAll('.domain').remove())
-        .call(g => g.selectAll(".tick:not(:first-of-type) line")
-              .attr("stroke-opacity", 0.5)
-              .attr("stroke-dasharray", "2,2"))
-        .call(g => g.selectAll(".tick text")
-              .remove());
-    
-    svg.append("g")
-        .attr('class','yGrid')
-        .call(yGrid);
-
-    svg.append("g")
-        .attr('class','y axis')
-        .call(d3.axisLeft(y)
-              .tickFormat(formatTick));
-    
-    // Colors
-    let color = d3.scaleOrdinal()
-        .domain(keys)
-        .range(colors_countries);
-
-    // Add lines
-    svg.selectAll('path.lines').remove();
-    svg.selectAll('rect.bars').remove();
-    navigation.elements.forEach(function(element,index) {
-        let _ = y_data.filter(d => (d['category'] === element['category'] &&
-                                    d['Country/Region'] === element['Country/Region']));
-        if (lines) {
-            svg.selectAll(`rect.bars.id_${element.id}`).remove();
-            svg.append('path')
-                .datum(_)
-                .attr('class','lines')
-                .attr('fill','none')
-                .attr('stroke', color(getKey(element)))
-                .attr("stroke-width", 3)
-                .attr('d',d3.line()
-                      .y(d => y(d[yVar]))
-                      .defined(d => logScale ? (d[yVar] <= 0 ? false : true ) : true)
-                      .x(d => x(d[xVar])));
-        } else {
-            svg.selectAll(`rect.bars.id_${element.id}`)
-                .data(_)
-                .join('rect')
-                .attr('class', 'bars id_' + element.id)
-                .attr('fill',  d => color(getKey(element)))
-                .attr('x', d => x(d[xVar]) + x2(getKey(element)))
-                .attr('width', x2.bandwidth())
-                .attr('y',  (d => y(d[yVar])))
-                .attr('height', d => (height - y(d[yVar])))
-                .on("mouseover", function(d) {
-	            d3.select(this).attr("fill", function() {
-                        return d3.rgb(d3.select(this).style("fill")).darker(0.5);
-                    });
-                })
-                .on("mouseout", function(d) {
-	            d3.select(this).attr("fill", function() {
-                        return d3.rgb(d3.select(this).style("fill")).brighter(0.5);
-                    });
-                });
-        }
-    });
-
-    // TOOLTIP
-    // Add Tooltip (vertical line + tooltip)
-    function addTooltip(g, data, mx, my) {
-        if (!data) {
-            g.selectAll("line").remove();
-            g.selectAll("circle").remove();
-            g.selectAll("text").remove();
-            return g.style("display", "none");
-        }
-        
-        g.style("display", null);
-
-        const xLine = g.selectAll("line")
-              .data([null])
-              .join("line")
-              .attr("class","tooltip_line")
-              .attr("x1", mx).attr("x2", mx) 
-              .attr("y1", 0).attr("y2", height);
-
-        
-        if (lines) {
-            const dots = g.selectAll("circle")
-                  .data(data.slice(1).filter(d => logScale ? d[yVar] > 0 : true))
-                  .join("circle")
-                  .style("fill", (d, i) => color(getKey(d)))
-                  .attr("r", 5)
-                  .attr("cx", (d, i) => x(d[xVar]))
-                  .attr("cy", (d, i) => y(d[yVar]));
-        }
-
-        const path = g.selectAll("rect")
-              .data([null])
-              .join("rect")
-              .attr("class","rect_tooltip");
-        
-        const text = g.selectAll("text")
-              .data([null])
-              .join("text")
-              .call(text => text
-                    .selectAll('tspan')
-                    .data(data)
-                    .join("tspan")
-                    .attr("x", 0)
-                    .attr("y", (d, i) => `${i * 1.1}em`)
-                    .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(getKey(d)))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(d) : `${getKey(d)}: ${d3.format((navigation.percPopulation2 ? '%' : d.category.includes('rate') ? '.3%' : ','))(d[yVar])}`));
-        
-        const {xx, yy, width: w, height: h} = text.node().getBBox();
-
-        // Make sure the tooltip is always in the graph area (and visible)
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
-            text_y = h + my - 20 > height ? my - h : my;
-        text.attr("transform", `translate(${text_x},${text_y})`);
-        path.attr("x", text_x-5)
-            .attr("y", text_y-20)
-            .attr("rx", 5)
-            .attr("width", w + 10)
-            .attr("height", h + 10);
-        return true;
-    };
-    function getMouseData(mx) {
-        const bisect = d3.bisector(d => d[xVar]).left;
-        let mouseDate = x.invert(mx),
-            i = bisect(data, mouseDate),
-            a = data[i-1],
-            b = i > data.length - 1 ? data.slice(-1)[0] : data[i],
-            f_id = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b['field_id'] : a['field_id']) : (mouseDate < b[xVar] ? a['field_id'] : b['field_id'] )),
-            date = (lines ? (mouseDate - a[xVar] > b[xVar] - mouseDate ? b[xVar] : a[xVar]) : (mouseDate < b[xVar] ? a[xVar] : b[xVar])),
-            values = y_data.filter(d => d['field_id'] === f_id).sort((a,b) => b[yVar] - a[yVar]);
-        return [date].concat(values);
-    }
-    svg.selectAll("g.tooltip_container").remove();
-    const tooltip = svg.append("g").attr("class","tooltip_container");
-    svg.on("touchmove mousemove", function() {
-        let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1];
-        if (mouse_x > 0) {
-            let mouseData = getMouseData(mouse_x);
-            tooltip
-                .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);
-        }
-    });
-    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
-
-    // Add legend
-    addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
-    // Save data
-    data_graph[id.slice(1)] = y_data;
-}
-
 function build_elements_compare() {
     let html = '',
         categories = d3.set(data_by_country.map(d => d['category'])).values();
@@ -1110,11 +613,10 @@ function build_testing_countries() {
     }
     $('#testing_countries_container').html(html);
 }
-
 function update_ft_threshold() {
     let max_value = Math.min(d3.max(data_by_country.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1) &&
-                                                  (d['category'] === 'Deaths'))
-                                  .map(d => d['field_value'])),1000);
+                                                           (d['category'] === 'Deaths'))
+                                    .map(d => d['field_value'])),1000);
     $('#thresholdRange').attr('max', max_value.toString());
 }
 function remove_ft_country(index) {
@@ -1122,15 +624,14 @@ function remove_ft_country(index) {
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
     build_ft_countries_select();
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({"data": ftData(data_by_country)});
 }
 function remove_testing_country(index) {
     navigation.testing_countries.splice(index,1);
     updateNavigation({"testing_countries": navigation.testing_countries});
     build_testing_countries();
     build_testing_countries_select();
-    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
 }
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
@@ -1140,7 +641,7 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
@@ -1149,8 +650,7 @@ function update_element(el, property) {
             it[property] = el.value;
         }
     });
-    updateNavigation({});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 function add_element() {
     let last_el = navigation.elements.length > 0 ? $.extend(true, {}, navigation.elements[navigation.elements.length-1]) : {
@@ -1161,20 +661,20 @@ function add_element() {
     last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
     navigation.elements = navigation.elements.concat(last_el);
     build_elements_compare();
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 function delete_element(id) {
     navigation.elements = navigation.elements.filter(d => d.id != id);
     build_elements_compare();
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 
 function addDatestoSelect() {
     let html_start_dates = '',
         html_end_dates = '';
     for (const d of list_dates) {
-        html_start_dates += '<option ' + (d === startDate ? 'selected' : '') + '>' + d + '</option>';
-        html_end_dates += '<option ' + (d === endDate ? 'selected' : '') + '>' + d + '</option>';
+        html_start_dates += '<option ' + (d === navigation.startDate ? 'selected' : '') + '>' + d + '</option>';
+        html_end_dates += '<option ' + (d === navigation.endDate ? 'selected' : '') + '>' + d + '</option>';
     }
     $('#startDate').html(html_start_dates);
     $('#endDate').html(html_end_dates);
@@ -1184,470 +684,197 @@ function addDatestoSelect() {
     $('#endDate3').html(html_end_dates);
 
 }
-function addPopulationData() {
-    let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
-    data_by_country = d3.nest()
-        .key(d => d['Country/Region'])
-        .rollup(function(a) {
-            let popDataEl = popData.get(a[0]['Country/Region']);
-            if (popDataEl) {
-                for (const e of a) {
-                    e['Population'] = +popDataEl[0].Population;
-                    e['field_value_pop'] = e['field_value'] / e['Population'];
-                }
-            }
-            return a;
-        })
-        .entries(data_by_country)
-        .map(d => d.value).flat();
-}
-
-// Navigation
-function loadPage(button, target) {
-    $('.sidebar_show.active').each(function() {
-        $(this).removeClass('active');
-    });
-    button.addClass('active');
-    $('.content').hide();
-    $(target).show();
-    updateNavigation({"page":target.slice(1)});
-}
-function updateNavigation(j) {
-    Object.keys(j).forEach(function(e,i) {
-        if (Object.keys(navigation).indexOf(e) > -1) {
-            navigation[e] = j[e];
-        }
-    });
-    document.location.hash = JSON.stringify(navigation);
-}
-
-// Download data
 function download_data(id) {
-    let el = document.createElement("a");
-    el.id = "download";
-    el.download = `louisdecharson_data_covid19_${id}_${Date.now()}.csv`;
-    el.href = URL.createObjectURL(new Blob([to_csv(data_graph[id])]));
-    el.click();
-}
-function to_csv(j) {
-    let csv = '';
-    if (j.length > 0) {
-        let keys = Object.keys(j[0]);
-        csv += keys.join(',') + "\n";
-        csv += j.map(function(d) {
-            let a = [];
-            for (const k of keys) {
-                a.push('"' + d[k] + '"');
-            }
-            return a.join(',');
-        }).join('\n');
-    }
-    return csv.toString();
-}
-
-// Simple analytics
-function action(event) {
-    try {
-        sa_event(event);
-    }
-    catch(error) {
-        console.log(`Error in action. Action: ${event} | Error: ${error}`);
+    switch (id) {
+    case 'country_graph':
+        countryGraph.downloadData();
+        break;
+    case 'country_graph_rates':
+        countryGraphRates.downloadData();
+        break;
+    case 'country_graph_new_cases':
+        countryGraphNewCases.downloadData();
+        break;
+    case 'compare_graph':
+        compareGraph.downloadData();
+        break;
+    case 'ft_graph':
+        ftGraph.downloadData();
+        break;
+    case 'testing_graph':
+        testingGraph.downloadData();
+        break;
     }
 }
+// ========================================================================== //
 
-// FT Graph
-function ft_interactive_graph(data, keys, logScale, hideLegend, threshold,
-                              category = 'Deaths',
-                              thresholdCategory = 'Deaths', maPeriod = 1, id = "#ft_graph", 
-                              yVar = 'field_value', w = widthMainGraph, h = heightMainGraph) {
-    // keys = list of countries
-    
-    let margin = getMarginGraph(w);
-    margin.bottom = 50;
-    // var margin = {top: 10, right: 30, bottom: 50, left: 60};
-    var width = w - margin.left - margin.right;
-    var height = h - margin.top - margin.bottom;
+// CHARTS
+// ======
 
-    // Select the id
-    var svg = d3.select(id + '_g');
-    
-    // Delete the axis
-    svg.selectAll('g.x.axis').remove();
-    svg.selectAll('g.y.axis').remove();
-    svg.selectAll('g.yGrid').remove();
+let countryGraph = new Grapher('country_graph',
+                               {
+                                   "x": {
+                                       "name": "date",
+                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                       "scale": "scaleTime",
+                                       "nice": false
+                                   },
+                                   "y": {
+                                       "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
+                                       "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
+                                       "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
+                                   },
+                                   "category": {
+                                       "name": "category"
+                                   },
+                                   "categories": cases_categories,
+                                   "type": navigation.lines ? "line" : "bar",
+                                   "style": {
+                                       "colors": colors,
+                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                   },
+                                   "advanced": {
+                                       "additionalColumnsInData": ['Country/Region']
+                                   }
+                               },
+                               graphWidth,
+                               graphHeight);
 
-    // Prepare data
-    let ft_data = d3.nest()
-        .key(d => d['Country/Region'])
-        .rollup(function(a) {
-            let na = $.extend(true, [], a).filter(d => d['category'] === category),
-                date_threshold = d3.min(a.filter(d => d['category'] === thresholdCategory &&
-                                                 d[yVar] >= threshold)
-                                        .map(d => d['date']));
-            for (let i = na.length; i >= 0 + maPeriod; i--) {
-                let e = na[i-1];
-                e['x'] = Math.round((e['date'] - date_threshold)/(24*3600*1000));
-                e['y'] = maPeriod === 1 ? e[yVar] : na.slice(i-maPeriod,i).reduce((t,n) => t + n[yVar],0)/maPeriod;
-            }
-            return na.reverse().slice(maPeriod-1).filter(d => d['x'] >= 0);
-        })
-        .entries(data.filter(d => (keys.indexOf(d['Country/Region']) > -1)))
-        .map( g => g.value).flat();
-    
-    // X-axis
-    let x = d3.scaleLinear()
-        .domain([d3.min(ft_data.map(d => d.x)),d3.max(ft_data.map(d => d.x))+10])
-        .range([0, width]);
-    let nb_ticks = parseInt((w - 100) / 100);
-    svg.append("g")
-        .attr('class','x axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x)
-              .ticks(nb_ticks)
-             );
+let countryGraphRates = new Grapher('country_graph_rates',
+                                    {
+                                        "x": {
+                                            "name": "date",
+                                            "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                            "scale": "scaleTime",
+                                            "nice": false
+                                        },
+                                        "y": {
+                                            "name": 'field_value',
+                                            "scale": "scaleLinear",
+                                            "tickFormat": Grapher.formatTick(false, true)
+                                        },
+                                        "category": {
+                                            "name": "category"
+                                        },
+                                        "type": "line",
+                                        "categories": rates_categories,
+                                        "style": {
+                                            "colors": colors,
+                                            "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
 
-    // Y-axis
-    let minY = d3.min(ft_data.filter(d => d.y > 0), d => d.y),
-        maxY = d3.max(ft_data, d => d.y);
-    let y = d3[logScale ? "scaleLog" : "scaleLinear"]()
-        .domain([minY,maxY])
-        .nice()
-        .range([height, 0]);
+                                        },
+                                        "advanced": {
+                                            "additionalColumnsInData": ['Country/Region']
+                                        }
+                                    },
+                                    graphWidth,
+                                    graphHeight);
+let countryGraphNewCases = new Grapher('country_graph_new_cases',
+                                       {
+                                           "x": {
+                                               "name": "date",
+                                               "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                               "scale": "scaleTime",
+                                               "nice": false
+                                           },
+                                           "y": {
+                                               "name": 'field_value',
+                                               "scale": "scaleLinear",
+                                               "tickFormat": Grapher.formatTick(false, false)
+                                           },
+                                           "category": {
+                                               "name": "category"
+                                           },
+                                           "type": "bar",
+                                           "categories": new_cases_categories,
+                                           "style": {
+                                               "colors": colors,
+                                               "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                           },
+                                           "advanced": {
+                                               "additionalColumnsInData": ['Country/Region']
+                                           }
+                                       },
+                                       graphWidth,
+                                       graphHeight);
+let compareGraph = new Grapher('compare_graph',
+                               {
+                                   "x": {
+                                       "name": "date",
+                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                       "scale": "scaleTime",
+                                       "nice": false
+                                   },
+                                   "y": {
+                                       "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
+                                       "scale": navigation.logScale2 ? "scaleLog" : "scaleLinear",
+                                       "tickFormat": Grapher.formatTick(navigation.logScale2, navigation.percPopulation2)
+                                   },
+                                   "category": {
+                                       "name": "keyCompare"
+                                   },
+                                   "style": {
+                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                   },
+                                   "advanced": {
+                                       "additionalColumnsInData": navigation.percPopulation2 ? ['field_value'] : ['field_value_pop']
+                                   }
+                               },
+                               graphWidth,
+                               graphHeight);
+let ftGraph = new Grapher('ft_graph',
+                          {
+                              "x": {
+                                  "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
+                              },
+                              "y": {
+                                  "scale": navigation.logScale3 ? "scaleLog" : "scaleLinear",
+                                  "tickFormat": Grapher.formatTick(navigation.logScale3, false)
+                              },
+                              "category": {
+                                  "name": "Country/Region"
+                              },
+                              "legend": {
+                                  "show": !navigation.hideLegend
+                              },
+                              "style": {
+                                  "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818'),
+                                  "tooltipFormat": (d,i) => i == 0 ? `D+${d}` : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d.y)}`,
+                              },
+                              "advanced": {
+                                  "additionalColumnsInData": ['category']
+                              }
+                          },
+                          graphWidth,
+                          graphHeight);
 
-    let formatTick = d => logScale ? (Number.isInteger(Math.log10(d)) ? d3.format('.3s')(d) : "" ) : d3.format('.3s')(d);
-    let nbTicks = logScale ? Math.round(Math.log10(d3.max(ft_data.map(d => d.y)))-Math.log10(d3.min(ft_data.map(d => d.y)))) + 1 : parseInt(h / 40);
-    let yGrid = svg => svg
-        .call(d3.axisRight(y)
-              .ticks(nbTicks)
-              .tickSize(width)
-              .tickFormat(formatTick))
-        .call(g => g.selectAll('.domain').remove())
-        .call(g => g.selectAll(".tick:not(:first-of-type) line")
-              .attr("stroke-opacity", 0.5)
-              .attr("stroke-dasharray", "2,2"))
-        .call(g => g.selectAll(".tick text")
-              .remove());
-    
-    svg.append("g")
-        .attr('class','yGrid')
-        .call(yGrid);
+let testingGraph = new Grapher('testing_graph',
+                               {
+                                   "x": {
+                                       "name":"date",
+                                       "scale": "scaleTime",
+                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                       "nice": false
+                                   },
+                                   "y": {
+                                       "name": navigation.testing_yVar,
+                                       "parse": d => +d,
+                                       "tickFormat": d3.format(navigation.testing_yVar == 'cumulative cases per test' ? '.2%' : '.3s')
+                                   },
+                                   "category": {
+                                       "name": "Entity"
+                                   },
+                                   "categories": navigation.testing_countries,
+                                   "style": {
+                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                   }
+                               },
+                               graphWidth,
+                               graphHeight);
+// ========================================================================== //
 
-    svg.append("g")
-        .attr('class','y axis')
-        .call(d3.axisLeft(y)
-              .tickFormat(formatTick));
-
-    svg.selectAll('text.axis_title').remove();
-    svg.append("text")
-        .attr('class','axis_title')
-        .attr("transform",
-              "translate(" + (width/2) + " ," + 
-              (height + margin.top + 25) + ")")
-        .style("text-anchor", "middle")
-        .text("Number of days since " + threshold.toString() + ` ${thresholdCategory} first recorded ->`);
-    
-    // Colors
-    let color = d3.scaleOrdinal()
-        .domain(keys)
-        .range(colors_countries);
-
-    // Add lines
-    svg.selectAll('path.lines').remove();
-    keys.forEach(function(e,i) {
-        let _ = ft_data.filter(d => d['Country/Region'] === e);
-        svg.append('path')
-            .datum(_)
-            .attr('class','lines')
-            .attr('fill','none')
-            .attr('stroke', color(e))
-            .attr("stroke-width", 3)
-            .attr('d',d3.line()
-                  .y(d => y(d.y))
-                  .defined(d => logScale ? (d.y <= 0 ? false : true ) : true)
-                  .x(d => x(d.x)));
-    });
-
-    // TOOLTIP
-    // Add Tooltip (vertical line + tooltip)
-    function addTooltip(g, data, mx, my) {
-        if (!data) return g.style("display", "none");
-        
-        g.style("display", null);
-        
-        const dots = g.selectAll("circle")
-              .data(data.slice(1).filter(d => logScale ? d.y > 0 : true))
-              .join("circle")
-              .style("fill", d => color(d['Country/Region']))
-              .attr("r", 5)
-              .attr("cx", (d, i) => x(d.x))
-              .attr("cy", (d, i) => y(d.y));
-
-        const path = g.selectAll("rect")
-              .data([null])
-              .join("rect")
-              .attr("class","rect_tooltip");
-
-        const text = g.selectAll("text")
-              .data([null])
-              .join("text")
-              .call(text => text
-                    .selectAll('tspan')
-                    .data(data)
-                    .join("tspan")
-                    .attr("x", 0)
-                    .attr("y", (d, i) => `${i * 1.1}em`)
-                    .attr("class","tooltip_text")
-                    .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d['Country/Region']))
-                    .text((d,i) => i === 0 ? `D+${d}` : `${d['Country/Region']} - ${d['category']}: ${d3.format(',')(d.y)}`));
-        const {xx, yy, width: w, height: h} = text.node().getBBox();
-
-        // Make sure the tooltip is always in the graph area (and visible)
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
-            text_y = h + my - 20 > height ? my - h : my;
-        text.attr("transform", `translate(${text_x},${text_y})`);
-
-        path.attr("x", text_x-5)
-            .attr("y", text_y - 20)
-            .attr("rx", 5)
-            .attr("width", w + 10)
-            .attr("height", h + 10);
-        
-        return true;
-    };
-    function getMouseData(mx) {
-        const bisect = d3.bisector(d => d.x).left;
-        let mouseDate = x.invert(mx),
-            date = Math.round(mouseDate),
-            values = ft_data.filter(d => d.x === date)
-            .sort((a,b) => b.y - a.y);
-        return [date].concat(values);
-    }
-    svg.selectAll("g.tooltip_container").remove();
-    const tooltip = svg.append("g").attr("class","tooltip_container");
-    svg.on("touchmove mousemove", function() {
-        let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1];
-        if (mouse_x > 0) {
-            let mouseData = getMouseData(mouse_x);
-            tooltip
-                .call(addTooltip, mouseData, x(mouseData[0]), mouse_y+30);
-        }
-    });
-    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
-
-    // Add legend
-    if (!hideLegend) {
-        addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
-    } else {
-        d3.select(id + '_svg').select('g.legend').remove();
-    }
-    // Save data
-    data_graph[id.slice(1)] = ft_data;
-}
-
-
-
-// Testing data
-function testing_graph(data, keys, hideLegend = false, yVar = 'Cumulative total',
-                       xVar = 'date',
-                       id = "#testing_graph",
-                       w = widthMainGraph, h = heightMainGraph) {    
-    let margin = getMarginGraph(w);
-    var width = w - margin.left - margin.right;
-    var height = h - margin.top - margin.bottom;
-
-    // Select the id
-    var svg = d3.select(id + '_g');
-
-    // Data Filtered
-    data = data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(startDate) &&
-                       d['date'] <= d3.timeParse('%d-%b-%y')(endDate) &&
-                       keys.indexOf(d['key']) > -1);
-    data.forEach(e => {e.y = +e[yVar];});
-
-    
-    // Delete the axis
-    svg.selectAll('g.x.axis').remove();
-    svg.selectAll('g.y.axis').remove();
-    svg.selectAll('g.yGrid').remove();
-
-    // X-axis
-    let x = d3.scaleTime()
-        .domain(d3.extent(data, d => d[xVar]))
-        .range([0, width]);
-    
-    let nb_ticks = parseInt((w - 100) / 100);
-    svg.append("g")
-        .attr('class','x axis')
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x)
-              .ticks(nb_ticks)
-              .tickFormat(d3.timeFormat("%d/%m/%y")));
-
-    // Y-axis
-    let y = d3.scaleLinear()
-        .domain(d3.extent(data, d => d.y))
-        .nice()
-        .range([height, 0]);
-    let formatTick = d => d3.format((yVar == 'Cumulative cases per test' ? '.2%' : '.3s'))(d);
-    let yGrid = svg => svg
-        .call(d3.axisRight(y)
-              .tickSize(width)
-              .tickFormat(formatTick))
-        .call(g => g.selectAll('.domain').remove())
-        .call(g => g.selectAll(".tick:not(:first-of-type) line")
-              .attr("stroke-opacity", 0.5)
-              .attr("stroke-dasharray", "2,2"))
-        .call(g => g.selectAll(".tick text")
-              .remove());
-    
-    svg.append("g")
-        .attr('class','yGrid')
-        .call(yGrid);
-
-    svg.append("g")
-        .attr('class','y axis')
-        .call(d3.axisLeft(y)
-              .tickFormat(formatTick));    
-    // Colors
-    let color = d3.scaleOrdinal()
-        .domain(keys)
-        .range(colors_countries);
-
-    // Add lines
-    svg.selectAll('path.lines').remove();
-    keys.forEach(function(e,i) {
-        let _ = data.filter(d => d.key === e);
-        svg.append('path')
-            .datum(_)
-            .attr('class','lines')
-            .attr('fill','none')
-            .attr('stroke', color(e))
-            .attr("stroke-width", 3)
-            .attr('d',d3.line()
-                  .y(d => y(d.y))
-                  .defined(d => d.y ? true : false)
-                  .x(d => x(d[xVar])));
-    });
-
-    // Add dots
-    const dots = svg.selectAll("circle")
-          .data(data)
-          .join("circle")
-          .style("fill", d => color(d.key))
-          .attr("r", 4)
-          .attr("cx", (d, i) => x(d[xVar]))
-          .attr("cy", (d, i) => y(d[yVar]));
-
-    // TOOLTIP
-    // Add Tooltip (vertical line + tooltip)
-    function addTooltip(g, data, mx, my) {
-        if (!data) {
-            g.selectAll("line").remove();
-            g.selectAll("circle").remove();
-            g.selectAll("text").remove();
-            return g.style("display", "none");
-        }
-        
-        g.style("display", null);
-
-
-        const xLine = g.selectAll("line")
-              .data([null])
-              .join("line")
-              .attr("class", "tooltip_line")
-              .attr("x1", mx).attr("x2", mx) 
-              .attr("y1", 0).attr("y2", height);
-        
-        const dots = g.selectAll("circle")
-              .data(data.slice(1))
-              .join("circle")
-              .style("fill", d => color(d.key))
-              .attr("r", 5)
-              .attr("cx", (d, i) => x(d[xVar]))
-              .attr("cy", (d, i) => y(d.y));
-
-        const path = g.selectAll("rect")
-              .data([null])
-              .join("rect")
-              .attr("class","rect_tooltip");
-
-        const text = g.selectAll("text")
-              .data([null])
-              .join("text")
-              .call(text => text
-                    .selectAll('tspan')
-                    .data(data)
-                    .join("tspan")
-                    .attr("x", 0)
-                    .attr("y", (d, i) => `${i * 1.1}em`)
-                    .attr("class","tooltip_text")
-                    .style("font-weight","bold")
-                    .style("fill",(d, i) => i === 0 ? (navigation.darkMode ? '#dadada' : '#181818') : color(d.key))
-                    .text((d,i) => i === 0 ? d3.timeFormat("%d-%b-%y")(new Date(d)) : `${d['Country/Region']} - ${yVar} (${d.units}): ${formatTick(d.y)}`));
-        const {xx, yy, width: w, height: h} = text.node().getBBox();
-
-        // Make sure the tooltip is always in the graph area (and visible)
-        let text_x = w + mx + 10 > width ? mx - w - 10 : mx + 10,
-            text_y = h + my - 20 > height ? my - h : my;
-        text.attr("transform", `translate(${text_x},${text_y})`);
-
-        path.attr("x", text_x-5)
-            .attr("y", text_y - 20)
-            .attr("rx", 5)
-            .attr("width", w + 10)
-            .attr("height", h + 10);
-        
-        return true;
-    };
-    let dates = d3.set(data.map(d => d['date'])).values().sort((a,b) => new Date(a) - new Date(b));
-    function getMouseData(mx) {
-        let mouseDate = x.invert(mx),
-            i = d3.bisector(d => new Date(d)).left(dates, mouseDate),
-            a = new Date(dates[i-1]),
-            b = i > dates.length - 1 ? new Date(dates.slice(-1)[0]) : new Date(dates[i]);
-        let date = mouseDate - a > b - mouseDate ? b : a,
-            values = data.filter(d => d['date'] == date.toString());
-        return [date].concat(values);
-    }
-    svg.selectAll("g.tooltip_container").remove();
-    const tooltip = svg.append("g").attr("class","tooltip_container");
-    svg.on("touchmove mousemove", function() {
-        let mouse_x = d3.mouse(this)[0],
-            mouse_y = d3.mouse(this)[1];
-        if (mouse_x > 0) {
-            let mouseData = getMouseData(mouse_x);
-            tooltip
-                .call(addTooltip, mouseData, x(new Date(mouseData[0])), mouse_y+30);
-        }
-    });
-    svg.on("touchend mouseleave", () => tooltip.call(addTooltip, null));
-
-    // Add legend
-    if (!hideLegend) {
-        addLegend(id+'_svg',keys,3*margin.right,margin.top,colors_countries);
-    } else {
-        d3.select(id + '_svg').select('g.legend').remove();
-    }
-    // Save data
-    data_graph[id.slice(1)] = data;
-}
-
-
-
-
-// ====================================================================== //
-
-// Create graphs
-createGraph('#country_graph');
-createGraph('#country_graph_rates');
-createGraph('#country_graph_new_cases');
-createGraph('#compare_graph');
-createGraph('#ft_graph');
-createGraph('#testing_graph');
-
-// Load Data (async)
+// LOAD DATA
+// =========
 let nb_process_ended = 0;
 for (const element of cases_categories) {
     let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${element.toLowerCase()}_global.csv`;
@@ -1716,9 +943,9 @@ let timer = setInterval(() => {
         console.time("Graph1");
         data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
         load_summary_data(data_country);
-        updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-        updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-        updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+        countryGraph.draw({"data": filterByDate(data_country)});
+        countryGraphRates.draw({"data": filterByDate(data_country)});
+        countryGraphNewCases.draw({"data": filterByDate(data_country)});
         $('.country_name').each(function() {$(this).html(navigation.country);});
         console.timeEnd("Graph1");
         
@@ -1727,16 +954,14 @@ let timer = setInterval(() => {
         build_elements_compare();
         console.timeEnd("build_elements_compare");
         console.time("Graph2");
-        updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'),
-                              navigation.lines2, navigation.maCompare);
+        compareGraph.draw({"data":getCompareData(data_by_country)});
         console.timeEnd("Graph2");
 
         // FT Graph
         console.time("GraphFT");
         build_ft_countries();
         build_ft_categories_select();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+        ftGraph.draw({"data": ftData(data_by_country)});
         console.timeEnd("GraphFT");
 
         // Testing Graph
@@ -1744,35 +969,17 @@ let timer = setInterval(() => {
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
-        testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+        console.log(navigation.testing_countries);
+        testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
     }
 }, 100);
 
 
-// Load page, buttons according to navigation
-if (document.location.hash.length > 0) {
-    updateNavigation(JSON.parse(decodeURIComponent(document.location.hash.substring(1))));
-}
-loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
-toggleDarkMode(navigation.darkMode);
-$('#logScaleSwitch').prop('checked', navigation.logScale);
-$('#barSwitch').prop('checked', !navigation.lines);
-$('#percPopulation').prop('checked', navigation.percPopulation);
-//Compare
-$('#logScaleSwitch2').prop('checked', navigation.logScale2);
-$('#barSwitch2').prop('checked', !navigation.lines2);
-$('#percPopulation2').prop('checked', navigation.percPopulation2);
-$('#movingAverageCompareRange').prop('value', navigation.maCompare);
-$('#movingAverageCompareValue').html(navigation.maCompare);
-// FT
-$('#logScaleSwitch3').prop('checked', navigation.logScale3);
-$('#hideLegend').prop('checked', navigation.hideLegend);
-$('#thresholdRange').prop('value', navigation.ft_threshold);
-// for ranges, we need to update both the range (position of the cursor) and the span value
-$('#thresholdValue').html(navigation.ft_threshold); 
-$('#movingAverageFTRange').prop('value', navigation.ft_ma);
-$('#movingAverageFTValue').html(navigation.ft_ma); 
+
+// ========================================================================== //
+
+
 
 // ACTIONS
 // =======
@@ -1791,99 +998,109 @@ $('#chooseCountry').change(function(){
     load_summary_data(data_country);
 
     $('.country_name').each(function() {$(this).html(navigation.country);});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    countryGraph.draw({"data": filterByDate(data_country)});
+    countryGraphRates.draw({"data": filterByDate(data_country)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country)});
     action([navigation.page,'chooseCountry',navigation.country].join('_').replace(/ /g,'_'));
 });
 $('#logScaleSwitch').change(function(){
     updateNavigation({"logScale": navigation.logScale ? false : true});
-    load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    // load_summary_data(data_country);
+    countryGraph.draw({
+        "y": {
+            "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
+            "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
+        }});
     action([navigation.page,'log_scale',navigation.logScale].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch').change(function(){
     updateNavigation({"lines": navigation.lines ? false : true});
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    countryGraph.draw({"type": navigation.lines ? "line" : "bar"});
     action([navigation.page,'barSwitch',navigation.lines].join('_').replace(/ /g,'_'));
 });
 
 $('#percPopulation').change(function() {
     updateNavigation({"percPopulation": navigation.percPopulation ? false : true});
     load_summary_data(data_country);
-    updateGraph('#country_graph', data_country, 'date', (navigation.percPopulation ? 'field_value_pop' : 'field_value'),  navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    countryGraph.draw({
+        "y": {
+            "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
+            "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
+        }
+    });
     action([navigation.page,'percPopulation',navigation.percPopulation].join('_').replace(/ /g,'_'));
 });
 $('#startDate').change(function() {
-    startDate = $('#startDate option:selected').text();
-    updateNavigation({"startDate": startDate});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    updateNavigation({"startDate": $('#startDate option:selected').text()});
+    countryGraph.draw({"data": filterByDate(data_country)});
+    countryGraphRates.draw({"data": filterByDate(data_country)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country)});
     action([navigation.page,'startDate',navigation.startDate].join('_').replace(/ /g,'_'));
 
 });
 $('#endDate').change(function() {
-    endDate = $('#endDate option:selected').text();
-    updateNavigation({'endDate': endDate});
-    updateGraph('#country_graph', data_country, 'date',(navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale, navigation.lines, cases_categories, navigation.percPopulation);
-    updateGraph('#country_graph_rates', data_country, 'date','field_value', false, true, rates_categories, true);
-    updateGraph('#country_graph_new_cases', data_country, 'date','field_value', false, false, new_cases_categories);
+    updateNavigation({"endDate": $('#endDate option:selected').text()});
+    countryGraph.draw({"data": filterByDate(data_country)});
+    countryGraphRates.draw({"data": filterByDate(data_country)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country)});
     action([navigation.page,'endDate',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 
 // Graph Comparison -  actions
 $('#logScaleSwitch2').change(function(){
     updateNavigation({"logScale2": navigation.logScale2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({
+        "y": {
+            "scale": navigation.logScale2 ? "scaleLog" : "scaleLinear",
+            "tickFormat": Grapher.formatTick(navigation.logScale2, navigation.percPopulation2)
+        }});
     action([navigation.page,'logScaleSwitch2',navigation.logScale2].join('_').replace(/ /g,'_'));
 });
 $('#percPopulation2').change(function() {
     updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({
+        "y": {
+            "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
+            "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation2)
+        }
+    });
     action([navigation.page,'percPopulation2',navigation.percPopulation2].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch2').change(function(){
     updateNavigation({"lines2": navigation.lines2 ? false : true});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"type": navigation.lines2 ? "line" : "bar"});
     action([navigation.page,'barSwitch2',navigation.lines2].join('_').replace(/ /g,'_'));
 });
 $('#startDate2').change(function() {
-    startDate = $('#startDate2 option:selected').text();
-    updateNavigation({"startDate": startDate});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    updateNavigation({"startDate": $('#startDate2 option:selected').text()});
+    compareGraph.draw({"data":getCompareData(data_by_country)});
     action([navigation.page,'startDate2',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate2').change(function() {
-    endDate = $('#endDate2 option:selected').text();
-    updateNavigation({"endDate": endDate});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    updateNavigation({"endDate": $('#endDate2 option:selected').text()});
+    compareGraph.draw({"data":getCompareData(data_by_country)});
     action([navigation.page,'endDate2',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 $("#movingAverageCompareRange").on('change mousemouve', function() {
     let ma = $(this).val();
     $('#movingAverageCompareValue').html(ma);
     updateNavigation({"maCompare": ma});
-    updateGraphComparison(data_by_country, navigation.logScale2, (navigation.percPopulation2 ? 'field_value_pop' : 'field_value'), navigation.lines2, navigation.maCompare);
+    compareGraph.draw({"data":getCompareData(data_by_country)});
 });
 
 // FT Graph
 $('#logScaleSwitch3').change(function(){
     updateNavigation({"logScale3": navigation.logScale3 ? false : true});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({
+        "y": {
+            "scale": navigation.logScale3 ? "scaleLog" : "scaleLinear",
+            "tickFormat": Grapher.formatTick(navigation.logScale3, false)
+        }});
     action([navigation.page,'logScaleSwitch3',navigation.logScale3].join('_').replace(/ /g,'_'));
 });
 $('#hideLegend').change(function(){
     updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({"legend": !navigation.hideLegend});
     action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
 });
 $('#ft_add_country').change(function(){
@@ -1892,34 +1109,38 @@ $('#ft_add_country').change(function(){
         updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
         build_ft_countries();
         build_ft_countries_select();
-        ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                             navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);}
-});
+        ftGraph.draw({"data": ftData(data_by_country)});
+    }});
 $('#ftCategory').change(function(){
     updateNavigation({"ft_category":$('#ftCategory option:selected').text()});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
-
+    ftGraph.draw({"data": ftData(data_by_country)});
 });
 $("#thresholdRange").on('change mousemouve', function() {
     let threshold = $(this).val();
     $('#thresholdValue').html(threshold);
     updateNavigation({"ft_threshold": threshold});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({
+        "data": ftData(data_by_country),
+        "x": {
+            "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
+        }});
 });
 $('#ftThresholdCategory').change(function(){
     updateNavigation({"ft_thresholdCategory":$('#ftThresholdCategory option:selected').text()});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({
+        "data": ftData(data_by_country),
+        "x": {
+            "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
+        }});
 
 });
 $("#movingAverageFTRange").on('change mousemouve', function() {
     let ma = $(this).val();
     $('#movingAverageFTValue').html(ma);
     updateNavigation({"ft_ma": ma});
-    ft_interactive_graph(data_by_country, navigation.ft_countries, navigation.logScale3, navigation.hideLegend,
-                         navigation.ft_threshold, navigation.ft_category, navigation.ft_thresholdCategory, navigation.ft_ma);
+    ftGraph.draw({
+        "data": ftData(data_by_country)
+    });
 });
 
 // Testing Graph
@@ -1929,23 +1150,28 @@ $('#testing_add_country').change(function(){
         updateNavigation({"testing_countries":navigation.testing_countries.concat([c])});
         build_testing_countries();
         build_testing_countries_select();
-        testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+        testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
     }
 });
 $('#testingYAxis').change(function(){
     updateNavigation({"testing_yVar":$('#testingYAxis option:selected').text()});
-    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    testingGraph.draw({
+        "data": filterByDate(testing_data),
+        "y": {
+            "name": navigation.testing_yVar,
+            "parse": d => +d,
+            "tickFormat": d3.format(navigation.testing_yVar == 'Cumulative cases per test' ? '.2%' : '.3s')
+        }
+    });;
 });
 $('#startDate3').change(function() {
-    startDate = $('#startDate3 option:selected').text();
-    updateNavigation({"startDate": startDate});
-    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    updateNavigation({"startDate": $('#startDate3 option:selected').text()});
+    testingGraph.draw({"data": filterByDate(testing_data)});
     action([navigation.page,'startDate3',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate3').change(function() {
-    endDate = $('#endDate3 option:selected').text();
-    updateNavigation({"endDate": endDate});
-    testing_graph(testing_data, navigation.testing_countries, navigation.hideLegend, navigation.testing_yVar);
+    updateNavigation({"endDate": $('#endDate3 option:selected').text()});
+    testingGraph.draw({"data": filterByDate(testing_data)});
     action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 
@@ -1954,3 +1180,13 @@ $('#darkmodeSwitch').on('click',function() {
     toggleDarkMode(!navigation.darkMode);
     action([navigation.page,'darkMode',navigation.darkMode].join('_').replace(/ /g,'_'));
 });
+$('#navSwitch').on('click',function() {
+    updateNavigation({"hideNav": !navigation.hideNav});
+    $('#navSwitch').addClass(navigation.hideNav ? "badge-secondary" : "badge-primary")
+        .text(navigation.hideNav ? "OFF" : "ON")
+        .removeClass(navigation.hideNav ? "badge-primary" : "badge-secondary");
+    action([navigation.page,'hideNav',navigation.hideNav].join('_').replace(/ /g,'_'));
+});
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+})

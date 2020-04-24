@@ -21,6 +21,19 @@ body {
 a.title {
     color: var(--color-text);
 }
+a {
+    color: inherit;
+    /* border-color: var(--text-muted)); */
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+    padding: 3px 0px 2px 0px;
+}
+a:hover {
+    color: white;
+    text-decoration: none;
+    background-color: #606870;
+    border-color: #606870;
+}
 .col-title {
     text-transform: uppercase;
     font-weight: 600;
@@ -188,16 +201,16 @@ hr {
 
 /*  Tooltip */
 .rect_tooltip {
-    fill: var(--background-color);
-    fill-opacity: 0.8;
-    stroke: var(--color-text);
+    fill: var(--background-color) !important;
+    fill-opacity: 0.8 !important;
+    stroke: var(--color-text) !important;
 }
 .rect_legend {
-    fill: var(--background-color);
-    fill-opacity: 0.9;
+    fill: var(--background-color) !important;
+    fill-opacity: 0.9 !important;
 }
 .tooltip_line {
-    stroke: var(--color-text)
+    stroke: var(--color-text) !important;
 }
 tooltip_text {
     fill: var(--color-text);
@@ -206,9 +219,15 @@ tooltip_text {
 .axis_title {
     fill: var(--color-text);
 }
+.grapher .xLabel.axisLabel {
+    fill: var(--color-text);
+}
 
 #darkmodeSwitch {
     cursor: pointer;
+}
+#navSwitch {
+    cursor: pointer
 }
 
 .banner {
@@ -217,6 +236,9 @@ tooltip_text {
 }
 .text-orange {
     color: #e57e22;
+}
+.footer {
+    background-color: var(--background-color);
 }
 /* popup */
 #crossquit{

@@ -28,9 +28,9 @@
         <div id="popup">
             <span id="crossquit">x</span>
         </div>
-        <h1 class="bd-masthead"><a href="#" class="bd-masthead title">Coronavirus Data Dashboard</a></h1>
+        <h1 class="bd-masthead">Coronavirus Data Dashboard</h1>
         <div class="m-2">
-            <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>, population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>, testing data from <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">Our World in Data</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a>
+            <div class="banner text-muted font-italic">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>, population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>, testing data from <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">Our World in Data</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a> (with <a href="http://louisdecharson.github.io/grapherjs.html">grapher.js</a>)
             </div>
             <!-- <div class="banner btn btn-sm btn-warning" id="view_popup">Data & content known issues</div></div> -->
             <div class="container" id="container">
@@ -84,10 +84,15 @@
                                 </svg>
                                             Data issues
                             </li>
-                            <li class="fixed-bottom p-3" style="background-color: inherit;">
+                            <li class="fixed-bottom p-2 footer">
                                 <svg class="svg-icon" viewBox="0 0 20 20">
 				    <path fill="none" d="M10,0.625c-5.178,0-9.375,4.197-9.375,9.375S4.822,19.375,10,19.375s9.375-4.197,9.375-9.375S15.178,0.625,10,0.625 M10,18.522V1.478c4.707,0,8.522,3.815,8.522,8.522S14.707,18.522,10,18.522"></path>
-				</svg> <span id="darkmodeSwitch" class="badge darkmode badge-primary">ON</span>
+				</svg> <span id="darkmodeSwitch" class="badge darkmode badge-primary" data-toggle="tooltip" title="Toggle the dark mode">ON</span>
+                                <div class="float-right">
+                                    <svg class="svg-icon" viewBox="0 0 20 20">
+				        <path d="M16.469,8.924l-2.414,2.413c-0.156,0.156-0.408,0.156-0.564,0c-0.156-0.155-0.156-0.408,0-0.563l2.414-2.414c1.175-1.175,1.175-3.087,0-4.262c-0.57-0.569-1.326-0.883-2.132-0.883s-1.562,0.313-2.132,0.883L9.227,6.511c-1.175,1.175-1.175,3.087,0,4.263c0.288,0.288,0.624,0.511,0.997,0.662c0.204,0.083,0.303,0.315,0.22,0.52c-0.171,0.422-0.643,0.17-0.52,0.22c-0.473-0.191-0.898-0.474-1.262-0.838c-1.487-1.485-1.487-3.904,0-5.391l2.414-2.413c0.72-0.72,1.678-1.117,2.696-1.117s1.976,0.396,2.696,1.117C17.955,5.02,17.955,7.438,16.469,8.924 M10.076,7.825c-0.205-0.083-0.437,0.016-0.52,0.22c-0.083,0.205,0.016,0.437,0.22,0.52c0.374,0.151,0.709,0.374,0.997,0.662c1.176,1.176,1.176,3.088,0,4.263l-2.414,2.413c-0.569,0.569-1.326,0.883-2.131,0.883s-1.562-0.313-2.132-0.883c-1.175-1.175-1.175-3.087,0-4.262L6.51,9.227c0.156-0.155,0.156-0.408,0-0.564c-0.156-0.156-0.408-0.156-0.564,0l-2.414,2.414c-1.487,1.485-1.487,3.904,0,5.391c0.72,0.72,1.678,1.116,2.696,1.116s1.976-0.396,2.696-1.116l2.414-2.413c1.487-1.486,1.487-3.905,0-5.392C10.974,8.298,10.55,8.017,10.076,7.825"></path>
+				    </svg><span id="navSwitch" class="badge badge-secondary" data-toggle="tooltip" title="Add your settings to the url, so it's ready for sharing">OFF</span>
+                                </div>
                             </li>
                         </ul>
                     </nav>
@@ -357,6 +362,7 @@
             <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+            <script src="./grapher.min.js"></script>
             <script src="./covid.js"></script>
             <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
             <noscript><img src="https://api.simpleanalytics.io/hello.gif" alt=""></noscript>
