@@ -111,7 +111,7 @@ const map_testing_country = function(country) {
 // Default navigation
 let navigation = {
     "page": "by_country",
-    "darkMode": window.matchMedia("(prefers-color-scheme: dark)").matches || true,
+    "darkMode": window.matchMedia("(prefers-color-scheme: dark)").matches,
     "country": "World",
     "elements": [
         {
@@ -165,6 +165,7 @@ function updateNavigation(j) {
             navigation[e] = j[e];
         }
     });
+    localStorage.setItem("navigation",JSON.stringify(navigation));
     document.location.hash = navigation.hideNav ? "" : JSON.stringify(navigation);    
 }
 // Simple analytics
@@ -180,7 +181,12 @@ function action(event) {
 // Navigation - load
 if (document.location.hash.length > 0) {
     updateNavigation(JSON.parse(decodeURIComponent(document.location.hash.substring(1))));
+} else {
+    if (localStorage.getItem('navigation')) {
+        updateNavigation(JSON.parse(localStorage.getItem('navigation')));
+    }
 }
+
 loadPage($(`#button_${navigation.page}`),'#' + navigation.page);
 toggleDarkMode(navigation.darkMode);
 $('#logScaleSwitch').prop('checked', navigation.logScale);
@@ -969,7 +975,6 @@ let timer = setInterval(() => {
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
-        console.log(navigation.testing_countries);
         testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
     }
@@ -1174,6 +1179,16 @@ $('#endDate3').change(function() {
     testingGraph.draw({"data": filterByDate(testing_data)});
     action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
 });
+
+// Mobile menu
+function menu(id) {
+    let el = document.getElementById(id);
+    if (window.getComputedStyle(el).display === "none") {
+        el.style.display = "block";
+    } else {
+        el.style.display = "none";
+    }
+}
 
 // Dark Mode
 $('#darkmodeSwitch').on('click',function() {

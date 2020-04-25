@@ -91,6 +91,29 @@ select option{
 .labels-legend {
     font-size: 1rem;
 }
+ul.mobile-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    align-items: baseline;
+}
+.mobile-menu li {
+    text-transform: uppercase;
+    border: 1px solid var(--text-muted);
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    flex-grow: 1;
+    margin: 0.1rem;
+}
+@media (min-width: 768px) {
+    .mobile-menu {
+        display: none !important;
+    }
+}
 
 @media (min-width: 1200px) {
     #container{
@@ -231,14 +254,10 @@ tooltip_text {
 }
 
 .banner {
-    display: inline-block;
     font-size: 0.8rem;
 }
 .text-orange {
     color: #e57e22;
-}
-.footer {
-    background-color: var(--background-color);
 }
 /* popup */
 #crossquit{
@@ -285,10 +304,20 @@ table.list-issues > tbody > tr:hover{
     color: var(--background-color) !important;
     background-color: var(--color-text) !important;
 }
+.footer {
+    background-color: var(--background-color);
+    padding: 0.5rem;
+}
 
 /* =================================================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .footer {
+        padding: 1rem;
+    }
+    .mobile-hide {
+        display: none;
+    }
     body {
         margin: 1%;
         font-size: 0.8rem;
