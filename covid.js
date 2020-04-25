@@ -485,9 +485,15 @@ function computeWorldData() {
 function get_dates(data) {
     list_dates = d3.set(data.map(d => d['date'])).values();
 }
-function filterByDate(data) {
-    return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
-                       d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate));
+function filterByDate(data,categoryName=false,categoryList=false) {
+    if (categoryName) {
+        return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
+                    d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate) &&
+                    categoryList.indexOf(d[categoryName]) > -1);
+    } else {
+        return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
+                           d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate));
+    }
 }
 /**
  * Prepare data for compare graph: 
@@ -637,7 +643,7 @@ function remove_testing_country(index) {
     updateNavigation({"testing_countries": navigation.testing_countries});
     build_testing_countries();
     build_testing_countries_select();
-    testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
+    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
 }
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
@@ -656,6 +662,7 @@ function update_element(el, property) {
             it[property] = el.value;
         }
     });
+    updateNavigation({"elements": navigation.elements});
     compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 function add_element() {
@@ -665,12 +672,13 @@ function add_element() {
         "offset": 0
     }; // copy last element
     last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
-    navigation.elements = navigation.elements.concat(last_el);
+    updateNavigation({"elements": navigation.elements.concat(last_el)});
     build_elements_compare();
     compareGraph.draw({"data":getCompareData(data_by_country)});
 }
 function delete_element(id) {
     navigation.elements = navigation.elements.filter(d => d.id != id);
+    updateNavigation({"elements": navigation.elements});
     build_elements_compare();
     compareGraph.draw({"data":getCompareData(data_by_country)});
 }
@@ -949,9 +957,9 @@ let timer = setInterval(() => {
         console.time("Graph1");
         data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
         load_summary_data(data_country);
-        countryGraph.draw({"data": filterByDate(data_country)});
-        countryGraphRates.draw({"data": filterByDate(data_country)});
-        countryGraphNewCases.draw({"data": filterByDate(data_country)});
+        countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
+        countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
+        countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
         $('.country_name').each(function() {$(this).html(navigation.country);});
         console.timeEnd("Graph1");
         
@@ -975,7 +983,7 @@ let timer = setInterval(() => {
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
-        testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
+        testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries)});
         console.timeEnd("GraphTesting");
     }
 }, 100);
@@ -1003,9 +1011,9 @@ $('#chooseCountry').change(function(){
     load_summary_data(data_country);
 
     $('.country_name').each(function() {$(this).html(navigation.country);});
-    countryGraph.draw({"data": filterByDate(data_country)});
-    countryGraphRates.draw({"data": filterByDate(data_country)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country)});
+    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
+    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
     action([navigation.page,'chooseCountry',navigation.country].join('_').replace(/ /g,'_'));
 });
 $('#logScaleSwitch').change(function(){
@@ -1015,7 +1023,9 @@ $('#logScaleSwitch').change(function(){
         "y": {
             "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
             "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
-        }});
+        },
+        "categories": cases_categories
+    });
     action([navigation.page,'log_scale',navigation.logScale].join('_').replace(/ /g,'_'));
 });
 $('#barSwitch').change(function(){
@@ -1037,17 +1047,17 @@ $('#percPopulation').change(function() {
 });
 $('#startDate').change(function() {
     updateNavigation({"startDate": $('#startDate option:selected').text()});
-    countryGraph.draw({"data": filterByDate(data_country)});
-    countryGraphRates.draw({"data": filterByDate(data_country)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country)});
+    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
+    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
     action([navigation.page,'startDate',navigation.startDate].join('_').replace(/ /g,'_'));
 
 });
 $('#endDate').change(function() {
     updateNavigation({"endDate": $('#endDate option:selected').text()});
-    countryGraph.draw({"data": filterByDate(data_country)});
-    countryGraphRates.draw({"data": filterByDate(data_country)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country)});
+    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
+    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
+    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
     action([navigation.page,'endDate',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 
@@ -1155,13 +1165,13 @@ $('#testing_add_country').change(function(){
         updateNavigation({"testing_countries":navigation.testing_countries.concat([c])});
         build_testing_countries();
         build_testing_countries_select();
-        testingGraph.draw({"data": filterByDate(testing_data), "categories":navigation.testing_countries});
+        testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
     }
 });
 $('#testingYAxis').change(function(){
     updateNavigation({"testing_yVar":$('#testingYAxis option:selected').text()});
     testingGraph.draw({
-        "data": filterByDate(testing_data),
+        "data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
         "y": {
             "name": navigation.testing_yVar,
             "parse": d => +d,
@@ -1171,12 +1181,12 @@ $('#testingYAxis').change(function(){
 });
 $('#startDate3').change(function() {
     updateNavigation({"startDate": $('#startDate3 option:selected').text()});
-    testingGraph.draw({"data": filterByDate(testing_data)});
+    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
     action([navigation.page,'startDate3',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate3').change(function() {
     updateNavigation({"endDate": $('#endDate3 option:selected').text()});
-    testingGraph.draw({"data": filterByDate(testing_data)});
+    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
     action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 
