@@ -842,6 +842,7 @@ let compareGraph = new Grapher('compare_graph',
                                        "name": "keyCompare"
                                    },
                                    "categories": get_list_elements(),
+                                   "type": navigation.lines2 ? "line" : "bar",
                                    "style": {
                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                    },
