@@ -762,7 +762,7 @@ let countryGraph = new Grapher('country_graph',
                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                    },
                                    "advanced": {
-                                       "additionalColumnsInData": ['Country/Region']
+                                       "additionalColumnsInData": ['Country/Region','field_value_pop','field_value']
                                    }
                                },
                                graphWidth,
