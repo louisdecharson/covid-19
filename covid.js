@@ -249,13 +249,15 @@ function zip() {
         return args.map(function(array){return array[i];});
     });
 }
-function ma_json(array, yVar, period=1) {
-    // Compute the moving average on yVar with period 'period' where array
+function ma_json(array, yVars, period=1) {
+    // Compute the moving average on yVars with period 'period' where array
     // is a JSON array
     let ma = [];
     for (let i = array.length; i >= 0 + period; i--) {
         let e = $.extend(true, {}, array[i - 1]);
-        e[yVar] = array.slice(i-period,i).reduce((t,n) => t + n[yVar],0)/period;
+        for (const yVar of yVars) {
+            e[yVar] = array.slice(i-period,i).reduce((t,n) => t + n[yVar],0)/period;
+        }
         ma.push(e);
     }
     return ma.reverse();
@@ -507,8 +509,10 @@ function getCompareData(inputData) {
     function offset_data(data, offset_value) {
         // Compute offset and update key
         data.forEach(function(it,ind) {
-            let value = ind + offset_value < data.length ? data[ind + offset_value]['field_value'] : NaN;
+            let value = ind + offset_value < data.length ? data[ind + offset_value]['field_value'] : NaN,
+                value_pop = ind + offset_value < data.length ? data[ind + offset_value]['field_value_pop'] : NaN;
             it['field_value'] = value; // update value
+            it['field_value_pop'] = value_pop;
             it.offset = offset_value; // add offset to the element
             it.keyCompare = getKey(it);
         });
@@ -522,7 +526,7 @@ function getCompareData(inputData) {
                                        d['Country/Region'] === element['Country/Region'] &&
                                        d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
                                        d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate)));
-        _ = ma_json(offset_data($.extend(true, [], _), element['offset']),'field_value', navigation.maCompare);
+        _ = ma_json(offset_data($.extend(true, [], _), element['offset']),['field_value', 'field_value_pop'], navigation.maCompare);
         data = data.concat(_);
     });
     return data;
@@ -653,7 +657,8 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    compareGraph.draw({"data": getCompareData(data_by_country),
+                       "categories": get_list_elements()});
 }
 function update_element(el, property) {
     let element_id = $(el).attr('element_id');
@@ -663,7 +668,14 @@ function update_element(el, property) {
         }
     });
     updateNavigation({"elements": navigation.elements});
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    compareGraph.draw({"data":getCompareData(data_by_country),
+                       "categories": get_list_elements()});
+}
+function get_list_elements() {
+    function getKey(e) {
+        return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
+    }
+    return navigation.elements.map(d => getKey(d));
 }
 function add_element() {
     let last_el = navigation.elements.length > 0 ? $.extend(true, {}, navigation.elements[navigation.elements.length-1]) : {
@@ -674,13 +686,15 @@ function add_element() {
     last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
     updateNavigation({"elements": navigation.elements.concat(last_el)});
     build_elements_compare();
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    compareGraph.draw({"data":getCompareData(data_by_country),
+                       "categories": get_list_elements()});
 }
 function delete_element(id) {
     navigation.elements = navigation.elements.filter(d => d.id != id);
     updateNavigation({"elements": navigation.elements});
     build_elements_compare();
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    compareGraph.draw({"data":getCompareData(data_by_country),
+                       "categories": get_list_elements()});
 }
 
 function addDatestoSelect() {
@@ -827,6 +841,7 @@ let compareGraph = new Grapher('compare_graph',
                                    "category": {
                                        "name": "keyCompare"
                                    },
+                                   "categories": get_list_elements(),
                                    "style": {
                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                    },
@@ -1076,7 +1091,7 @@ $('#percPopulation2').change(function() {
     compareGraph.draw({
         "y": {
             "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
-            "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation2)
+            "tickFormat": Grapher.formatTick(navigation.logScale2, navigation.percPopulation2)
         }
     });
     action([navigation.page,'percPopulation2',navigation.percPopulation2].join('_').replace(/ /g,'_'));
