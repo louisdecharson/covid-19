@@ -847,7 +847,7 @@ let compareGraph = new Grapher('compare_graph',
                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                    },
                                    "advanced": {
-                                       "additionalColumnsInData": navigation.percPopulation2 ? ['field_value'] : ['field_value_pop']
+                                       "additionalColumnsInData": ['field_value','field_value_pop']
                                    }
                                },
                                graphWidth,
