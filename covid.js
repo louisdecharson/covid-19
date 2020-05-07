@@ -346,10 +346,10 @@ function addRates(data) {
                 }
                 new_case[i]['category'] = `New ${e['category']} cases`;
                 new_case[i]['key'] = e['category'] + e['Country/Region'] + e['field_id'];
-                new_case[i]['field_value_pop'] = e['field_value'] / e['Population'];
+                new_case[i]['field_value_pop'] = new_case[i]['field_value'] / e['Population'];
                 growth_rate[i]['category'] = `${e['category']} growth rate`;
                 growth_rate[i]['key'] = e['category'] + e['Country/Region'] + e['field_id'];
-                growth_rate[i]['field_value_pop'] = e['field_value'] / e['Population'];
+                growth_rate[i]['field_value_pop'] = growth_rate[i]['field_value'] / e['Population'];
             }
             return [...new_case, ...growth_rate];
         })
