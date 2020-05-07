@@ -1134,7 +1134,9 @@ $('#logScaleSwitch3').change(function(){
 });
 $('#hideLegend').change(function(){
     updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
-    ftGraph.draw({"legend": !navigation.hideLegend});
+    ftGraph.draw({"legend": {
+        "show": !navigation.hideLegend
+    }});
     action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
 });
 $('#ft_add_country').change(function(){
