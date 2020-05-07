@@ -147,7 +147,7 @@ let navigation = {
     "ft_thresholdCategory": "Deaths",
     "ft_ma": 1,
     "testing_yVar": "Cumulative total",
-    "testing_countries": [],
+    "testing_countries": false,
     "hideNav": true
 };
 function loadPage(button, target) {
@@ -303,7 +303,7 @@ function parseTestingData(data) {
         }
     }
     testing_countries = d3.set(data.map(d => d.key)).values();
-    navigation.testing_countries = testing_countries.slice(1, 4);
+    navigation.testing_countries = navigation.testing_countries || testing_countries.slice(1, 4);
     testing_yaxis.push('Cumulative cases per test');
     return data;
 }
@@ -640,14 +640,16 @@ function remove_ft_country(index) {
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
     build_ft_countries_select();
-    ftGraph.draw({"data": ftData(data_by_country)});
+    ftGraph.draw({"data": ftData(data_by_country),
+                  "categories":navigation.ft_countries});
 }
 function remove_testing_country(index) {
     navigation.testing_countries.splice(index,1);
     updateNavigation({"testing_countries": navigation.testing_countries});
     build_testing_countries();
     build_testing_countries_select();
-    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
+    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
+                       "categories": navigation.testing_countries});
 }
 function update_offset(el, value) {
     let element_id = $(el).attr('element_id');
@@ -894,7 +896,6 @@ let testingGraph = new Grapher('testing_graph',
                                    "category": {
                                        "name": "Entity"
                                    },
-                                   "categories": navigation.testing_countries,
                                    "style": {
                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                    }
@@ -991,7 +992,8 @@ let timer = setInterval(() => {
         console.time("GraphFT");
         build_ft_countries();
         build_ft_categories_select();
-        ftGraph.draw({"data": ftData(data_by_country)});
+        ftGraph.draw({"data": ftData(data_by_country),
+                     "categories":navigation.ft_countries});
         console.timeEnd("GraphFT");
 
         // Testing Graph
@@ -999,7 +1001,8 @@ let timer = setInterval(() => {
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
-        testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries)});
+        testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries),
+                          "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
     }
 }, 100);
@@ -1140,7 +1143,8 @@ $('#ft_add_country').change(function(){
         updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
         build_ft_countries();
         build_ft_countries_select();
-        ftGraph.draw({"data": ftData(data_by_country)});
+        ftGraph.draw({"data": ftData(data_by_country),
+                     "categories":navigation.ft_countries});
     }});
 $('#ftCategory').change(function(){
     updateNavigation({"ft_category":$('#ftCategory option:selected').text()});
@@ -1181,7 +1185,8 @@ $('#testing_add_country').change(function(){
         updateNavigation({"testing_countries":navigation.testing_countries.concat([c])});
         build_testing_countries();
         build_testing_countries_select();
-        testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
+        testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
+                          "categories":navigation.testing_countries});
     }
 });
 $('#testingYAxis').change(function(){
