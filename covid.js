@@ -762,7 +762,7 @@ function update_mobility_element(el, property) {
             it[property] = el.value;
         }
     });
-    updateNavigation({"elements": navigation.mobility_elements});
+    updateNavigation({"mobility_elements": navigation.mobility_elements});
     mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
                                              navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
                         "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
