@@ -134,6 +134,7 @@ ul.mobile-menu {
 }
 .svg-icon circle {
     stroke: var(--color-text);
+    fill: var(--color-text);
     stroke-width: 1;
 }
 svg.text {
@@ -201,6 +202,8 @@ hr {
     -webkit-appearance: none;
     margin: auto;
     border: 1px solid var(--color-text);
+    width: 100%;
+    max-width: calc(100% - 20px);
 }
 .select-category-element {
     padding: 0.3em;

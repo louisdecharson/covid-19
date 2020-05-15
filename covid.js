@@ -42,7 +42,11 @@ let data = [],
     population_data = [],
     testing_data = [],
     data_country,
-    data_graph = {};
+    data_graph = {},
+    mobilityData = [],
+    mobilityDates = [],
+    mobilityRegions = [],
+    mobilityTypes = [];
 
 
 // Continental Aggregates
@@ -148,6 +152,21 @@ let navigation = {
     "ft_ma": 1,
     "testing_yVar": "Cumulative total",
     "testing_countries": false,
+    "mobility_elements":[
+        {
+            "region": "Paris",
+            "transportation_type": "walking"
+        },
+        {
+            "region": "Paris",
+            "transportation_type": "driving"
+        },
+        {
+            "region": "Paris",
+            "transportation_type": "transit"
+        }],
+    "lines4": true,
+    "hideLegendMobility": false,
     "hideNav": true
 };
 function loadPage(button, target) {
@@ -209,6 +228,11 @@ $('#thresholdRange').prop('value', navigation.ft_threshold);
 $('#thresholdValue').html(navigation.ft_threshold); 
 $('#movingAverageFTRange').prop('value', navigation.ft_ma);
 $('#movingAverageFTValue').html(navigation.ft_ma); 
+
+// Mobility
+$('#barSwitch4').prop('checked', !navigation.lines4);
+$('#hideLegendMobility').prop('checked', navigation.hideLegendMobility);
+
 
 
 // ========================================================================== //
@@ -285,6 +309,28 @@ function parseData(wide_data, pivot_columns, category) {
     navigation.startDate = navigation.startDate || list_dates[0];
     navigation.endDate = navigation.endDate || list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
+}
+function parseMobilityData(wide_data, pivot_columns) {
+    let long_data = [],
+        columns = Object.keys(wide_data[0]),
+        wide_columns = columns.filter(x => !pivot_columns.includes(x));
+    for (const element of wide_data) {
+        for (const col of wide_columns) {
+            let long_element = {};
+            long_element['field_id'] = col;
+            long_element['field_value'] = +element[col];
+            for (const col of pivot_columns) {
+                long_element[col] = element[col];
+            }
+            long_element['date'] = new Date (d3.timeParse("%Y-%m-%d")(long_element['field_id']));
+            long_element['key'] = `${long_element['region']} - ${long_element['transportation_type']}`;
+            long_data.push(long_element);
+        }
+    }
+    mobilityDates = Grapher.unique(long_data.map(d => d['field_id']));
+    mobilityRegions = Grapher.unique(long_data.map(d => d['region']));
+    mobilityTypes = Grapher.unique(long_data.map(d => d['transportation_type']));
+    return long_data;
 }
 
 function parseTestingData(data) {
@@ -488,13 +534,15 @@ function get_dates(data) {
     list_dates = d3.set(data.map(d => d['date'])).values();
 }
 function filterByDate(data,categoryName=false,categoryList=false) {
+    let a =  d3.timeParse('%d-%b-%y')(navigation.startDate),
+        b = d3.timeParse('%d-%b-%y')(navigation.endDate);
     if (categoryName) {
-        return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
-                    d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate) &&
+        return data.filter(d => d['date'] >= a &&
+                    d['date'] <= b &&
                     categoryList.indexOf(d[categoryName]) > -1);
     } else {
-        return data.filter(d => d['date'] >= d3.timeParse('%d-%b-%y')(navigation.startDate) &&
-                           d['date'] <= d3.timeParse('%d-%b-%y')(navigation.endDate));
+        return data.filter(d => d['date'] >= a &&
+                           d['date'] <= b);
     }
 }
 /**
@@ -531,7 +579,6 @@ function getCompareData(inputData) {
     });
     return data;
 }
-
 function ftData(data, yVar='field_value') {
     return d3.nest()
         .key(d => d['Country/Region'])
@@ -609,6 +656,41 @@ function build_elements_compare() {
     }
     $('#compare_elements_container').html(html);
 }
+function build_elements_mobility() {
+    let html = '';
+    for (const [index, element] of navigation.mobility_elements.entries()) {
+        let selectRegion = '',
+            selectType = '';
+        for (const region of mobilityRegions) {
+            let selected = region === element['region'] ? 'selected' : '';
+            selectRegion += '<option ' + selected + '>' + region + '</option>';
+        }
+        for (const type of mobilityTypes) {
+            let selected = type === element['transportation_type'] ? 'selected' : '';
+            selectType += '<option ' + selected + '>' + type + '</option>';
+        }
+        element.id = (parseInt(Math.random()*1e16)).toString();
+        html += `
+<div class="col-xl-4 col-md-6 col-12 mt-2 mb-2">
+    <div class="card element" style="border-color:${colors_countries[index]}">
+        <svg style="position:absolute;top:0.2rem;right:0.1rem;" class="svg-icon delete-element" onclick=delete_mobility_element('${element.id}') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot">
+            <path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path>
+        </svg>
+        <div class="card-title country_element mb-1">
+            <select onchange="update_mobility_element(this,'region')" class="select-country-element" element_id="${element.id}">
+                ${selectRegion}
+            </select>
+        </div>
+        <div class="category_element mb-1 mt-1">
+            <select onchange="update_mobility_element(this,'transportation_type')" class="select-category-element" element_id="${element.id}">
+                ${selectType}
+            </select>
+        </div>
+    </div>
+</div>`;
+    }
+    $('#mobility_elements_container').html(html);   
+};
 
 function build_ft_countries() {
     let html = '';
@@ -673,6 +755,19 @@ function update_element(el, property) {
     compareGraph.draw({"data":getCompareData(data_by_country),
                        "categories": get_list_elements()});
 }
+function update_mobility_element(el, property) {
+    let element_id = $(el).attr('element_id');
+    navigation.mobility_elements.forEach(function(it, ind) {
+        if (it.id === element_id) {
+            it[property] = el.value;
+        }
+    });
+    updateNavigation({"elements": navigation.mobility_elements});
+    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
+                        "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
+
+}
 function get_list_elements() {
     function getKey(e) {
         return `${e['Country/Region']} - ${e['category']}` + (e['offset'] > 0 ? ` (offset: ${e['offset']} day${e['offset'] > 1 ? 's' : ''})` : "");
@@ -699,6 +794,28 @@ function delete_element(id) {
                        "categories": get_list_elements()});
 }
 
+function add_mobility_element() {
+    let last_el = navigation.mobility_elements.length > 0 ? $.extend(true, {}, navigation.mobility_elements.slice(-1)[0]) : {
+        "region": "Paris",
+        "transportation_type": "walking"
+    }; // copy last element
+    updateNavigation({"mobility_elements": navigation.mobility_elements.concat(last_el)});
+    last_el['region'] = navigation.mobility_elements.length > 0 ? mobilityRegions[Math.min(mobilityRegions.indexOf(last_el['region'])+1,mobilityRegions.length-1)] : 'Paris';
+
+    build_elements_mobility();
+    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
+                        "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
+}
+function delete_mobility_element(id) {
+    updateNavigation({"mobility_elements": navigation.mobility_elements.filter(d => d.id != id)});
+    build_elements_mobility();
+    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
+                        "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});    
+}
+
+
 function addDatestoSelect() {
     let html_start_dates = '',
         html_end_dates = '';
@@ -712,6 +829,8 @@ function addDatestoSelect() {
     $('#endDate2').html(html_end_dates);
     $('#startDate3').html(html_start_dates);
     $('#endDate3').html(html_end_dates);
+    $('#startDate4').html(html_start_dates);
+    $('#endDate4').html(html_end_dates);
 
 }
 function download_data(id) {
@@ -902,6 +1021,31 @@ let testingGraph = new Grapher('testing_graph',
                                },
                                graphWidth,
                                graphHeight);
+let mobilityGraph = new Grapher('mobility_graph',
+                                {
+                                    "x": {
+                                        "name": "date",
+                                        "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                        "scale": "scaleTime",
+                                        "nice": false
+                                    },
+                                    "y": {
+                                        "name": 'field_value',
+                                        "scale": "scaleLinear",
+                                    },
+                                    "category": {
+                                        "name": "key"
+                                    },
+                                    "type": navigation.lines4 ? "line" : "bar",
+                                    "style": {
+                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                    },
+                                    "legend": {
+                                        "show": !navigation.hideLegendMobility
+                                    },
+                                },
+                                graphWidth,
+                                graphHeight);
 // ========================================================================== //
 
 // LOAD DATA
@@ -929,10 +1073,14 @@ d3.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
 
+d3.csv('https://raw.githubusercontent.com/ActiveConclusion/COVID19_mobility/master/apple_reports/applemobilitytrends.csv')
+    .then(d => mobilityData = parseMobilityData(d, ['geo_type','region','transportation_type','alternative_name']))
+    .catch(e => console.log(e))
+    .finally(_ => nb_process_ended += 1);
 
 // Process Data
 let timer = setInterval(() => {
-    if (nb_process_ended === cases_categories.length + 2) {
+    if (nb_process_ended === cases_categories.length + 3) {
         clearInterval(timer);
 
         // Add Dates to select
@@ -1004,6 +1152,17 @@ let timer = setInterval(() => {
         testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries),
                           "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
+
+        // Mobility Graph
+        console.time("build_elements_mobility");
+        build_elements_mobility();
+        console.timeEnd("build_elements_mobility");
+        console.time("GraphMobility");
+        mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                                 navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
+                            "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
+        console.timeEnd("GraphMobility");
+
     }
 }, 100);
 
@@ -1211,6 +1370,33 @@ $('#endDate3').change(function() {
     updateNavigation({"endDate": $('#endDate3 option:selected').text()});
     testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
     action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
+});
+
+
+// Mobility
+$('#barSwitch4').change(function(){
+    updateNavigation({"lines4": navigation.lines4 ? false : true});
+    mobilityGraph.draw({"type": navigation.lines4 ? "line" : "bar"});
+    action([navigation.page,'barSwitch4',navigation.lines4].join('_').replace(/ /g,'_'));
+});
+$('#startDate4').change(function() {
+    updateNavigation({"startDate": $('#startDate4 option:selected').text()});
+    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`))});
+    action([navigation.page,'startDate4',navigation.startDate].join('_').replace(/ /g,'_'));
+});
+$('#endDate4').change(function() {
+    updateNavigation({"endDate": $('#endDate4 option:selected').text()});
+    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`))});
+    action([navigation.page,'endDate4',navigation.endDate].join('_').replace(/ /g,'_'));
+});
+$('#hideLegendMobility').change(function(){
+    updateNavigation({"hideLegendMobility": navigation.hideLegendMobility ? false : true});
+    mobilityGraph.draw({"legend": {
+        "show": !navigation.hideLegendMobility
+    }});
+    action([navigation.page,'hideLegendMobility',navigation.hideLegendMobility].join('_').replace(/ /g,'_'));
 });
 
 // Mobile menu
