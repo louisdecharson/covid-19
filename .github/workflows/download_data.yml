@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r download_data/requirements.txt; fi
+        if [ -f download_data/requirements.txt ]; then pip install -r download_data/requirements.txt; fi
 
     - name: Download data
       run: |
