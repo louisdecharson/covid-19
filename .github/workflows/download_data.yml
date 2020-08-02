@@ -45,7 +45,7 @@ jobs:
           git add .
           git commit -am "AUTO - Add data.gouv.fr COVID data from SOS Medecins - $(date "+%Y-%m-%d %Hh%Mm")"
           git remote rm origin
-          git remote add origin https://louisdecharson:$PUSH_TOKEN@louisdecharson/covid-19.git
+          git remote add origin https://louisdecharson:${PUSH_TOKEN}@github.com/louisdecharson/covid-19.git
           git push origin HEAD:master
         else
           echo 'unable to detech changes'
