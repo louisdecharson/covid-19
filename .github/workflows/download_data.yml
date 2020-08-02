@@ -6,6 +6,8 @@ name: Download_SOS_Medecins_data
 on:
   schedule:
     - cron: "0 0 * * *"
+  push:
+    branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
