@@ -57,7 +57,6 @@ def download_data() -> None:
 
     # Process data
     df = process_data(OUT_RAW_FILE)
-    print(df.head())
     df.to_csv(OUT_PROCESSED_FILE, index=None)
     print("{} saved to disk.".format(OUT_PROCESSED_FILE))
 
@@ -78,7 +77,7 @@ def process_data(filepath: str) -> None:
     
     # Compute diff
     cols = [c for c in df_merged.columns if c not in ['Region', 'Age group','Day']]
-    print((c, df_merged[c].dtype) for c in df_merged.columns)
+    print([(c, df_merged[c].dtype) for c in df_merged.columns])
     df_with_diff = (df_merged
                     .sort_values(by=['Region', 'Age group','Day'])
                     .groupby(['Region','Age group'])[cols]
