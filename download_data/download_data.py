@@ -77,9 +77,11 @@ def process_data(filepath: str) -> None:
     idx = df_merged.set_index(['Region','Age group','Day']).index
     
     # Compute diff
+    cols = [c for c in df_merged.columns if c not in ['Region', 'Age group','Day']]
+    print((c, df_merged[c].dtype) for c in df_merged.columns)
     df_with_diff = (df_merged
                     .sort_values(by=['Region', 'Age group','Day'])
-                    .groupby(['Region','Age group'])
+                    .groupby(['Region','Age group'])[cols]
                     .diff())
     df_with_diff.index = idx
     df_with_diff.rename(columns={f"{c}": f"New {c}"
