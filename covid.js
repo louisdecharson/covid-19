@@ -307,7 +307,7 @@ function parseData(wide_data, pivot_columns, category) {
     }
     list_dates = d3.set(data.map(d => d['date'])).values().map(d => d3.timeFormat("%d-%b-%y")(new Date(d)));
     navigation.startDate = navigation.startDate || list_dates[0];
-    navigation.endDate = navigation.endDate || list_dates.slice(-1)[0];
+    navigation.endDate = list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
 }
 function parseMobilityData(wide_data, pivot_columns) {
