@@ -2,7 +2,7 @@
  * @copyright: Louis de Charsonville
  * 
  */
-
+$('#loading_screen').show();
 const main = document.getElementById('main'),
       mainStyle = main.currentStyle || window.getComputedStyle(main),
       mainWidth = main.offsetWidth,
@@ -859,101 +859,88 @@ function download_data(id) {
 
 // CHARTS
 // ======
+class CovidGraph extends Grapher {
+    constructor(id, options= {}) {
+        let default_options = {
+            "x": {
+                "name": "date",
+                "tickFormat": d3.timeFormat("%d/%m/%y"),
+                "scale": "scaleTime",
+                "nice": false                
+            },
+            "y": {
+                "name": 'field_value',
+                "scale": "scaleLinear",
+            },                                        
+            "category": {
+                "name": "category"
+            },
+            "type": "line",
+            "style": {
+                "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+            },
+        };
+        Grapher.updateDict(default_options, options, true);
+        super(id,
+              default_options,
+              graphWidth,
+              graphHeight);
+    }
+}
+// ========================================================================== //
 
-let countryGraph = new Grapher('country_graph',
-                               {
-                                   "x": {
-                                       "name": "date",
-                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                       "scale": "scaleTime",
-                                       "nice": false
-                                   },
-                                   "y": {
-                                       "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
-                                       "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
-                                       "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
-                                   },
-                                   "category": {
-                                       "name": "category"
-                                   },
-                                   "categories": cases_categories,
-                                   "type": navigation.lines ? "line" : "bar",
-                                   "style": {
-                                       "colors": colors,
-                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                   },
-                                   "advanced": {
-                                       "additionalColumnsInData": ['Country/Region','field_value_pop','field_value']
-                                   }
-                               },
-                               graphWidth,
-                               graphHeight);
 
-let countryGraphRates = new Grapher('country_graph_rates',
-                                    {
-                                        "x": {
-                                            "name": "date",
-                                            "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                            "scale": "scaleTime",
-                                            "nice": false
-                                        },
-                                        "y": {
-                                            "name": 'field_value',
-                                            "scale": "scaleLinear",
-                                            "tickFormat": Grapher.formatTick(false, true)
-                                        },
-                                        "category": {
-                                            "name": "category"
-                                        },
-                                        "type": "line",
-                                        "categories": rates_categories,
-                                        "style": {
-                                            "colors": colors,
-                                            "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+let countryGraph = new CovidGraph('country_graph',
+                                  {
+                                      "y": {
+                                          "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
+                                          "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
+                                          "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
+                                      },
+                                      "categories": cases_categories,
+                                      "type": navigation.lines ? "line" : "bar",
+                                      "advanced": {
+                                          "additionalColumnsInData": ['Country/Region','field_value_pop','field_value']
+                                      },
+                                      "style": {
+                                          "colors": colors,
+                                          "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                      }
+                                  });
 
-                                        },
-                                        "advanced": {
-                                            "additionalColumnsInData": ['Country/Region']
-                                        }
-                                    },
-                                    graphWidth,
-                                    graphHeight);
-let countryGraphNewCases = new Grapher('country_graph_new_cases',
+let countryGraphRates = new CovidGraph('country_graph_rates',
                                        {
-                                           "x": {
-                                               "name": "date",
-                                               "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                               "scale": "scaleTime",
-                                               "nice": false
-                                           },
                                            "y": {
-                                               "name": 'field_value',
-                                               "scale": "scaleLinear",
-                                               "tickFormat": Grapher.formatTick(false, false)
+                                               "tickFormat": Grapher.formatTick(false, true)
                                            },
                                            "category": {
                                                "name": "category"
                                            },
-                                           "type": "bar",
-                                           "categories": new_cases_categories,
                                            "style": {
                                                "colors": colors,
                                                "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
                                            },
+                                           "categories": rates_categories,
                                            "advanced": {
                                                "additionalColumnsInData": ['Country/Region']
-                                           }
-                                       },
-                                       graphWidth,
-                                       graphHeight);
-let compareGraph = new Grapher('compare_graph',
+                                           }});
+let countryGraphNewCases = new CovidGraph('country_graph_new_cases',
+                                          {
+                                              "y": {
+                                                  "tickFormat": Grapher.formatTick(false, false)
+                                              },
+                                              "style": {
+                                                  "colors": colors,
+                                                  "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                              },
+                                              "type": "bar",
+                                              "categories": new_cases_categories,
+                                              "advanced": {
+                                                  "additionalColumnsInData": ['Country/Region']
+                                              }
+                                          });
+let compareGraph = new CovidGraph('compare_graph',
                                {
-                                   "x": {
-                                       "name": "date",
-                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                       "scale": "scaleTime",
-                                       "nice": false
-                                   },
                                    "y": {
                                        "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
                                        "scale": navigation.logScale2 ? "scaleLog" : "scaleLinear",
@@ -964,15 +951,10 @@ let compareGraph = new Grapher('compare_graph',
                                    },
                                    "categories": get_list_elements(),
                                    "type": navigation.lines2 ? "line" : "bar",
-                                   "style": {
-                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                   },
                                    "advanced": {
                                        "additionalColumnsInData": ['field_value','field_value_pop']
                                    }
-                               },
-                               graphWidth,
-                               graphHeight);
+                               });
 let ftGraph = new Grapher('ft_graph',
                           {
                               "x": {
@@ -999,64 +981,48 @@ let ftGraph = new Grapher('ft_graph',
                           graphWidth,
                           graphHeight);
 
-let testingGraph = new Grapher('testing_graph',
-                               {
-                                   "x": {
-                                       "name":"date",
-                                       "scale": "scaleTime",
-                                       "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                       "nice": false
-                                   },
-                                   "y": {
-                                       "name": navigation.testing_yVar,
-                                       "parse": d => +d,
-                                       "tickFormat": d3.format(navigation.testing_yVar == 'cumulative cases per test' ? '.2%' : '.3s')
-                                   },
-                                   "category": {
-                                       "name": "Entity"
-                                   },
-                                   "style": {
-                                       "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                   }
-                               },
-                               graphWidth,
-                               graphHeight);
-let mobilityGraph = new Grapher('mobility_graph',
-                                {
-                                    "x": {
-                                        "name": "date",
-                                        "tickFormat": d3.timeFormat("%d/%m/%y"),
-                                        "scale": "scaleTime",
-                                        "nice": false
-                                    },
-                                    "y": {
-                                        "name": 'field_value',
-                                        "scale": "scaleLinear",
-                                    },
-                                    "category": {
-                                        "name": "key"
-                                    },
-                                    "type": navigation.lines4 ? "line" : "bar",
-                                    "style": {
-                                        "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                    },
-                                    "legend": {
-                                        "show": !navigation.hideLegendMobility
-                                    },
-                                },
-                                graphWidth,
-                                graphHeight);
+let testingGraph = new CovidGraph('testing_graph',
+                                  {
+                                      "y": {
+                                          "name": navigation.testing_yVar,
+                                          "parse": d => +d,
+                                          "tickFormat": d3.format(navigation.testing_yVar == 'cumulative cases per test' ? '.2%' : '.3s')
+                                      },
+                                      "category": {
+                                          "name": "Entity"
+                                      },
+                                  });
+let mobilityGraph = new CovidGraph('mobility_graph',
+                                   {
+                                       "category": {
+                                           "name": "key"
+                                       },
+                                       "type": navigation.lines4 ? "line" : "bar",
+                                       "legend": {
+                                           "show": !navigation.hideLegendMobility
+                                       },
+                                   });
 // ========================================================================== //
 
 // LOAD DATA
 // =========
+// Process Data
+console.time("Loading");
+const progressBar = document.getElementById("myBar");
+let widthProgressBar = 10;
+function updateProgressBar(w) {
+    widthProgressBar = widthProgressBar + w;
+    progressBar.style.width = widthProgressBar + "%";
+}
 let nb_process_ended = 0;
+console.time("DownloadData");
 for (const element of cases_categories) {
     let data_link =  `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${element.toLowerCase()}_global.csv`;
     d3.csv(data_link)
         .then(function(d) {
             console.log(`Loaded data for ${element}. Length: ${d.length}`);
             data = data.concat(parseData(d, pivot_columns, element));
+            updateProgressBar(10);
         })
         .catch(function(error) {
             console.log(error);
@@ -1066,21 +1032,23 @@ for (const element of cases_categories) {
 d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/population_data.csv')
     .then(d => population_data = d)
     .catch(e => console.log(e))
-    .finally(_ => nb_process_ended += 1);
+    .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
 d3.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv')
     .then(d => testing_data = d)
     .catch(e => console.log(e))
-    .finally(_ => nb_process_ended += 1);
+    .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
 d3.csv('https://raw.githubusercontent.com/ActiveConclusion/COVID19_mobility/master/apple_reports/applemobilitytrends.csv')
     .then(d => mobilityData = parseMobilityData(d, ['geo_type','region','transportation_type','alternative_name']))
     .catch(e => console.log(e))
-    .finally(_ => nb_process_ended += 1);
+    .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
-// Process Data
+
+
 let timer = setInterval(() => {
     if (nb_process_ended === cases_categories.length + 3) {
+        console.timeEnd("DownloadData");
         clearInterval(timer);
 
         // Add Dates to select
@@ -1093,7 +1061,8 @@ let timer = setInterval(() => {
         data_by_country = groupBy(data,'key',['field_value'],[],
                                   ['field_id','Country/Region','date','category','key_world']);
         console.timeEnd("groupBy");
-
+        updateProgressBar(5);
+        
         // Add Population Data
         console.time("addPopulationData");
         addPopulationData();
@@ -1103,6 +1072,7 @@ let timer = setInterval(() => {
         console.time("computeWorldData");
         data_by_country = computeWorldData();
         console.timeEnd("computeWorldData");
+        updateProgressBar(5);
 
         console.time("get_list_countries");
         get_list_countries(data_by_country);
@@ -1112,11 +1082,14 @@ let timer = setInterval(() => {
         console.time("addRates");
         data_by_country = addRates(data_by_country);
         console.timeEnd("addRates");
+        updateProgressBar(5);
+
 
         // Parse testing data
         console.time("parseTestingData");
         testing_data = parseTestingData(testing_data);
         console.timeEnd("parseTestingData");
+        updateProgressBar(5);
 
         // Graph
         console.time("Graph1");
@@ -1135,6 +1108,8 @@ let timer = setInterval(() => {
         console.time("Graph2");
         compareGraph.draw({"data":getCompareData(data_by_country)});
         console.timeEnd("Graph2");
+        updateProgressBar(5);
+
 
         // FT Graph
         console.time("GraphFT");
@@ -1143,6 +1118,9 @@ let timer = setInterval(() => {
         ftGraph.draw({"data": ftData(data_by_country),
                      "categories":navigation.ft_countries});
         console.timeEnd("GraphFT");
+        updateProgressBar(5);
+
+
 
         // Testing Graph
         console.time("GraphTesting");
@@ -1152,6 +1130,8 @@ let timer = setInterval(() => {
         testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries),
                           "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
+
+
 
         // Mobility Graph
         console.time("build_elements_mobility");
@@ -1163,6 +1143,8 @@ let timer = setInterval(() => {
                             "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
         console.timeEnd("GraphMobility");
 
+        console.timeEnd("Loading");
+        $('#loading_screen').hide();
     }
 }, 100);
 

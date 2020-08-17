@@ -18,6 +18,20 @@ body {
     background-color: var(--background-color); 
     color: var(--color-text);
 }
+#loading_screen {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--background-color);
+}
+#myProgress {
+  width: 96%;
+  /* background-color: var(--text-muted); */
+}
+#myBar {
+  width: 10%;
+  height: 30px;
+  /* background-color: var(--color-text); */
+}
 a.title {
     color: var(--color-text);
 }
@@ -41,6 +55,7 @@ a:hover {
 .text-muted {
     color: var(--text-muted) !important;
 }
+
 #country_graph_svg {
     background-color: var(--background-color);;
 }
