@@ -31,7 +31,15 @@
             <li class="mobile-link" onclick="menu('nav')">Menu</li>
             <li class="mobile-link" onclick="menu('info')">Info</li>
         </ul>
-        <div class="m-2">
+        <div id="loading_screen">
+            <div class="">
+                <h6>Data loading...</h6>
+                <div id="myProgress" class="progress" >
+                    <div id="myBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <div class="m-2" id="site_content">
             <div class="mobile-hide banner text-muted font-italic mb-4" id="info">Using COVID-19 data from <a href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins University</a>, population data from <a href="https://data.worldbank.org/indicator/SP.POP.TOTL">World Bank</a>, testing data from <a href="https://github.com/owid/covid-19-data/tree/master/public/data/testing">Our World in Data</a>. Code by <a href="https://github.com/louisdecharson">@louisdecharson</a> (with <a href="http://louisdecharson.github.io/grapherjs.html">grapher.js</a>)
             </div>
             <div class="container" id="container">
