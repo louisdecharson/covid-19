@@ -233,6 +233,13 @@ hr {
     -webkit-appearance: none;
     border: 1px solid var(--text-muted);
 }
+.select-camouflaged {
+    padding: 0.3em;
+    color: var(--text-muted);
+    background: transparent;
+    -webkit-appearance: none;
+    border: 1px solid var(--text-muted);
+}
 .delete-element {
          cursor: pointer;
 }
