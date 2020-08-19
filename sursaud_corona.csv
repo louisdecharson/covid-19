@@ -166,11 +166,15 @@ Day,Category,value
 2020-08-06,Urgent care attendances for suspicion of COVID-19,622.0
 2020-08-07,Urgent care attendances for suspicion of COVID-19,626.0
 2020-08-08,Urgent care attendances for suspicion of COVID-19,640.0
-2020-08-09,Urgent care attendances for suspicion of COVID-19,532.0
-2020-08-10,Urgent care attendances for suspicion of COVID-19,624.0
-2020-08-11,Urgent care attendances for suspicion of COVID-19,508.0
-2020-08-12,Urgent care attendances for suspicion of COVID-19,558.0
-2020-08-13,Urgent care attendances for suspicion of COVID-19,488.0
+2020-08-09,Urgent care attendances for suspicion of COVID-19,534.0
+2020-08-10,Urgent care attendances for suspicion of COVID-19,628.0
+2020-08-11,Urgent care attendances for suspicion of COVID-19,528.0
+2020-08-12,Urgent care attendances for suspicion of COVID-19,570.0
+2020-08-13,Urgent care attendances for suspicion of COVID-19,620.0
+2020-08-14,Urgent care attendances for suspicion of COVID-19,732.0
+2020-08-15,Urgent care attendances for suspicion of COVID-19,732.0
+2020-08-16,Urgent care attendances for suspicion of COVID-19,588.0
+2020-08-17,Urgent care attendances for suspicion of COVID-19,550.0
 2020-02-24,Total urgent care attendances,97179.0
 2020-02-25,Total urgent care attendances,85392.0
 2020-02-26,Total urgent care attendances,84226.0
@@ -324,197 +328,205 @@ Day,Category,value
 2020-07-23,Total urgent care attendances,82076.0
 2020-07-24,Total urgent care attendances,83235.0
 2020-07-25,Total urgent care attendances,82074.0
-2020-07-26,Total urgent care attendances,79944.0
-2020-07-27,Total urgent care attendances,89676.0
-2020-07-28,Total urgent care attendances,81126.0
-2020-07-29,Total urgent care attendances,80856.0
-2020-07-30,Total urgent care attendances,80894.0
-2020-07-31,Total urgent care attendances,82323.0
+2020-07-26,Total urgent care attendances,79950.0
+2020-07-27,Total urgent care attendances,89696.0
+2020-07-28,Total urgent care attendances,81242.0
+2020-07-29,Total urgent care attendances,81388.0
+2020-07-30,Total urgent care attendances,81426.0
+2020-07-31,Total urgent care attendances,82311.0
 2020-08-01,Total urgent care attendances,84230.0
 2020-08-02,Total urgent care attendances,81505.0
 2020-08-03,Total urgent care attendances,90494.0
 2020-08-04,Total urgent care attendances,81912.0
 2020-08-05,Total urgent care attendances,82092.0
 2020-08-06,Total urgent care attendances,82382.0
-2020-08-07,Total urgent care attendances,82243.0
-2020-08-08,Total urgent care attendances,81732.0
-2020-08-09,Total urgent care attendances,79175.0
-2020-08-10,Total urgent care attendances,92264.0
-2020-08-11,Total urgent care attendances,84543.0
-2020-08-12,Total urgent care attendances,84121.0
-2020-08-13,Total urgent care attendances,75572.0
-2020-02-24,Hospitalizations,0.0
-2020-02-25,Hospitalizations,0.0
-2020-02-26,Hospitalizations,0.0
-2020-02-27,Hospitalizations,2.0
-2020-02-28,Hospitalizations,12.0
-2020-02-29,Hospitalizations,10.0
-2020-03-01,Hospitalizations,42.0
-2020-03-02,Hospitalizations,101.0
-2020-03-03,Hospitalizations,106.0
-2020-03-04,Hospitalizations,112.0
-2020-03-05,Hospitalizations,142.0
-2020-03-06,Hospitalizations,246.0
-2020-03-07,Hospitalizations,236.0
-2020-03-08,Hospitalizations,258.0
-2020-03-09,Hospitalizations,338.0
-2020-03-10,Hospitalizations,410.0
-2020-03-11,Hospitalizations,460.0
-2020-03-12,Hospitalizations,600.0
-2020-03-13,Hospitalizations,836.0
-2020-03-14,Hospitalizations,754.0
-2020-03-15,Hospitalizations,834.0
-2020-03-16,Hospitalizations,1154.0
-2020-03-17,Hospitalizations,1370.0
-2020-03-18,Hospitalizations,1430.0
-2020-03-19,Hospitalizations,1760.0
-2020-03-20,Hospitalizations,2170.0
-2020-03-21,Hospitalizations,2080.0
-2020-03-22,Hospitalizations,2212.0
-2020-03-23,Hospitalizations,3716.0
-2020-03-24,Hospitalizations,3592.0
-2020-03-25,Hospitalizations,3700.0
-2020-03-26,Hospitalizations,4028.0
-2020-03-27,Hospitalizations,4930.0
-2020-03-28,Hospitalizations,3994.0
-2020-03-29,Hospitalizations,3286.0
-2020-03-30,Hospitalizations,4612.0
-2020-03-31,Hospitalizations,3876.0
-2020-04-01,Hospitalizations,3438.0
-2020-04-02,Hospitalizations,3430.0
-2020-04-03,Hospitalizations,3570.0
-2020-04-04,Hospitalizations,2572.0
-2020-04-05,Hospitalizations,2300.0
-2020-04-06,Hospitalizations,3250.0
-2020-04-07,Hospitalizations,2750.0
-2020-04-08,Hospitalizations,2466.0
-2020-04-09,Hospitalizations,2462.0
-2020-04-10,Hospitalizations,2590.0
-2020-04-11,Hospitalizations,1988.0
-2020-04-12,Hospitalizations,1684.0
-2020-04-13,Hospitalizations,1668.0
-2020-04-14,Hospitalizations,2016.0
-2020-04-15,Hospitalizations,1654.0
-2020-04-16,Hospitalizations,1746.0
-2020-04-17,Hospitalizations,1882.0
-2020-04-18,Hospitalizations,1378.0
-2020-04-19,Hospitalizations,1182.0
-2020-04-20,Hospitalizations,1920.0
-2020-04-21,Hospitalizations,1412.0
-2020-04-22,Hospitalizations,1318.0
-2020-04-23,Hospitalizations,1292.0
-2020-04-24,Hospitalizations,1280.0
-2020-04-25,Hospitalizations,926.0
-2020-04-26,Hospitalizations,836.0
-2020-04-27,Hospitalizations,1162.0
-2020-04-28,Hospitalizations,1084.0
-2020-04-29,Hospitalizations,1156.0
-2020-04-30,Hospitalizations,1204.0
-2020-05-01,Hospitalizations,748.0
-2020-05-02,Hospitalizations,886.0
-2020-05-03,Hospitalizations,694.0
-2020-05-04,Hospitalizations,1066.0
-2020-05-05,Hospitalizations,886.0
-2020-05-06,Hospitalizations,858.0
-2020-05-07,Hospitalizations,886.0
-2020-05-08,Hospitalizations,566.0
-2020-05-09,Hospitalizations,750.0
-2020-05-10,Hospitalizations,594.0
-2020-05-11,Hospitalizations,810.0
-2020-05-12,Hospitalizations,722.0
-2020-05-13,Hospitalizations,646.0
-2020-05-14,Hospitalizations,676.0
-2020-05-15,Hospitalizations,680.0
-2020-05-16,Hospitalizations,541.0
-2020-05-17,Hospitalizations,470.0
-2020-05-18,Hospitalizations,698.0
-2020-05-19,Hospitalizations,590.0
-2020-05-20,Hospitalizations,648.0
-2020-05-21,Hospitalizations,468.0
-2020-05-22,Hospitalizations,584.0
-2020-05-23,Hospitalizations,438.0
-2020-05-24,Hospitalizations,372.0
-2020-05-25,Hospitalizations,494.0
-2020-05-26,Hospitalizations,394.0
-2020-05-27,Hospitalizations,364.0
-2020-05-28,Hospitalizations,356.0
-2020-05-29,Hospitalizations,350.0
-2020-05-30,Hospitalizations,338.0
-2020-05-31,Hospitalizations,326.0
-2020-06-01,Hospitalizations,276.0
-2020-06-02,Hospitalizations,344.0
-2020-06-03,Hospitalizations,344.0
-2020-06-04,Hospitalizations,342.0
-2020-06-05,Hospitalizations,320.0
-2020-06-06,Hospitalizations,230.0
-2020-06-07,Hospitalizations,154.0
-2020-06-08,Hospitalizations,236.0
-2020-06-09,Hospitalizations,216.0
-2020-06-10,Hospitalizations,190.0
-2020-06-11,Hospitalizations,204.0
-2020-06-12,Hospitalizations,182.0
-2020-06-13,Hospitalizations,208.0
-2020-06-14,Hospitalizations,178.0
-2020-06-15,Hospitalizations,170.0
-2020-06-16,Hospitalizations,144.0
-2020-06-17,Hospitalizations,158.0
-2020-06-18,Hospitalizations,166.0
-2020-06-19,Hospitalizations,172.0
-2020-06-20,Hospitalizations,194.0
-2020-06-21,Hospitalizations,124.0
-2020-06-22,Hospitalizations,152.0
-2020-06-23,Hospitalizations,136.0
-2020-06-24,Hospitalizations,200.0
-2020-06-25,Hospitalizations,148.0
-2020-06-26,Hospitalizations,162.0
-2020-06-27,Hospitalizations,122.0
-2020-06-28,Hospitalizations,138.0
-2020-06-29,Hospitalizations,150.0
-2020-06-30,Hospitalizations,158.0
-2020-07-01,Hospitalizations,120.0
-2020-07-02,Hospitalizations,140.0
-2020-07-03,Hospitalizations,154.0
-2020-07-04,Hospitalizations,120.0
-2020-07-05,Hospitalizations,108.0
-2020-07-06,Hospitalizations,140.0
-2020-07-07,Hospitalizations,128.0
-2020-07-08,Hospitalizations,114.0
-2020-07-09,Hospitalizations,190.0
-2020-07-10,Hospitalizations,160.0
-2020-07-11,Hospitalizations,118.0
-2020-07-12,Hospitalizations,128.0
-2020-07-13,Hospitalizations,154.0
-2020-07-14,Hospitalizations,112.0
-2020-07-15,Hospitalizations,164.0
-2020-07-16,Hospitalizations,152.0
-2020-07-17,Hospitalizations,194.0
-2020-07-18,Hospitalizations,134.0
-2020-07-19,Hospitalizations,130.0
-2020-07-20,Hospitalizations,188.0
-2020-07-21,Hospitalizations,156.0
-2020-07-22,Hospitalizations,194.0
-2020-07-23,Hospitalizations,172.0
-2020-07-24,Hospitalizations,190.0
-2020-07-25,Hospitalizations,184.0
-2020-07-26,Hospitalizations,148.0
-2020-07-27,Hospitalizations,212.0
-2020-07-28,Hospitalizations,168.0
-2020-07-29,Hospitalizations,162.0
-2020-07-30,Hospitalizations,178.0
-2020-07-31,Hospitalizations,176.0
-2020-08-01,Hospitalizations,182.0
-2020-08-02,Hospitalizations,166.0
-2020-08-03,Hospitalizations,168.0
-2020-08-04,Hospitalizations,160.0
-2020-08-05,Hospitalizations,194.0
-2020-08-06,Hospitalizations,194.0
-2020-08-07,Hospitalizations,226.0
-2020-08-08,Hospitalizations,208.0
-2020-08-09,Hospitalizations,176.0
-2020-08-10,Hospitalizations,200.0
-2020-08-11,Hospitalizations,190.0
-2020-08-12,Hospitalizations,192.0
-2020-08-13,Hospitalizations,160.0
+2020-08-07,Total urgent care attendances,82149.0
+2020-08-08,Total urgent care attendances,81882.0
+2020-08-09,Total urgent care attendances,79437.0
+2020-08-10,Total urgent care attendances,92584.0
+2020-08-11,Total urgent care attendances,85313.0
+2020-08-12,Total urgent care attendances,85719.0
+2020-08-13,Total urgent care attendances,87352.0
+2020-08-14,Total urgent care attendances,89588.0
+2020-08-15,Total urgent care attendances,84172.0
+2020-08-16,Total urgent care attendances,80296.0
+2020-08-17,Total urgent care attendances,78355.0
+2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
+2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
+2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
+2020-02-27,Hospitalizations for suspicion of COVID-19,2.0
+2020-02-28,Hospitalizations for suspicion of COVID-19,12.0
+2020-02-29,Hospitalizations for suspicion of COVID-19,10.0
+2020-03-01,Hospitalizations for suspicion of COVID-19,42.0
+2020-03-02,Hospitalizations for suspicion of COVID-19,101.0
+2020-03-03,Hospitalizations for suspicion of COVID-19,106.0
+2020-03-04,Hospitalizations for suspicion of COVID-19,112.0
+2020-03-05,Hospitalizations for suspicion of COVID-19,142.0
+2020-03-06,Hospitalizations for suspicion of COVID-19,246.0
+2020-03-07,Hospitalizations for suspicion of COVID-19,236.0
+2020-03-08,Hospitalizations for suspicion of COVID-19,258.0
+2020-03-09,Hospitalizations for suspicion of COVID-19,338.0
+2020-03-10,Hospitalizations for suspicion of COVID-19,410.0
+2020-03-11,Hospitalizations for suspicion of COVID-19,460.0
+2020-03-12,Hospitalizations for suspicion of COVID-19,600.0
+2020-03-13,Hospitalizations for suspicion of COVID-19,836.0
+2020-03-14,Hospitalizations for suspicion of COVID-19,754.0
+2020-03-15,Hospitalizations for suspicion of COVID-19,834.0
+2020-03-16,Hospitalizations for suspicion of COVID-19,1154.0
+2020-03-17,Hospitalizations for suspicion of COVID-19,1370.0
+2020-03-18,Hospitalizations for suspicion of COVID-19,1430.0
+2020-03-19,Hospitalizations for suspicion of COVID-19,1760.0
+2020-03-20,Hospitalizations for suspicion of COVID-19,2170.0
+2020-03-21,Hospitalizations for suspicion of COVID-19,2080.0
+2020-03-22,Hospitalizations for suspicion of COVID-19,2212.0
+2020-03-23,Hospitalizations for suspicion of COVID-19,3716.0
+2020-03-24,Hospitalizations for suspicion of COVID-19,3592.0
+2020-03-25,Hospitalizations for suspicion of COVID-19,3700.0
+2020-03-26,Hospitalizations for suspicion of COVID-19,4028.0
+2020-03-27,Hospitalizations for suspicion of COVID-19,4930.0
+2020-03-28,Hospitalizations for suspicion of COVID-19,3994.0
+2020-03-29,Hospitalizations for suspicion of COVID-19,3286.0
+2020-03-30,Hospitalizations for suspicion of COVID-19,4612.0
+2020-03-31,Hospitalizations for suspicion of COVID-19,3876.0
+2020-04-01,Hospitalizations for suspicion of COVID-19,3438.0
+2020-04-02,Hospitalizations for suspicion of COVID-19,3430.0
+2020-04-03,Hospitalizations for suspicion of COVID-19,3570.0
+2020-04-04,Hospitalizations for suspicion of COVID-19,2572.0
+2020-04-05,Hospitalizations for suspicion of COVID-19,2300.0
+2020-04-06,Hospitalizations for suspicion of COVID-19,3250.0
+2020-04-07,Hospitalizations for suspicion of COVID-19,2750.0
+2020-04-08,Hospitalizations for suspicion of COVID-19,2466.0
+2020-04-09,Hospitalizations for suspicion of COVID-19,2462.0
+2020-04-10,Hospitalizations for suspicion of COVID-19,2590.0
+2020-04-11,Hospitalizations for suspicion of COVID-19,1988.0
+2020-04-12,Hospitalizations for suspicion of COVID-19,1684.0
+2020-04-13,Hospitalizations for suspicion of COVID-19,1668.0
+2020-04-14,Hospitalizations for suspicion of COVID-19,2016.0
+2020-04-15,Hospitalizations for suspicion of COVID-19,1654.0
+2020-04-16,Hospitalizations for suspicion of COVID-19,1746.0
+2020-04-17,Hospitalizations for suspicion of COVID-19,1882.0
+2020-04-18,Hospitalizations for suspicion of COVID-19,1378.0
+2020-04-19,Hospitalizations for suspicion of COVID-19,1182.0
+2020-04-20,Hospitalizations for suspicion of COVID-19,1920.0
+2020-04-21,Hospitalizations for suspicion of COVID-19,1412.0
+2020-04-22,Hospitalizations for suspicion of COVID-19,1318.0
+2020-04-23,Hospitalizations for suspicion of COVID-19,1292.0
+2020-04-24,Hospitalizations for suspicion of COVID-19,1280.0
+2020-04-25,Hospitalizations for suspicion of COVID-19,926.0
+2020-04-26,Hospitalizations for suspicion of COVID-19,836.0
+2020-04-27,Hospitalizations for suspicion of COVID-19,1162.0
+2020-04-28,Hospitalizations for suspicion of COVID-19,1084.0
+2020-04-29,Hospitalizations for suspicion of COVID-19,1156.0
+2020-04-30,Hospitalizations for suspicion of COVID-19,1204.0
+2020-05-01,Hospitalizations for suspicion of COVID-19,748.0
+2020-05-02,Hospitalizations for suspicion of COVID-19,886.0
+2020-05-03,Hospitalizations for suspicion of COVID-19,694.0
+2020-05-04,Hospitalizations for suspicion of COVID-19,1066.0
+2020-05-05,Hospitalizations for suspicion of COVID-19,886.0
+2020-05-06,Hospitalizations for suspicion of COVID-19,858.0
+2020-05-07,Hospitalizations for suspicion of COVID-19,886.0
+2020-05-08,Hospitalizations for suspicion of COVID-19,566.0
+2020-05-09,Hospitalizations for suspicion of COVID-19,750.0
+2020-05-10,Hospitalizations for suspicion of COVID-19,594.0
+2020-05-11,Hospitalizations for suspicion of COVID-19,810.0
+2020-05-12,Hospitalizations for suspicion of COVID-19,722.0
+2020-05-13,Hospitalizations for suspicion of COVID-19,646.0
+2020-05-14,Hospitalizations for suspicion of COVID-19,676.0
+2020-05-15,Hospitalizations for suspicion of COVID-19,680.0
+2020-05-16,Hospitalizations for suspicion of COVID-19,541.0
+2020-05-17,Hospitalizations for suspicion of COVID-19,470.0
+2020-05-18,Hospitalizations for suspicion of COVID-19,698.0
+2020-05-19,Hospitalizations for suspicion of COVID-19,590.0
+2020-05-20,Hospitalizations for suspicion of COVID-19,648.0
+2020-05-21,Hospitalizations for suspicion of COVID-19,468.0
+2020-05-22,Hospitalizations for suspicion of COVID-19,584.0
+2020-05-23,Hospitalizations for suspicion of COVID-19,438.0
+2020-05-24,Hospitalizations for suspicion of COVID-19,372.0
+2020-05-25,Hospitalizations for suspicion of COVID-19,494.0
+2020-05-26,Hospitalizations for suspicion of COVID-19,394.0
+2020-05-27,Hospitalizations for suspicion of COVID-19,364.0
+2020-05-28,Hospitalizations for suspicion of COVID-19,356.0
+2020-05-29,Hospitalizations for suspicion of COVID-19,350.0
+2020-05-30,Hospitalizations for suspicion of COVID-19,338.0
+2020-05-31,Hospitalizations for suspicion of COVID-19,326.0
+2020-06-01,Hospitalizations for suspicion of COVID-19,276.0
+2020-06-02,Hospitalizations for suspicion of COVID-19,344.0
+2020-06-03,Hospitalizations for suspicion of COVID-19,344.0
+2020-06-04,Hospitalizations for suspicion of COVID-19,342.0
+2020-06-05,Hospitalizations for suspicion of COVID-19,320.0
+2020-06-06,Hospitalizations for suspicion of COVID-19,230.0
+2020-06-07,Hospitalizations for suspicion of COVID-19,154.0
+2020-06-08,Hospitalizations for suspicion of COVID-19,236.0
+2020-06-09,Hospitalizations for suspicion of COVID-19,216.0
+2020-06-10,Hospitalizations for suspicion of COVID-19,190.0
+2020-06-11,Hospitalizations for suspicion of COVID-19,204.0
+2020-06-12,Hospitalizations for suspicion of COVID-19,182.0
+2020-06-13,Hospitalizations for suspicion of COVID-19,208.0
+2020-06-14,Hospitalizations for suspicion of COVID-19,178.0
+2020-06-15,Hospitalizations for suspicion of COVID-19,170.0
+2020-06-16,Hospitalizations for suspicion of COVID-19,144.0
+2020-06-17,Hospitalizations for suspicion of COVID-19,158.0
+2020-06-18,Hospitalizations for suspicion of COVID-19,166.0
+2020-06-19,Hospitalizations for suspicion of COVID-19,172.0
+2020-06-20,Hospitalizations for suspicion of COVID-19,194.0
+2020-06-21,Hospitalizations for suspicion of COVID-19,124.0
+2020-06-22,Hospitalizations for suspicion of COVID-19,152.0
+2020-06-23,Hospitalizations for suspicion of COVID-19,136.0
+2020-06-24,Hospitalizations for suspicion of COVID-19,200.0
+2020-06-25,Hospitalizations for suspicion of COVID-19,148.0
+2020-06-26,Hospitalizations for suspicion of COVID-19,162.0
+2020-06-27,Hospitalizations for suspicion of COVID-19,122.0
+2020-06-28,Hospitalizations for suspicion of COVID-19,138.0
+2020-06-29,Hospitalizations for suspicion of COVID-19,150.0
+2020-06-30,Hospitalizations for suspicion of COVID-19,158.0
+2020-07-01,Hospitalizations for suspicion of COVID-19,120.0
+2020-07-02,Hospitalizations for suspicion of COVID-19,140.0
+2020-07-03,Hospitalizations for suspicion of COVID-19,154.0
+2020-07-04,Hospitalizations for suspicion of COVID-19,120.0
+2020-07-05,Hospitalizations for suspicion of COVID-19,108.0
+2020-07-06,Hospitalizations for suspicion of COVID-19,140.0
+2020-07-07,Hospitalizations for suspicion of COVID-19,128.0
+2020-07-08,Hospitalizations for suspicion of COVID-19,114.0
+2020-07-09,Hospitalizations for suspicion of COVID-19,190.0
+2020-07-10,Hospitalizations for suspicion of COVID-19,160.0
+2020-07-11,Hospitalizations for suspicion of COVID-19,118.0
+2020-07-12,Hospitalizations for suspicion of COVID-19,128.0
+2020-07-13,Hospitalizations for suspicion of COVID-19,154.0
+2020-07-14,Hospitalizations for suspicion of COVID-19,112.0
+2020-07-15,Hospitalizations for suspicion of COVID-19,164.0
+2020-07-16,Hospitalizations for suspicion of COVID-19,152.0
+2020-07-17,Hospitalizations for suspicion of COVID-19,194.0
+2020-07-18,Hospitalizations for suspicion of COVID-19,134.0
+2020-07-19,Hospitalizations for suspicion of COVID-19,130.0
+2020-07-20,Hospitalizations for suspicion of COVID-19,188.0
+2020-07-21,Hospitalizations for suspicion of COVID-19,156.0
+2020-07-22,Hospitalizations for suspicion of COVID-19,194.0
+2020-07-23,Hospitalizations for suspicion of COVID-19,172.0
+2020-07-24,Hospitalizations for suspicion of COVID-19,190.0
+2020-07-25,Hospitalizations for suspicion of COVID-19,184.0
+2020-07-26,Hospitalizations for suspicion of COVID-19,148.0
+2020-07-27,Hospitalizations for suspicion of COVID-19,212.0
+2020-07-28,Hospitalizations for suspicion of COVID-19,168.0
+2020-07-29,Hospitalizations for suspicion of COVID-19,162.0
+2020-07-30,Hospitalizations for suspicion of COVID-19,178.0
+2020-07-31,Hospitalizations for suspicion of COVID-19,176.0
+2020-08-01,Hospitalizations for suspicion of COVID-19,182.0
+2020-08-02,Hospitalizations for suspicion of COVID-19,166.0
+2020-08-03,Hospitalizations for suspicion of COVID-19,168.0
+2020-08-04,Hospitalizations for suspicion of COVID-19,160.0
+2020-08-05,Hospitalizations for suspicion of COVID-19,194.0
+2020-08-06,Hospitalizations for suspicion of COVID-19,194.0
+2020-08-07,Hospitalizations for suspicion of COVID-19,226.0
+2020-08-08,Hospitalizations for suspicion of COVID-19,208.0
+2020-08-09,Hospitalizations for suspicion of COVID-19,176.0
+2020-08-10,Hospitalizations for suspicion of COVID-19,198.0
+2020-08-11,Hospitalizations for suspicion of COVID-19,202.0
+2020-08-12,Hospitalizations for suspicion of COVID-19,208.0
+2020-08-13,Hospitalizations for suspicion of COVID-19,228.0
+2020-08-14,Hospitalizations for suspicion of COVID-19,220.0
+2020-08-15,Hospitalizations for suspicion of COVID-19,244.0
+2020-08-16,Hospitalizations for suspicion of COVID-19,164.0
+2020-08-17,Hospitalizations for suspicion of COVID-19,152.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -685,8 +697,12 @@ Day,Category,value
 2020-08-09,Medical acts (SOS Médecin) for suspicion of COVID-19,581.0
 2020-08-10,Medical acts (SOS Médecin) for suspicion of COVID-19,542.0
 2020-08-11,Medical acts (SOS Médecin) for suspicion of COVID-19,544.0
-2020-08-12,Medical acts (SOS Médecin) for suspicion of COVID-19,540.0
+2020-08-12,Medical acts (SOS Médecin) for suspicion of COVID-19,538.0
 2020-08-13,Medical acts (SOS Médecin) for suspicion of COVID-19,500.0
+2020-08-14,Medical acts (SOS Médecin) for suspicion of COVID-19,541.0
+2020-08-15,Medical acts (SOS Médecin) for suspicion of COVID-19,749.0
+2020-08-16,Medical acts (SOS Médecin) for suspicion of COVID-19,700.0
+2020-08-17,Medical acts (SOS Médecin) for suspicion of COVID-19,768.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -856,9 +872,13 @@ Day,Category,value
 2020-08-08,Medical acts total (SOS Médecin),19190.0
 2020-08-09,Medical acts total (SOS Médecin),17262.0
 2020-08-10,Medical acts total (SOS Médecin),17689.0
-2020-08-11,Medical acts total (SOS Médecin),15907.0
-2020-08-12,Medical acts total (SOS Médecin),16305.0
-2020-08-13,Medical acts total (SOS Médecin),16166.0
+2020-08-11,Medical acts total (SOS Médecin),15903.0
+2020-08-12,Medical acts total (SOS Médecin),16237.0
+2020-08-13,Medical acts total (SOS Médecin),16441.0
+2020-08-14,Medical acts total (SOS Médecin),16983.0
+2020-08-15,Medical acts total (SOS Médecin),20850.0
+2020-08-16,Medical acts total (SOS Médecin),18595.0
+2020-08-17,Medical acts total (SOS Médecin),17430.0
 2020-02-24,New Urgent care attendances for suspicion of COVID-19,
 2020-02-25,New Urgent care attendances for suspicion of COVID-19,0.0
 2020-02-26,New Urgent care attendances for suspicion of COVID-19,-2.0
@@ -1026,11 +1046,15 @@ Day,Category,value
 2020-08-06,New Urgent care attendances for suspicion of COVID-19,28.0
 2020-08-07,New Urgent care attendances for suspicion of COVID-19,4.0
 2020-08-08,New Urgent care attendances for suspicion of COVID-19,14.0
-2020-08-09,New Urgent care attendances for suspicion of COVID-19,-108.0
-2020-08-10,New Urgent care attendances for suspicion of COVID-19,92.0
-2020-08-11,New Urgent care attendances for suspicion of COVID-19,-116.0
-2020-08-12,New Urgent care attendances for suspicion of COVID-19,50.0
-2020-08-13,New Urgent care attendances for suspicion of COVID-19,-70.0
+2020-08-09,New Urgent care attendances for suspicion of COVID-19,-106.0
+2020-08-10,New Urgent care attendances for suspicion of COVID-19,94.0
+2020-08-11,New Urgent care attendances for suspicion of COVID-19,-100.0
+2020-08-12,New Urgent care attendances for suspicion of COVID-19,42.0
+2020-08-13,New Urgent care attendances for suspicion of COVID-19,50.0
+2020-08-14,New Urgent care attendances for suspicion of COVID-19,112.0
+2020-08-15,New Urgent care attendances for suspicion of COVID-19,0.0
+2020-08-16,New Urgent care attendances for suspicion of COVID-19,-144.0
+2020-08-17,New Urgent care attendances for suspicion of COVID-19,-38.0
 2020-02-24,New Total urgent care attendances,
 2020-02-25,New Total urgent care attendances,-11787.0
 2020-02-26,New Total urgent care attendances,-1166.0
@@ -1184,197 +1208,205 @@ Day,Category,value
 2020-07-23,New Total urgent care attendances,1109.0
 2020-07-24,New Total urgent care attendances,1159.0
 2020-07-25,New Total urgent care attendances,-1161.0
-2020-07-26,New Total urgent care attendances,-2130.0
-2020-07-27,New Total urgent care attendances,9732.0
-2020-07-28,New Total urgent care attendances,-8550.0
-2020-07-29,New Total urgent care attendances,-270.0
+2020-07-26,New Total urgent care attendances,-2124.0
+2020-07-27,New Total urgent care attendances,9746.0
+2020-07-28,New Total urgent care attendances,-8454.0
+2020-07-29,New Total urgent care attendances,146.0
 2020-07-30,New Total urgent care attendances,38.0
-2020-07-31,New Total urgent care attendances,1429.0
-2020-08-01,New Total urgent care attendances,1907.0
+2020-07-31,New Total urgent care attendances,885.0
+2020-08-01,New Total urgent care attendances,1919.0
 2020-08-02,New Total urgent care attendances,-2725.0
 2020-08-03,New Total urgent care attendances,8989.0
 2020-08-04,New Total urgent care attendances,-8582.0
 2020-08-05,New Total urgent care attendances,180.0
 2020-08-06,New Total urgent care attendances,290.0
-2020-08-07,New Total urgent care attendances,-139.0
-2020-08-08,New Total urgent care attendances,-511.0
-2020-08-09,New Total urgent care attendances,-2557.0
-2020-08-10,New Total urgent care attendances,13089.0
-2020-08-11,New Total urgent care attendances,-7721.0
-2020-08-12,New Total urgent care attendances,-422.0
-2020-08-13,New Total urgent care attendances,-8549.0
-2020-02-24,New Hospitalizations,
-2020-02-25,New Hospitalizations,0.0
-2020-02-26,New Hospitalizations,0.0
-2020-02-27,New Hospitalizations,2.0
-2020-02-28,New Hospitalizations,10.0
-2020-02-29,New Hospitalizations,-2.0
-2020-03-01,New Hospitalizations,32.0
-2020-03-02,New Hospitalizations,59.0
-2020-03-03,New Hospitalizations,5.0
-2020-03-04,New Hospitalizations,6.0
-2020-03-05,New Hospitalizations,30.0
-2020-03-06,New Hospitalizations,104.0
-2020-03-07,New Hospitalizations,-10.0
-2020-03-08,New Hospitalizations,22.0
-2020-03-09,New Hospitalizations,80.0
-2020-03-10,New Hospitalizations,72.0
-2020-03-11,New Hospitalizations,50.0
-2020-03-12,New Hospitalizations,140.0
-2020-03-13,New Hospitalizations,236.0
-2020-03-14,New Hospitalizations,-82.0
-2020-03-15,New Hospitalizations,80.0
-2020-03-16,New Hospitalizations,320.0
-2020-03-17,New Hospitalizations,216.0
-2020-03-18,New Hospitalizations,60.0
-2020-03-19,New Hospitalizations,330.0
-2020-03-20,New Hospitalizations,410.0
-2020-03-21,New Hospitalizations,-90.0
-2020-03-22,New Hospitalizations,132.0
-2020-03-23,New Hospitalizations,1504.0
-2020-03-24,New Hospitalizations,-124.0
-2020-03-25,New Hospitalizations,108.0
-2020-03-26,New Hospitalizations,328.0
-2020-03-27,New Hospitalizations,902.0
-2020-03-28,New Hospitalizations,-936.0
-2020-03-29,New Hospitalizations,-708.0
-2020-03-30,New Hospitalizations,1326.0
-2020-03-31,New Hospitalizations,-736.0
-2020-04-01,New Hospitalizations,-438.0
-2020-04-02,New Hospitalizations,-8.0
-2020-04-03,New Hospitalizations,140.0
-2020-04-04,New Hospitalizations,-998.0
-2020-04-05,New Hospitalizations,-272.0
-2020-04-06,New Hospitalizations,950.0
-2020-04-07,New Hospitalizations,-500.0
-2020-04-08,New Hospitalizations,-284.0
-2020-04-09,New Hospitalizations,-4.0
-2020-04-10,New Hospitalizations,128.0
-2020-04-11,New Hospitalizations,-602.0
-2020-04-12,New Hospitalizations,-304.0
-2020-04-13,New Hospitalizations,-16.0
-2020-04-14,New Hospitalizations,348.0
-2020-04-15,New Hospitalizations,-362.0
-2020-04-16,New Hospitalizations,92.0
-2020-04-17,New Hospitalizations,136.0
-2020-04-18,New Hospitalizations,-504.0
-2020-04-19,New Hospitalizations,-196.0
-2020-04-20,New Hospitalizations,738.0
-2020-04-21,New Hospitalizations,-508.0
-2020-04-22,New Hospitalizations,-94.0
-2020-04-23,New Hospitalizations,-26.0
-2020-04-24,New Hospitalizations,-12.0
-2020-04-25,New Hospitalizations,-354.0
-2020-04-26,New Hospitalizations,-90.0
-2020-04-27,New Hospitalizations,326.0
-2020-04-28,New Hospitalizations,-78.0
-2020-04-29,New Hospitalizations,72.0
-2020-04-30,New Hospitalizations,48.0
-2020-05-01,New Hospitalizations,-456.0
-2020-05-02,New Hospitalizations,138.0
-2020-05-03,New Hospitalizations,-192.0
-2020-05-04,New Hospitalizations,372.0
-2020-05-05,New Hospitalizations,-180.0
-2020-05-06,New Hospitalizations,-28.0
-2020-05-07,New Hospitalizations,28.0
-2020-05-08,New Hospitalizations,-320.0
-2020-05-09,New Hospitalizations,184.0
-2020-05-10,New Hospitalizations,-156.0
-2020-05-11,New Hospitalizations,216.0
-2020-05-12,New Hospitalizations,-88.0
-2020-05-13,New Hospitalizations,-76.0
-2020-05-14,New Hospitalizations,30.0
-2020-05-15,New Hospitalizations,4.0
-2020-05-16,New Hospitalizations,-139.0
-2020-05-17,New Hospitalizations,-71.0
-2020-05-18,New Hospitalizations,228.0
-2020-05-19,New Hospitalizations,-108.0
-2020-05-20,New Hospitalizations,58.0
-2020-05-21,New Hospitalizations,-180.0
-2020-05-22,New Hospitalizations,116.0
-2020-05-23,New Hospitalizations,-146.0
-2020-05-24,New Hospitalizations,-66.0
-2020-05-25,New Hospitalizations,122.0
-2020-05-26,New Hospitalizations,-100.0
-2020-05-27,New Hospitalizations,-30.0
-2020-05-28,New Hospitalizations,-8.0
-2020-05-29,New Hospitalizations,-6.0
-2020-05-30,New Hospitalizations,-12.0
-2020-05-31,New Hospitalizations,-12.0
-2020-06-01,New Hospitalizations,-50.0
-2020-06-02,New Hospitalizations,68.0
-2020-06-03,New Hospitalizations,0.0
-2020-06-04,New Hospitalizations,-2.0
-2020-06-05,New Hospitalizations,-22.0
-2020-06-06,New Hospitalizations,-90.0
-2020-06-07,New Hospitalizations,-76.0
-2020-06-08,New Hospitalizations,82.0
-2020-06-09,New Hospitalizations,-20.0
-2020-06-10,New Hospitalizations,-26.0
-2020-06-11,New Hospitalizations,14.0
-2020-06-12,New Hospitalizations,-22.0
-2020-06-13,New Hospitalizations,26.0
-2020-06-14,New Hospitalizations,-30.0
-2020-06-15,New Hospitalizations,-8.0
-2020-06-16,New Hospitalizations,-26.0
-2020-06-17,New Hospitalizations,14.0
-2020-06-18,New Hospitalizations,8.0
-2020-06-19,New Hospitalizations,6.0
-2020-06-20,New Hospitalizations,22.0
-2020-06-21,New Hospitalizations,-70.0
-2020-06-22,New Hospitalizations,28.0
-2020-06-23,New Hospitalizations,-16.0
-2020-06-24,New Hospitalizations,64.0
-2020-06-25,New Hospitalizations,-52.0
-2020-06-26,New Hospitalizations,14.0
-2020-06-27,New Hospitalizations,-40.0
-2020-06-28,New Hospitalizations,16.0
-2020-06-29,New Hospitalizations,12.0
-2020-06-30,New Hospitalizations,8.0
-2020-07-01,New Hospitalizations,-38.0
-2020-07-02,New Hospitalizations,20.0
-2020-07-03,New Hospitalizations,14.0
-2020-07-04,New Hospitalizations,-34.0
-2020-07-05,New Hospitalizations,-12.0
-2020-07-06,New Hospitalizations,32.0
-2020-07-07,New Hospitalizations,-12.0
-2020-07-08,New Hospitalizations,-14.0
-2020-07-09,New Hospitalizations,76.0
-2020-07-10,New Hospitalizations,-30.0
-2020-07-11,New Hospitalizations,-42.0
-2020-07-12,New Hospitalizations,10.0
-2020-07-13,New Hospitalizations,26.0
-2020-07-14,New Hospitalizations,-42.0
-2020-07-15,New Hospitalizations,52.0
-2020-07-16,New Hospitalizations,-12.0
-2020-07-17,New Hospitalizations,42.0
-2020-07-18,New Hospitalizations,-60.0
-2020-07-19,New Hospitalizations,-4.0
-2020-07-20,New Hospitalizations,58.0
-2020-07-21,New Hospitalizations,-32.0
-2020-07-22,New Hospitalizations,38.0
-2020-07-23,New Hospitalizations,-22.0
-2020-07-24,New Hospitalizations,18.0
-2020-07-25,New Hospitalizations,-6.0
-2020-07-26,New Hospitalizations,-36.0
-2020-07-27,New Hospitalizations,64.0
-2020-07-28,New Hospitalizations,-44.0
-2020-07-29,New Hospitalizations,-6.0
-2020-07-30,New Hospitalizations,16.0
-2020-07-31,New Hospitalizations,-2.0
-2020-08-01,New Hospitalizations,6.0
-2020-08-02,New Hospitalizations,-16.0
-2020-08-03,New Hospitalizations,2.0
-2020-08-04,New Hospitalizations,-8.0
-2020-08-05,New Hospitalizations,34.0
-2020-08-06,New Hospitalizations,0.0
-2020-08-07,New Hospitalizations,32.0
-2020-08-08,New Hospitalizations,-18.0
-2020-08-09,New Hospitalizations,-32.0
-2020-08-10,New Hospitalizations,24.0
-2020-08-11,New Hospitalizations,-10.0
-2020-08-12,New Hospitalizations,2.0
-2020-08-13,New Hospitalizations,-32.0
+2020-08-07,New Total urgent care attendances,-233.0
+2020-08-08,New Total urgent care attendances,-267.0
+2020-08-09,New Total urgent care attendances,-2445.0
+2020-08-10,New Total urgent care attendances,13147.0
+2020-08-11,New Total urgent care attendances,-7271.0
+2020-08-12,New Total urgent care attendances,406.0
+2020-08-13,New Total urgent care attendances,1633.0
+2020-08-14,New Total urgent care attendances,2236.0
+2020-08-15,New Total urgent care attendances,-5416.0
+2020-08-16,New Total urgent care attendances,-3876.0
+2020-08-17,New Total urgent care attendances,-1941.0
+2020-02-24,New Hospitalizations for suspicion of COVID-19,
+2020-02-25,New Hospitalizations for suspicion of COVID-19,0.0
+2020-02-26,New Hospitalizations for suspicion of COVID-19,0.0
+2020-02-27,New Hospitalizations for suspicion of COVID-19,2.0
+2020-02-28,New Hospitalizations for suspicion of COVID-19,10.0
+2020-02-29,New Hospitalizations for suspicion of COVID-19,-2.0
+2020-03-01,New Hospitalizations for suspicion of COVID-19,32.0
+2020-03-02,New Hospitalizations for suspicion of COVID-19,59.0
+2020-03-03,New Hospitalizations for suspicion of COVID-19,5.0
+2020-03-04,New Hospitalizations for suspicion of COVID-19,6.0
+2020-03-05,New Hospitalizations for suspicion of COVID-19,30.0
+2020-03-06,New Hospitalizations for suspicion of COVID-19,104.0
+2020-03-07,New Hospitalizations for suspicion of COVID-19,-10.0
+2020-03-08,New Hospitalizations for suspicion of COVID-19,22.0
+2020-03-09,New Hospitalizations for suspicion of COVID-19,80.0
+2020-03-10,New Hospitalizations for suspicion of COVID-19,72.0
+2020-03-11,New Hospitalizations for suspicion of COVID-19,50.0
+2020-03-12,New Hospitalizations for suspicion of COVID-19,140.0
+2020-03-13,New Hospitalizations for suspicion of COVID-19,236.0
+2020-03-14,New Hospitalizations for suspicion of COVID-19,-82.0
+2020-03-15,New Hospitalizations for suspicion of COVID-19,80.0
+2020-03-16,New Hospitalizations for suspicion of COVID-19,320.0
+2020-03-17,New Hospitalizations for suspicion of COVID-19,216.0
+2020-03-18,New Hospitalizations for suspicion of COVID-19,60.0
+2020-03-19,New Hospitalizations for suspicion of COVID-19,330.0
+2020-03-20,New Hospitalizations for suspicion of COVID-19,410.0
+2020-03-21,New Hospitalizations for suspicion of COVID-19,-90.0
+2020-03-22,New Hospitalizations for suspicion of COVID-19,132.0
+2020-03-23,New Hospitalizations for suspicion of COVID-19,1504.0
+2020-03-24,New Hospitalizations for suspicion of COVID-19,-124.0
+2020-03-25,New Hospitalizations for suspicion of COVID-19,108.0
+2020-03-26,New Hospitalizations for suspicion of COVID-19,328.0
+2020-03-27,New Hospitalizations for suspicion of COVID-19,902.0
+2020-03-28,New Hospitalizations for suspicion of COVID-19,-936.0
+2020-03-29,New Hospitalizations for suspicion of COVID-19,-708.0
+2020-03-30,New Hospitalizations for suspicion of COVID-19,1326.0
+2020-03-31,New Hospitalizations for suspicion of COVID-19,-736.0
+2020-04-01,New Hospitalizations for suspicion of COVID-19,-438.0
+2020-04-02,New Hospitalizations for suspicion of COVID-19,-8.0
+2020-04-03,New Hospitalizations for suspicion of COVID-19,140.0
+2020-04-04,New Hospitalizations for suspicion of COVID-19,-998.0
+2020-04-05,New Hospitalizations for suspicion of COVID-19,-272.0
+2020-04-06,New Hospitalizations for suspicion of COVID-19,950.0
+2020-04-07,New Hospitalizations for suspicion of COVID-19,-500.0
+2020-04-08,New Hospitalizations for suspicion of COVID-19,-284.0
+2020-04-09,New Hospitalizations for suspicion of COVID-19,-4.0
+2020-04-10,New Hospitalizations for suspicion of COVID-19,128.0
+2020-04-11,New Hospitalizations for suspicion of COVID-19,-602.0
+2020-04-12,New Hospitalizations for suspicion of COVID-19,-304.0
+2020-04-13,New Hospitalizations for suspicion of COVID-19,-16.0
+2020-04-14,New Hospitalizations for suspicion of COVID-19,348.0
+2020-04-15,New Hospitalizations for suspicion of COVID-19,-362.0
+2020-04-16,New Hospitalizations for suspicion of COVID-19,92.0
+2020-04-17,New Hospitalizations for suspicion of COVID-19,136.0
+2020-04-18,New Hospitalizations for suspicion of COVID-19,-504.0
+2020-04-19,New Hospitalizations for suspicion of COVID-19,-196.0
+2020-04-20,New Hospitalizations for suspicion of COVID-19,738.0
+2020-04-21,New Hospitalizations for suspicion of COVID-19,-508.0
+2020-04-22,New Hospitalizations for suspicion of COVID-19,-94.0
+2020-04-23,New Hospitalizations for suspicion of COVID-19,-26.0
+2020-04-24,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-04-25,New Hospitalizations for suspicion of COVID-19,-354.0
+2020-04-26,New Hospitalizations for suspicion of COVID-19,-90.0
+2020-04-27,New Hospitalizations for suspicion of COVID-19,326.0
+2020-04-28,New Hospitalizations for suspicion of COVID-19,-78.0
+2020-04-29,New Hospitalizations for suspicion of COVID-19,72.0
+2020-04-30,New Hospitalizations for suspicion of COVID-19,48.0
+2020-05-01,New Hospitalizations for suspicion of COVID-19,-456.0
+2020-05-02,New Hospitalizations for suspicion of COVID-19,138.0
+2020-05-03,New Hospitalizations for suspicion of COVID-19,-192.0
+2020-05-04,New Hospitalizations for suspicion of COVID-19,372.0
+2020-05-05,New Hospitalizations for suspicion of COVID-19,-180.0
+2020-05-06,New Hospitalizations for suspicion of COVID-19,-28.0
+2020-05-07,New Hospitalizations for suspicion of COVID-19,28.0
+2020-05-08,New Hospitalizations for suspicion of COVID-19,-320.0
+2020-05-09,New Hospitalizations for suspicion of COVID-19,184.0
+2020-05-10,New Hospitalizations for suspicion of COVID-19,-156.0
+2020-05-11,New Hospitalizations for suspicion of COVID-19,216.0
+2020-05-12,New Hospitalizations for suspicion of COVID-19,-88.0
+2020-05-13,New Hospitalizations for suspicion of COVID-19,-76.0
+2020-05-14,New Hospitalizations for suspicion of COVID-19,30.0
+2020-05-15,New Hospitalizations for suspicion of COVID-19,4.0
+2020-05-16,New Hospitalizations for suspicion of COVID-19,-139.0
+2020-05-17,New Hospitalizations for suspicion of COVID-19,-71.0
+2020-05-18,New Hospitalizations for suspicion of COVID-19,228.0
+2020-05-19,New Hospitalizations for suspicion of COVID-19,-108.0
+2020-05-20,New Hospitalizations for suspicion of COVID-19,58.0
+2020-05-21,New Hospitalizations for suspicion of COVID-19,-180.0
+2020-05-22,New Hospitalizations for suspicion of COVID-19,116.0
+2020-05-23,New Hospitalizations for suspicion of COVID-19,-146.0
+2020-05-24,New Hospitalizations for suspicion of COVID-19,-66.0
+2020-05-25,New Hospitalizations for suspicion of COVID-19,122.0
+2020-05-26,New Hospitalizations for suspicion of COVID-19,-100.0
+2020-05-27,New Hospitalizations for suspicion of COVID-19,-30.0
+2020-05-28,New Hospitalizations for suspicion of COVID-19,-8.0
+2020-05-29,New Hospitalizations for suspicion of COVID-19,-6.0
+2020-05-30,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-05-31,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-06-01,New Hospitalizations for suspicion of COVID-19,-50.0
+2020-06-02,New Hospitalizations for suspicion of COVID-19,68.0
+2020-06-03,New Hospitalizations for suspicion of COVID-19,0.0
+2020-06-04,New Hospitalizations for suspicion of COVID-19,-2.0
+2020-06-05,New Hospitalizations for suspicion of COVID-19,-22.0
+2020-06-06,New Hospitalizations for suspicion of COVID-19,-90.0
+2020-06-07,New Hospitalizations for suspicion of COVID-19,-76.0
+2020-06-08,New Hospitalizations for suspicion of COVID-19,82.0
+2020-06-09,New Hospitalizations for suspicion of COVID-19,-20.0
+2020-06-10,New Hospitalizations for suspicion of COVID-19,-26.0
+2020-06-11,New Hospitalizations for suspicion of COVID-19,14.0
+2020-06-12,New Hospitalizations for suspicion of COVID-19,-22.0
+2020-06-13,New Hospitalizations for suspicion of COVID-19,26.0
+2020-06-14,New Hospitalizations for suspicion of COVID-19,-30.0
+2020-06-15,New Hospitalizations for suspicion of COVID-19,-8.0
+2020-06-16,New Hospitalizations for suspicion of COVID-19,-26.0
+2020-06-17,New Hospitalizations for suspicion of COVID-19,14.0
+2020-06-18,New Hospitalizations for suspicion of COVID-19,8.0
+2020-06-19,New Hospitalizations for suspicion of COVID-19,6.0
+2020-06-20,New Hospitalizations for suspicion of COVID-19,22.0
+2020-06-21,New Hospitalizations for suspicion of COVID-19,-70.0
+2020-06-22,New Hospitalizations for suspicion of COVID-19,28.0
+2020-06-23,New Hospitalizations for suspicion of COVID-19,-16.0
+2020-06-24,New Hospitalizations for suspicion of COVID-19,64.0
+2020-06-25,New Hospitalizations for suspicion of COVID-19,-52.0
+2020-06-26,New Hospitalizations for suspicion of COVID-19,14.0
+2020-06-27,New Hospitalizations for suspicion of COVID-19,-40.0
+2020-06-28,New Hospitalizations for suspicion of COVID-19,16.0
+2020-06-29,New Hospitalizations for suspicion of COVID-19,12.0
+2020-06-30,New Hospitalizations for suspicion of COVID-19,8.0
+2020-07-01,New Hospitalizations for suspicion of COVID-19,-38.0
+2020-07-02,New Hospitalizations for suspicion of COVID-19,20.0
+2020-07-03,New Hospitalizations for suspicion of COVID-19,14.0
+2020-07-04,New Hospitalizations for suspicion of COVID-19,-34.0
+2020-07-05,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-07-06,New Hospitalizations for suspicion of COVID-19,32.0
+2020-07-07,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-07-08,New Hospitalizations for suspicion of COVID-19,-14.0
+2020-07-09,New Hospitalizations for suspicion of COVID-19,76.0
+2020-07-10,New Hospitalizations for suspicion of COVID-19,-30.0
+2020-07-11,New Hospitalizations for suspicion of COVID-19,-42.0
+2020-07-12,New Hospitalizations for suspicion of COVID-19,10.0
+2020-07-13,New Hospitalizations for suspicion of COVID-19,26.0
+2020-07-14,New Hospitalizations for suspicion of COVID-19,-42.0
+2020-07-15,New Hospitalizations for suspicion of COVID-19,52.0
+2020-07-16,New Hospitalizations for suspicion of COVID-19,-12.0
+2020-07-17,New Hospitalizations for suspicion of COVID-19,42.0
+2020-07-18,New Hospitalizations for suspicion of COVID-19,-60.0
+2020-07-19,New Hospitalizations for suspicion of COVID-19,-4.0
+2020-07-20,New Hospitalizations for suspicion of COVID-19,58.0
+2020-07-21,New Hospitalizations for suspicion of COVID-19,-32.0
+2020-07-22,New Hospitalizations for suspicion of COVID-19,38.0
+2020-07-23,New Hospitalizations for suspicion of COVID-19,-22.0
+2020-07-24,New Hospitalizations for suspicion of COVID-19,18.0
+2020-07-25,New Hospitalizations for suspicion of COVID-19,-6.0
+2020-07-26,New Hospitalizations for suspicion of COVID-19,-36.0
+2020-07-27,New Hospitalizations for suspicion of COVID-19,64.0
+2020-07-28,New Hospitalizations for suspicion of COVID-19,-44.0
+2020-07-29,New Hospitalizations for suspicion of COVID-19,-6.0
+2020-07-30,New Hospitalizations for suspicion of COVID-19,16.0
+2020-07-31,New Hospitalizations for suspicion of COVID-19,-2.0
+2020-08-01,New Hospitalizations for suspicion of COVID-19,6.0
+2020-08-02,New Hospitalizations for suspicion of COVID-19,-16.0
+2020-08-03,New Hospitalizations for suspicion of COVID-19,2.0
+2020-08-04,New Hospitalizations for suspicion of COVID-19,-8.0
+2020-08-05,New Hospitalizations for suspicion of COVID-19,34.0
+2020-08-06,New Hospitalizations for suspicion of COVID-19,0.0
+2020-08-07,New Hospitalizations for suspicion of COVID-19,32.0
+2020-08-08,New Hospitalizations for suspicion of COVID-19,-18.0
+2020-08-09,New Hospitalizations for suspicion of COVID-19,-32.0
+2020-08-10,New Hospitalizations for suspicion of COVID-19,22.0
+2020-08-11,New Hospitalizations for suspicion of COVID-19,4.0
+2020-08-12,New Hospitalizations for suspicion of COVID-19,6.0
+2020-08-13,New Hospitalizations for suspicion of COVID-19,20.0
+2020-08-14,New Hospitalizations for suspicion of COVID-19,-8.0
+2020-08-15,New Hospitalizations for suspicion of COVID-19,24.0
+2020-08-16,New Hospitalizations for suspicion of COVID-19,-80.0
+2020-08-17,New Hospitalizations for suspicion of COVID-19,-12.0
 2020-02-24,New Medical acts (SOS Médecin) for suspicion of COVID-19,
 2020-02-25,New Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,New Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -1545,8 +1577,12 @@ Day,Category,value
 2020-08-09,New Medical acts (SOS Médecin) for suspicion of COVID-19,-23.0
 2020-08-10,New Medical acts (SOS Médecin) for suspicion of COVID-19,-39.0
 2020-08-11,New Medical acts (SOS Médecin) for suspicion of COVID-19,2.0
-2020-08-12,New Medical acts (SOS Médecin) for suspicion of COVID-19,-4.0
-2020-08-13,New Medical acts (SOS Médecin) for suspicion of COVID-19,-40.0
+2020-08-12,New Medical acts (SOS Médecin) for suspicion of COVID-19,-6.0
+2020-08-13,New Medical acts (SOS Médecin) for suspicion of COVID-19,-38.0
+2020-08-14,New Medical acts (SOS Médecin) for suspicion of COVID-19,41.0
+2020-08-15,New Medical acts (SOS Médecin) for suspicion of COVID-19,208.0
+2020-08-16,New Medical acts (SOS Médecin) for suspicion of COVID-19,-49.0
+2020-08-17,New Medical acts (SOS Médecin) for suspicion of COVID-19,68.0
 2020-02-24,New Medical acts total (SOS Médecin),
 2020-02-25,New Medical acts total (SOS Médecin),-2292.0
 2020-02-26,New Medical acts total (SOS Médecin),-198.0
@@ -1716,6 +1752,10 @@ Day,Category,value
 2020-08-08,New Medical acts total (SOS Médecin),3651.0
 2020-08-09,New Medical acts total (SOS Médecin),-1928.0
 2020-08-10,New Medical acts total (SOS Médecin),427.0
-2020-08-11,New Medical acts total (SOS Médecin),-1782.0
-2020-08-12,New Medical acts total (SOS Médecin),398.0
-2020-08-13,New Medical acts total (SOS Médecin),-139.0
+2020-08-11,New Medical acts total (SOS Médecin),-1786.0
+2020-08-12,New Medical acts total (SOS Médecin),334.0
+2020-08-13,New Medical acts total (SOS Médecin),204.0
+2020-08-14,New Medical acts total (SOS Médecin),542.0
+2020-08-15,New Medical acts total (SOS Médecin),3867.0
+2020-08-16,New Medical acts total (SOS Médecin),-2255.0
+2020-08-17,New Medical acts total (SOS Médecin),-1165.0

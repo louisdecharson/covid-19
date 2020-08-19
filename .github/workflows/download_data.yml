@@ -42,13 +42,13 @@ jobs:
         git config user.email "$GIT_OWNER_EMAIL"
         git config user.name "louisdecharson"
         if [[ `git diff --quiet` ]]; then
-          git add sursaud_corona.csv
+          echo 'unable to detech changes'
+        else
+          git add sursaud_corona.csv sursaud_corona_raw.csv
           git commit -am "AUTO - Add data.gouv.fr COVID data from SOS Medecins - $(date "+%Y-%m-%d %Hh%Mm")"
           git remote rm origin
           git remote add origin https://louisdecharson:${PUSH_TOKEN}@github.com/louisdecharson/covid-19.git
           git push origin HEAD:master
-        else
-          echo 'unable to detech changes'
         fi                
 
     # - uses: actions/upload-artifact@v2
