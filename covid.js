@@ -46,7 +46,8 @@ let data = [],
     mobilityData = [],
     mobilityDates = [],
     mobilityRegions = [],
-    mobilityTypes = [];
+    mobilityTypes = [],
+    hospitalizationData = [];
 
 
 // Continental Aggregates
@@ -167,7 +168,8 @@ let navigation = {
         }],
     "lines4": true,
     "hideLegendMobility": false,
-    "hideNav": true
+    "hideNav": true,
+    "hospitalizationVariables": ["Hospitalizations for suspicion of COVID-19"]
 };
 function loadPage(button, target) {
     $('.sidebar_show.active').each(function() {
@@ -533,16 +535,16 @@ function computeWorldData() {
 function get_dates(data) {
     list_dates = d3.set(data.map(d => d['date'])).values();
 }
-function filterByDate(data,categoryName=false,categoryList=false) {
+function filterByDate(data, categoryName=false, categoryList=false, dateVariable = "date") {
     let a =  d3.timeParse('%d-%b-%y')(navigation.startDate),
         b = d3.timeParse('%d-%b-%y')(navigation.endDate);
     if (categoryName) {
-        return data.filter(d => d['date'] >= a &&
-                    d['date'] <= b &&
+        return data.filter(d => d[dateVariable] >= a &&
+                    d[dateVariable] <= b &&
                     categoryList.indexOf(d[categoryName]) > -1);
     } else {
-        return data.filter(d => d['date'] >= a &&
-                           d['date'] <= b);
+        return data.filter(d => d[dateVariable] >= a &&
+                           d[dateVariable] <= b);
     }
 }
 /**
@@ -823,15 +825,10 @@ function addDatestoSelect() {
         html_start_dates += '<option ' + (d === navigation.startDate ? 'selected' : '') + '>' + d + '</option>';
         html_end_dates += '<option ' + (d === navigation.endDate ? 'selected' : '') + '>' + d + '</option>';
     }
-    $('#startDate').html(html_start_dates);
-    $('#endDate').html(html_end_dates);
-    $('#startDate2').html(html_start_dates);
-    $('#endDate2').html(html_end_dates);
-    $('#startDate3').html(html_start_dates);
-    $('#endDate3').html(html_end_dates);
-    $('#startDate4').html(html_start_dates);
-    $('#endDate4').html(html_end_dates);
-
+    for (let i=0; i < 6; i++) {
+        $(`#startDate${i}`).html(html_start_dates);
+        $(`#endDate${i}`).html(html_end_dates);
+    }
 }
 function download_data(id) {
     switch (id) {
@@ -854,6 +851,15 @@ function download_data(id) {
         testingGraph.downloadData();
         break;
     }
+}
+function buildSelectHospitalizationVariables() {
+    let hospitalizationVariables = Grapher.unique(hospitalizationData.map(d => d['Category']));
+    let html = "";
+    for (const v of hospitalizationVariables) {
+        let selected = navigation.hospitalizationVariables.indexOf(v) > -1 ? 'selected' : '';
+        html += `<option ${selected}>${v}</option>`;
+    }
+    $('#hospitalization_variables').html(html);
 }
 // ========================================================================== //
 
@@ -1002,6 +1008,18 @@ let mobilityGraph = new CovidGraph('mobility_graph',
                                            "show": !navigation.hideLegendMobility
                                        },
                                    });
+let hospitalizationGraph = new CovidGraph('hospitalization_graph',
+                                 {
+                                     "x": {
+                                         "name": "date",
+                                         "tickFormat": d3.timeFormat("%d/%m/%y"),
+                                     },
+                                     "y": {
+                                         "name": 'value',
+                                         "parse": d => parseFloat(d)
+                                     },                                        
+                                     "category": {"name": "Category"},
+                                 });
 // ========================================================================== //
 
 // LOAD DATA
@@ -1044,10 +1062,15 @@ d3.csv('https://raw.githubusercontent.com/ActiveConclusion/COVID19_mobility/mast
     .catch(e => console.log(e))
     .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
+d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/sursaud_corona.csv')
+    .then(d => hospitalizationData = d.map(
+        function(e) {e['date'] = d3.timeParse('%Y-%m-%d')(e['Day']); return e;}))
+    .catch(e => console.log(e))
+    .finally(_ => nb_process_ended += 1);
 
 
 let timer = setInterval(() => {
-    if (nb_process_ended === cases_categories.length + 3) {
+    if (nb_process_ended === cases_categories.length + 4) {
         console.timeEnd("DownloadData");
         clearInterval(timer);
 
@@ -1145,6 +1168,14 @@ let timer = setInterval(() => {
 
         console.timeEnd("Loading");
         $('#loading_screen').hide();
+
+        // SOS Med data
+        buildSelectHospitalizationVariables();
+        hospitalizationGraph.draw(
+            {"data": filterByDate(hospitalizationData,
+                                  'Category',
+                                  navigation.hospitalizationVariables)
+            });
     }
 }, 100);
 
@@ -1338,7 +1369,7 @@ $('#testingYAxis').change(function(){
         "data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
         "y": {
             "name": navigation.testing_yVar,
-            "parse": d => +d,
+            "parse": d => parseFloat(d),
             "tickFormat": d3.format(navigation.testing_yVar == 'Cumulative cases per test' ? '.2%' : '.3s')
         }
     });;
@@ -1379,6 +1410,38 @@ $('#hideLegendMobility').change(function(){
         "show": !navigation.hideLegendMobility
     }});
     action([navigation.page,'hideLegendMobility',navigation.hideLegendMobility].join('_').replace(/ /g,'_'));
+});
+
+// Hospitalization
+$('#hospitalization_variables').change(function(){
+    updateNavigation({
+        "hospitalizationVariables":$('#hospitalization_variables option:selected')
+            .map((i,e) => e.text)
+            .toArray()
+    });
+    hospitalizationGraph.draw(
+        {"data": filterByDate(hospitalizationData,
+                              'Category',
+                              navigation.hospitalizationVariables)
+        });
+});
+$('#startDate5').change(function() {
+    updateNavigation({"startDate": $('#startDate5 option:selected').text()});
+    hospitalizationGraph.draw(
+        {"data": filterByDate(hospitalizationData,
+                              'Category',
+                              navigation.hospitalizationVariables)
+        }
+    );
+});
+$('#endDate5').change(function() {
+    updateNavigation({"endDate": $('#endDate5 option:selected').text()});
+    hospitalizationGraph.draw(
+        {"data": filterByDate(hospitalizationData,
+                              'Category',
+                              navigation.hospitalizationVariables)
+        }
+    );
 });
 
 // Mobile menu

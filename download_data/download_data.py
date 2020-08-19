@@ -20,7 +20,7 @@ COLUMNS_MAPPING = {
     # "sursaud_cl_age_corona": "Age group",
     "nbre_pass_corona": "Urgent care attendances for suspicion of COVID-19",
     "nbre_pass_tot": "Total urgent care attendances",
-    "nbre_hospit_corona": "Hospitalizations",
+    "nbre_hospit_corona": "Hospitalizations for suspicion of COVID-19",
     "nbre_acte_corona": "Medical acts (SOS Médecin) for suspicion of COVID-19",
     "nbre_acte_tot": "Medical acts total (SOS Médecin)"
 }
