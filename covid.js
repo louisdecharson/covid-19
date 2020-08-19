@@ -27,10 +27,21 @@ for (const v of cssVariables) {
 const colors_countries = ["#1abb9b","#3497da","#9a59b5","#f0c30f","#e57e22","#e64c3c","#7f8b8c","#CC6666", "#9999CC", "#66CC99"];
 const colors = ['#FFC107','#ff073a','#2ecb71'];
 
+// Data
+let _data = {
+    "cases": [],
+    "cases_raw": [],
+    "cases_selected": [],
+    "testing": [],
+    "population": [],
+    "mobility": [],
+    "hospitalization": [],
+};
+
+
+
 // Initiate variables
-let data = [],
-    data_by_country = [],
-    pivot_columns = ['Province/State','Country/Region','Lat','Long'],
+let pivot_columns = ['Province/State','Country/Region','Lat','Long'],
     // cases_categories = ['Confirmed','Deaths'],
     cases_categories = ['Confirmed','Deaths','Recovered'],
     rates_categories = ['Deaths rate'],
@@ -39,15 +50,9 @@ let data = [],
     testing_countries = [],
     countries = [],
     list_dates = [],
-    population_data = [],
-    testing_data = [],
-    data_country,
-    data_graph = {},
-    mobilityData = [],
     mobilityDates = [],
     mobilityRegions = [],
-    mobilityTypes = [],
-    hospitalizationData = [];
+    mobilityTypes = [];
 
 
 // Continental Aggregates
@@ -169,7 +174,10 @@ let navigation = {
     "lines4": true,
     "hideLegendMobility": false,
     "hideNav": true,
-    "hospitalizationVariables": ["Hospitalizations for suspicion of COVID-19"]
+    "hospitalizationVariables": ["Hospitalizations for suspicion of COVID-19"],
+    "hideLegendHospitalization": false,
+    "lines5": true,
+    "maHospitalization": 1
 };
 function loadPage(button, target) {
     $('.sidebar_show.active').each(function() {
@@ -235,6 +243,11 @@ $('#movingAverageFTValue').html(navigation.ft_ma);
 $('#barSwitch4').prop('checked', !navigation.lines4);
 $('#hideLegendMobility').prop('checked', navigation.hideLegendMobility);
 
+// Hospitalization
+$('#barSwitch5').prop('checked', !navigation.lines5);
+$('#hideLegendHospitalization').prop('checked', navigation.hideLegendHospitalization);
+$('#movingAverageHospitalizationRange').prop('value', navigation.maHospitalization);
+$('#movingAverageHospitalizationValue').html(navigation.maHospitalization);
 
 
 // ========================================================================== //
@@ -307,7 +320,7 @@ function parseData(wide_data, pivot_columns, category) {
             long_data.push(long_element);
         }
     }
-    list_dates = d3.set(data.map(d => d['date'])).values().map(d => d3.timeFormat("%d-%b-%y")(new Date(d)));
+    list_dates = d3.set(long_data.map(d => d['date'])).values().map(d => d3.timeFormat("%d-%b-%y")(new Date(d)));
     navigation.startDate = navigation.startDate || list_dates[0];
     navigation.endDate = list_dates.slice(-1)[0];
     return long_data.sort(function(a,b) {return a.date - b.date;});
@@ -336,7 +349,7 @@ function parseMobilityData(wide_data, pivot_columns) {
 }
 
 function parseTestingData(data) {
-    let confirmed_cases = d3.nest().key(d => d.key).map(data_by_country
+    let confirmed_cases = d3.nest().key(d => d.key).map(_data.cases
                                                         .filter(d => d['category'] === 'Confirmed'));
     for (const el of data) {
         el['Country/Region'] = map_testing_country(el['Entity'].split(' - ')[0]);
@@ -401,7 +414,7 @@ function addRates(data) {
             }
             return [...new_case, ...growth_rate];
         })
-        .entries(data_by_country)
+        .entries(_data.cases)
         .map(g => g.value).flat();
     
     
@@ -442,7 +455,7 @@ function groupBy(array, key, colSum = [], colCount = [], colFirst = []){
         });
 }
 function computeAggregate(name_aggregate, fltr = false,
-                          data = data_by_country,
+                          data = _data.cases,
                           colSum = ['field_value','Population'],
                           colFirst = ['field_id','date', 'category']) {
     return d3.nest()
@@ -485,15 +498,15 @@ function get_list_countries(data) {
     $('#ft_add_country').html(ft_countries_html);
 }
 function load_summary_data() {
-    let last_date = data.map(d => d['date']).slice(-1)[0];
+    let last_date = _data.cases_raw.map(d => d['date']).slice(-1)[0];
     for (const category of cases_categories) {
-        let data_category = data_country.filter(f => f['category'] === category),
+        let data_category = _data.cases_selected.filter(f => f['category'] === category),
             last_value = d3.format((navigation.percPopulation ? '%' : ','))(data_category.slice(-1)[0][(navigation.percPopulation ? 'field_value_pop' : 'field_value')]);
         $(`#nb_${category.toLowerCase()}`).html(last_value);
 
         // Add this data to DOM
         if (category === 'Deaths' || category === 'Recovered') {
-            let last_value_rate = ` (${d3.format('.2%')(data_country.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
+            let last_value_rate = ` (${d3.format('.2%')(_data.cases_selected.filter(f => f['category'] === category + ' rate').slice(-1)[0]['field_value'])}) `;
             $(`#nb_${category.toLowerCase()}_rate`).html(last_value_rate);
         } 
         // sparkline(`#sparkline_${category.toLowerCase()}`, data_category, 'field_id', (navigation.percPopulation ? 'field_value_pop' : 'field_value'), navigation.logScale);
@@ -502,8 +515,8 @@ function load_summary_data() {
 
 }
 function addPopulationData() {
-    let popData = d3.nest().key(d => d['Country/Region']).map(population_data);
-    data_by_country = d3.nest()
+    let popData = d3.nest().key(d => d['Country/Region']).map(_data.population);
+    _data.cases = d3.nest()
         .key(d => d['Country/Region'])
         .rollup(function(a) {
             let popDataEl = popData.get(a[0]['Country/Region']);
@@ -515,11 +528,11 @@ function addPopulationData() {
             }
             return a;
         })
-        .entries(data_by_country)
+        .entries(_data.cases)
         .map(d => d.value).flat();
 }
 function computeWorldData() {
-    return [...data_by_country, ...computeAggregate('World'),
+    return [..._data.cases, ...computeAggregate('World'),
             ...computeAggregate('European Union', (d => EU_countries.indexOf(d['Country/Region']) > -1)),
             ...computeAggregate('Europe', (d => Europe_countries.indexOf(d['Country/Region']) > -1)),
             ...computeAggregate('Asia', (d => Asia_countries.indexOf(d['Country/Region']) > -1)),
@@ -614,7 +627,7 @@ function build_ft_countries_select() {
 function build_ft_categories_select() {
     let ft_categories_html = '',
         ft_categories_threshold_html = '',
-        categories = d3.set(data_by_country.map(d => d['category'])).values().filter(d => !d.includes('rate'));
+        categories = d3.set(_data.cases.map(d => d['category'])).values().filter(d => !d.includes('rate'));
     for (const category of categories) {
         let ft_category_select = navigation.ft_category === category ? 'selected' : '',
             ft_category_threshold_select = navigation.ft_thresholdCategory === category ? 'selected' : '';
@@ -640,7 +653,7 @@ function build_testing_yaxis() {
 }
 function build_elements_compare() {
     let html = '',
-        categories = d3.set(data_by_country.map(d => d['category'])).values();
+        categories = d3.set(_data.cases.map(d => d['category'])).values();
     for (const [index, element] of navigation.elements.entries()) {
         element.id = (parseInt(Math.random()*1e16)).toString();
         html += `<div class="col-xl-4 col-md-6 col-12 mt-2 mb-2"> <div class="card element" style="border-color:${colors_countries[index]}"><svg style="position:absolute;top:0.2rem;right:0.1rem;" class="svg-icon delete-element" onclick=delete_element('${element.id}') viewBox="0 0 20 20" data-toggle="tooltip" data-placement="top" title="delete plot"><path d="M10.185,1.417c-4.741,0-8.583,3.842-8.583,8.583c0,4.74,3.842,8.582,8.583,8.582S18.768,14.74,18.768,10C18.768,5.259,14.926,1.417,10.185,1.417 M10.185,17.68c-4.235,0-7.679-3.445-7.679-7.68c0-4.235,3.444-7.679,7.679-7.679S17.864,5.765,17.864,10C17.864,14.234,14.42,17.68,10.185,17.68 M10.824,10l2.842-2.844c0.178-0.176,0.178-0.46,0-0.637c-0.177-0.178-0.461-0.178-0.637,0l-2.844,2.841L7.341,6.52c-0.176-0.178-0.46-0.178-0.637,0c-0.178,0.176-0.178,0.461,0,0.637L9.546,10l-2.841,2.844c-0.178,0.176-0.178,0.461,0,0.637c0.178,0.178,0.459,0.178,0.637,0l2.844-2.841l2.844,2.841c0.178,0.178,0.459,0.178,0.637,0c0.178-0.176,0.178-0.461,0-0.637L10.824,10z"></path></svg><div class="card-title country_element mb-1"><select onchange="update_element(this,'Country/Region')" class="select-country-element" element_id="${element.id}">`;
@@ -714,7 +727,7 @@ function build_testing_countries() {
     $('#testing_countries_container').html(html);
 }
 function update_ft_threshold() {
-    let max_value = Math.min(d3.max(data_by_country.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1) &&
+    let max_value = Math.min(d3.max(_data.cases.filter(d => (navigation.ft_countries.indexOf(d['Country/Region']) > -1) &&
                                                            (d['category'] === 'Deaths'))
                                     .map(d => d['field_value'])),1000);
     $('#thresholdRange').attr('max', max_value.toString());
@@ -724,7 +737,7 @@ function remove_ft_country(index) {
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
     build_ft_countries_select();
-    ftGraph.draw({"data": ftData(data_by_country),
+    ftGraph.draw({"data": ftData(_data.cases),
                   "categories":navigation.ft_countries});
 }
 function remove_testing_country(index) {
@@ -732,7 +745,7 @@ function remove_testing_country(index) {
     updateNavigation({"testing_countries": navigation.testing_countries});
     build_testing_countries();
     build_testing_countries_select();
-    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
+    plots['testing_graph'].draw({"data": filterByDate(_data.testing, 'Entity', navigation.testing_countries),
                        "categories": navigation.testing_countries});
 }
 function update_offset(el, value) {
@@ -743,7 +756,7 @@ function update_offset(el, value) {
             $(`#offset_${element_id}`).html(it.offset);
         }
     });
-    compareGraph.draw({"data": getCompareData(data_by_country),
+    compareGraph.draw({"data": getCompareData(_data.cases),
                        "categories": get_list_elements()});
 }
 function update_element(el, property) {
@@ -754,7 +767,7 @@ function update_element(el, property) {
         }
     });
     updateNavigation({"elements": navigation.elements});
-    compareGraph.draw({"data":getCompareData(data_by_country),
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases),
                        "categories": get_list_elements()});
 }
 function update_mobility_element(el, property) {
@@ -765,7 +778,7 @@ function update_mobility_element(el, property) {
         }
     });
     updateNavigation({"mobility_elements": navigation.mobility_elements});
-    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+    plots['mobility_graph'].draw({"data": filterByDate(_data.mobility,'key',
                                              navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
                         "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
 
@@ -785,14 +798,14 @@ function add_element() {
     last_el['Country/Region'] = navigation.elements.length > 0 ? countries[Math.min(countries.indexOf(last_el['Country/Region'])+1,countries.length-1)] : 'France';
     updateNavigation({"elements": navigation.elements.concat(last_el)});
     build_elements_compare();
-    compareGraph.draw({"data":getCompareData(data_by_country),
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases),
                        "categories": get_list_elements()});
 }
 function delete_element(id) {
     navigation.elements = navigation.elements.filter(d => d.id != id);
     updateNavigation({"elements": navigation.elements});
     build_elements_compare();
-    compareGraph.draw({"data":getCompareData(data_by_country),
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases),
                        "categories": get_list_elements()});
 }
 
@@ -805,14 +818,14 @@ function add_mobility_element() {
     last_el['region'] = navigation.mobility_elements.length > 0 ? mobilityRegions[Math.min(mobilityRegions.indexOf(last_el['region'])+1,mobilityRegions.length-1)] : 'Paris';
 
     build_elements_mobility();
-    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+    plots['mobility_graph'].draw({"data": filterByDate(_data.mobility,'key',
                                              navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
                         "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
 }
 function delete_mobility_element(id) {
     updateNavigation({"mobility_elements": navigation.mobility_elements.filter(d => d.id != id)});
     build_elements_mobility();
-    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+    plots['mobility_graph'].draw({"data": filterByDate(_data.mobility,'key',
                                              navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
                         "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});    
 }
@@ -825,9 +838,38 @@ function addDatestoSelect() {
         html_start_dates += '<option ' + (d === navigation.startDate ? 'selected' : '') + '>' + d + '</option>';
         html_end_dates += '<option ' + (d === navigation.endDate ? 'selected' : '') + '>' + d + '</option>';
     }
-    for (let i=0; i < 6; i++) {
-        $(`#startDate${i}`).html(html_start_dates);
-        $(`#endDate${i}`).html(html_end_dates);
+    $('.select-dates[start]').each((i,e) => $(e).html(html_start_dates));
+    $('.select-dates[end]').each((i,e) => $(e).html(html_end_dates));
+}
+function updateDatesPlot(target) {
+    switch (target) {
+    case 'country_graph':
+        plots['country_graph'].draw({"data": filterByDate(_data.cases_selected, 'category', cases_categories)});
+        plots['country_graph_rates'].draw({"data": filterByDate(_data.cases_selected, 'category', rates_categories)});
+        plots['country_graph_new_cases'].draw({"data": filterByDate(_data.cases_selected, 'category', new_cases_categories)});
+        break;
+    case 'compare_graph':
+        plots['compare_graph'].draw({"data":getCompareData(_data.cases)});
+        break;
+    case 'testing_graph':
+        plots['testing_graph'].draw({"data": filterByDate(_data.testing, 'Entity', navigation.testing_countries)});
+        break;
+    case 'mobility_graph':
+        plots['mobility_graph'].draw(
+            {"data": filterByDate(_data.mobility,'key',
+                                  navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`))
+            });
+        break;
+    case 'hospitalization_graph':
+        plots['hospitalization_graph'].draw(
+            {"data": ma_json(filterByDate(_data.hospitalization,
+                                          'Category',
+                                          navigation.hospitalizationVariables),
+                             ["value"],
+                             navigation.maHospitalization
+                            )
+            }
+        );
     }
 }
 function download_data(id) {
@@ -836,24 +878,24 @@ function download_data(id) {
         countryGraph.downloadData();
         break;
     case 'country_graph_rates':
-        countryGraphRates.downloadData();
+        plots['country_graph_rates'].downloadData();
         break;
     case 'country_graph_new_cases':
-        countryGraphNewCases.downloadData();
+        plots['country_graph_new_cases'].downloadData();
         break;
     case 'compare_graph':
-        compareGraph.downloadData();
+        plots['compare_graph'].downloadData();
         break;
     case 'ft_graph':
-        ftGraph.downloadData();
+        plots['ft_graph'].downloadData();
         break;
     case 'testing_graph':
-        testingGraph.downloadData();
+        plots['testing_graph'].downloadData();
         break;
     }
 }
 function buildSelectHospitalizationVariables() {
-    let hospitalizationVariables = Grapher.unique(hospitalizationData.map(d => d['Category']));
+    let hospitalizationVariables = Grapher.unique(_data.hospitalization.map(d => d['Category']));
     let html = "";
     for (const v of hospitalizationVariables) {
         let selected = navigation.hospitalizationVariables.indexOf(v) > -1 ? 'selected' : '';
@@ -894,43 +936,41 @@ class CovidGraph extends Grapher {
     }
 }
 // ========================================================================== //
-
-
-let countryGraph = new CovidGraph('country_graph',
-                                  {
-                                      "y": {
-                                          "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
-                                          "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
-                                          "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
-                                      },
-                                      "categories": cases_categories,
-                                      "type": navigation.lines ? "line" : "bar",
-                                      "advanced": {
-                                          "additionalColumnsInData": ['Country/Region','field_value_pop','field_value']
-                                      },
-                                      "style": {
-                                          "colors": colors,
-                                          "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                      }
-                                  });
-
-let countryGraphRates = new CovidGraph('country_graph_rates',
-                                       {
-                                           "y": {
-                                               "tickFormat": Grapher.formatTick(false, true)
-                                           },
-                                           "category": {
-                                               "name": "category"
-                                           },
-                                           "style": {
-                                               "colors": colors,
-                                               "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
-                                           },
-                                           "categories": rates_categories,
-                                           "advanced": {
-                                               "additionalColumnsInData": ['Country/Region']
-                                           }});
-let countryGraphNewCases = new CovidGraph('country_graph_new_cases',
+let plots = {};
+plots['country_graph'] = new CovidGraph('country_graph',
+                                        {
+                                            "y": {
+                                                "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
+                                                "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
+                                                "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
+                                            },
+                                            "categories": cases_categories,
+                                            "type": navigation.lines ? "line" : "bar",
+                                            "advanced": {
+                                                "additionalColumnsInData": ['Country/Region','field_value_pop','field_value']
+                                            },
+                                            "style": {
+                                                "colors": colors,
+                                                "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                            }
+                                        });
+plots['country_graph_rates'] = new CovidGraph('country_graph_rates',
+                                              {
+                                                  "y": {
+                                                      "tickFormat": Grapher.formatTick(false, true)
+                                                  },
+                                                  "category": {
+                                                      "name": "category"
+                                                  },
+                                                  "style": {
+                                                      "colors": colors,
+                                                      "tooltipColor": () => (navigation.darkMode ? '#dadada' : '#181818')
+                                                  },
+                                                  "categories": rates_categories,
+                                                  "advanced": {
+                                                      "additionalColumnsInData": ['Country/Region']
+                                                  }});
+plots['country_graph_new_cases'] = new CovidGraph('country_graph_new_cases',
                                           {
                                               "y": {
                                                   "tickFormat": Grapher.formatTick(false, false)
@@ -945,7 +985,8 @@ let countryGraphNewCases = new CovidGraph('country_graph_new_cases',
                                                   "additionalColumnsInData": ['Country/Region']
                                               }
                                           });
-let compareGraph = new CovidGraph('compare_graph',
+// compareGraph
+plots['compare_graph'] = new CovidGraph('compare_graph',
                                {
                                    "y": {
                                        "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
@@ -961,7 +1002,7 @@ let compareGraph = new CovidGraph('compare_graph',
                                        "additionalColumnsInData": ['field_value','field_value_pop']
                                    }
                                });
-let ftGraph = new Grapher('ft_graph',
+plots['ft_graph'] = new Grapher('ft_graph',
                           {
                               "x": {
                                   "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
@@ -987,18 +1028,18 @@ let ftGraph = new Grapher('ft_graph',
                           graphWidth,
                           graphHeight);
 
-let testingGraph = new CovidGraph('testing_graph',
+plots['testing_graph'] = new CovidGraph('testing_graph',
                                   {
                                       "y": {
                                           "name": navigation.testing_yVar,
-                                          "parse": d => +d,
+                                          "parse": d => parseFloat(d),
                                           "tickFormat": d3.format(navigation.testing_yVar == 'cumulative cases per test' ? '.2%' : '.3s')
                                       },
                                       "category": {
                                           "name": "Entity"
                                       },
                                   });
-let mobilityGraph = new CovidGraph('mobility_graph',
+plots['mobility_graph'] = new CovidGraph('mobility_graph',
                                    {
                                        "category": {
                                            "name": "key"
@@ -1008,7 +1049,7 @@ let mobilityGraph = new CovidGraph('mobility_graph',
                                            "show": !navigation.hideLegendMobility
                                        },
                                    });
-let hospitalizationGraph = new CovidGraph('hospitalization_graph',
+plots['hospitalization_graph'] = new CovidGraph('hospitalization_graph',
                                  {
                                      "x": {
                                          "name": "date",
@@ -1019,6 +1060,10 @@ let hospitalizationGraph = new CovidGraph('hospitalization_graph',
                                          "parse": d => parseFloat(d)
                                      },                                        
                                      "category": {"name": "Category"},
+                                     "type": navigation.lines5 ? "line" : "bar",
+                                     "legend": {
+                                         "show": !navigation.hideLegendHospitalization
+                                     }
                                  });
 // ========================================================================== //
 
@@ -1039,7 +1084,7 @@ for (const element of cases_categories) {
     d3.csv(data_link)
         .then(function(d) {
             console.log(`Loaded data for ${element}. Length: ${d.length}`);
-            data = data.concat(parseData(d, pivot_columns, element));
+            _data.cases_raw = _data.cases_raw.concat(parseData(d, pivot_columns, element));
             updateProgressBar(10);
         })
         .catch(function(error) {
@@ -1048,23 +1093,23 @@ for (const element of cases_categories) {
         .finally(_ => nb_process_ended += 1);
 }
 d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/population_data.csv')
-    .then(d => population_data = d)
+    .then(d => _data.population = d)
     .catch(e => console.log(e))
     .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
 d3.csv('https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/testing/covid-testing-all-observations.csv')
-    .then(d => testing_data = d)
+    .then(d => _data.testing = d)
     .catch(e => console.log(e))
     .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
 d3.csv('https://raw.githubusercontent.com/ActiveConclusion/COVID19_mobility/master/apple_reports/applemobilitytrends.csv')
-    .then(d => mobilityData = parseMobilityData(d, ['geo_type','region','transportation_type','alternative_name']))
+    .then(d => _data.mobility = parseMobilityData(d, ['geo_type','region','transportation_type','alternative_name']))
     .catch(e => console.log(e))
     .finally(_ => {nb_process_ended += 1; updateProgressBar(10);});
 
 d3.csv('https://raw.githubusercontent.com/louisdecharson/covid-19/master/sursaud_corona.csv')
-    .then(d => hospitalizationData = d.map(
-        function(e) {e['date'] = d3.timeParse('%Y-%m-%d')(e['Day']); return e;}))
+    .then(d => _data.hospitalization = d.map(
+        function(e) {e['date'] = d3.timeParse('%Y-%m-%d')(e['Day']); e['value'] = parseFloat(e['value']); return e;}))
     .catch(e => console.log(e))
     .finally(_ => nb_process_ended += 1);
 
@@ -1081,8 +1126,11 @@ let timer = setInterval(() => {
         
         // Group By Data
         console.time("groupBy");
-        data_by_country = groupBy(data,'key',['field_value'],[],
-                                  ['field_id','Country/Region','date','category','key_world']);
+        _data.cases = groupBy(_data.cases_raw,
+                             'key',
+                             ['field_value'],
+                             [],
+                             ['field_id','Country/Region','date','category','key_world']);
         console.timeEnd("groupBy");
         updateProgressBar(5);
         
@@ -1093,34 +1141,34 @@ let timer = setInterval(() => {
 
         // Compute data for the world
         console.time("computeWorldData");
-        data_by_country = computeWorldData();
+        _data.cases = computeWorldData();
         console.timeEnd("computeWorldData");
         updateProgressBar(5);
 
         console.time("get_list_countries");
-        get_list_countries(data_by_country);
+        get_list_countries(_data.cases);
         console.timeEnd("get_list_countries");
 
         // Add rates
         console.time("addRates");
-        data_by_country = addRates(data_by_country);
+        _data.cases = addRates(_data.cases);
         console.timeEnd("addRates");
         updateProgressBar(5);
 
 
         // Parse testing data
         console.time("parseTestingData");
-        testing_data = parseTestingData(testing_data);
+        _data.testing = parseTestingData(_data.testing);
         console.timeEnd("parseTestingData");
         updateProgressBar(5);
 
         // Graph
         console.time("Graph1");
-        data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
-        load_summary_data(data_country);
-        countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
-        countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
-        countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
+        _data.cases_selected = _data.cases.filter(d => d['Country/Region'] === navigation.country);
+        load_summary_data(_data.cases_selected);
+        plots['country_graph'].draw({"data": filterByDate(_data.cases_selected, 'category', cases_categories)});
+        plots['country_graph_rates'].draw({"data": filterByDate(_data.cases_selected, 'category', rates_categories)});
+        plots['country_graph_new_cases'].draw({"data": filterByDate(_data.cases_selected, 'category', new_cases_categories)});
         $('.country_name').each(function() {$(this).html(navigation.country);});
         console.timeEnd("Graph1");
         
@@ -1129,7 +1177,7 @@ let timer = setInterval(() => {
         build_elements_compare();
         console.timeEnd("build_elements_compare");
         console.time("Graph2");
-        compareGraph.draw({"data":getCompareData(data_by_country)});
+        plots['compare_graph'].draw({"data":getCompareData(_data.cases)});
         console.timeEnd("Graph2");
         updateProgressBar(5);
 
@@ -1138,7 +1186,7 @@ let timer = setInterval(() => {
         console.time("GraphFT");
         build_ft_countries();
         build_ft_categories_select();
-        ftGraph.draw({"data": ftData(data_by_country),
+        plots['ft_graph'].draw({"data": ftData(_data.cases),
                      "categories":navigation.ft_countries});
         console.timeEnd("GraphFT");
         updateProgressBar(5);
@@ -1150,7 +1198,7 @@ let timer = setInterval(() => {
         build_testing_countries();
         build_testing_countries_select();
         build_testing_yaxis();
-        testingGraph.draw({"data": filterByDate(testing_data,'Entity',navigation.testing_countries),
+        plots['testing_graph'].draw({"data": filterByDate(_data.testing,'Entity',navigation.testing_countries),
                           "categories":navigation.testing_countries});
         console.timeEnd("GraphTesting");
 
@@ -1161,7 +1209,7 @@ let timer = setInterval(() => {
         build_elements_mobility();
         console.timeEnd("build_elements_mobility");
         console.time("GraphMobility");
-        mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
+        plots['mobility_graph'].draw({"data": filterByDate(_data.mobility,'key',
                                                  navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)),
                             "categories": navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`)});
         console.timeEnd("GraphMobility");
@@ -1171,10 +1219,13 @@ let timer = setInterval(() => {
 
         // SOS Med data
         buildSelectHospitalizationVariables();
-        hospitalizationGraph.draw(
-            {"data": filterByDate(hospitalizationData,
-                                  'Category',
-                                  navigation.hospitalizationVariables)
+        plots['hospitalization_graph'].draw(
+            {"data": ma_json(filterByDate(_data.hospitalization,
+                                          'Category',
+                                          navigation.hospitalizationVariables),
+                             ["value"],
+                             navigation.maHospitalization
+                            )
             });
     }
 }, 100);
@@ -1198,19 +1249,18 @@ $('.sidebar_show').click(function(){
 // By Country graphs - actions
 $('#chooseCountry').change(function(){
     updateNavigation({"country":$('#chooseCountry option:selected').text()});
-    data_country = data_by_country.filter(d => d['Country/Region'] === navigation.country);
-    load_summary_data(data_country);
+    _data.cases_selected = _data.cases.filter(d => d['Country/Region'] === navigation.country);
+    load_summary_data(_data.cases_selected);
 
     $('.country_name').each(function() {$(this).html(navigation.country);});
-    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
-    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
+    plots['country_graph'].draw({"data": filterByDate(_data.cases_selected, 'category', cases_categories)});
+    plots['country_graph_rates'].draw({"data": filterByDate(_data.cases_selected, 'category', rates_categories)});
+    plots['country_graph_new_cases'].draw({"data": filterByDate(_data.cases_selected, 'category', new_cases_categories)});
     action([navigation.page,'chooseCountry',navigation.country].join('_').replace(/ /g,'_'));
 });
 $('#logScaleSwitch').change(function(){
     updateNavigation({"logScale": navigation.logScale ? false : true});
-    // load_summary_data(data_country);
-    countryGraph.draw({
+    plots['country_graph'].draw({
         "y": {
             "scale": navigation.logScale ? "scaleLog" : "scaleLinear",
             "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
@@ -1221,14 +1271,14 @@ $('#logScaleSwitch').change(function(){
 });
 $('#barSwitch').change(function(){
     updateNavigation({"lines": navigation.lines ? false : true});
-    countryGraph.draw({"type": navigation.lines ? "line" : "bar"});
+    plots['country_graph'].draw({"type": navigation.lines ? "line" : "bar"});
     action([navigation.page,'barSwitch',navigation.lines].join('_').replace(/ /g,'_'));
 });
 
 $('#percPopulation').change(function() {
     updateNavigation({"percPopulation": navigation.percPopulation ? false : true});
-    load_summary_data(data_country);
-    countryGraph.draw({
+    load_summary_data(_data.cases_selected);
+    plots['country_graph'].draw({
         "y": {
             "name": navigation.percPopulation ? 'field_value_pop' : 'field_value',
             "tickFormat": Grapher.formatTick(navigation.logScale, navigation.percPopulation)
@@ -1236,26 +1286,25 @@ $('#percPopulation').change(function() {
     });
     action([navigation.page,'percPopulation',navigation.percPopulation].join('_').replace(/ /g,'_'));
 });
-$('#startDate').change(function() {
-    updateNavigation({"startDate": $('#startDate option:selected').text()});
-    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
-    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
+$('.select-dates[start]').change(function() {
+    let target = $(this).attr('target'),
+        startDate = $(this).children("option:selected").val();
+    updateNavigation({"startDate": startDate});
     action([navigation.page,'startDate',navigation.startDate].join('_').replace(/ /g,'_'));
-
+    updateDatesPlot(target);
 });
-$('#endDate').change(function() {
-    updateNavigation({"endDate": $('#endDate option:selected').text()});
-    countryGraph.draw({"data": filterByDate(data_country, 'category', cases_categories)});
-    countryGraphRates.draw({"data": filterByDate(data_country, 'category', rates_categories)});
-    countryGraphNewCases.draw({"data": filterByDate(data_country, 'category', new_cases_categories)});
-    action([navigation.page,'endDate',navigation.startDate].join('_').replace(/ /g,'_'));
+$('.select-dates[end]').change(function() {
+    let target = $(this).attr('target'),
+        endDate = $(this).children("option:selected").val();
+    updateNavigation({"endDate": endDate});
+    action([navigation.page,'endDate',navigation.endDate].join('_').replace(/ /g,'_'));
+    updateDatesPlot(target);
 });
 
 // Graph Comparison -  actions
 $('#logScaleSwitch2').change(function(){
     updateNavigation({"logScale2": navigation.logScale2 ? false : true});
-    compareGraph.draw({
+    plots['compare_graph'].draw({
         "y": {
             "scale": navigation.logScale2 ? "scaleLog" : "scaleLinear",
             "tickFormat": Grapher.formatTick(navigation.logScale2, navigation.percPopulation2)
@@ -1264,7 +1313,7 @@ $('#logScaleSwitch2').change(function(){
 });
 $('#percPopulation2').change(function() {
     updateNavigation({"percPopulation2": navigation.percPopulation2 ? false : true});
-    compareGraph.draw({
+    plots['compare_graph'].draw({
         "y": {
             "name": navigation.percPopulation2 ? 'field_value_pop' : 'field_value',
             "tickFormat": Grapher.formatTick(navigation.logScale2, navigation.percPopulation2)
@@ -1274,30 +1323,30 @@ $('#percPopulation2').change(function() {
 });
 $('#barSwitch2').change(function(){
     updateNavigation({"lines2": navigation.lines2 ? false : true});
-    compareGraph.draw({"type": navigation.lines2 ? "line" : "bar"});
+    plots['compare_graph'].draw({"type": navigation.lines2 ? "line" : "bar"});
     action([navigation.page,'barSwitch2',navigation.lines2].join('_').replace(/ /g,'_'));
 });
 $('#startDate2').change(function() {
     updateNavigation({"startDate": $('#startDate2 option:selected').text()});
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases)});
     action([navigation.page,'startDate2',navigation.startDate].join('_').replace(/ /g,'_'));
 });
 $('#endDate2').change(function() {
     updateNavigation({"endDate": $('#endDate2 option:selected').text()});
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases)});
     action([navigation.page,'endDate2',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 $("#movingAverageCompareRange").on('change mousemouve', function() {
     let ma = $(this).val();
     $('#movingAverageCompareValue').html(ma);
     updateNavigation({"maCompare": ma});
-    compareGraph.draw({"data":getCompareData(data_by_country)});
+    plots['compare_graph'].draw({"data":getCompareData(_data.cases)});
 });
 
 // FT Graph
 $('#logScaleSwitch3').change(function(){
     updateNavigation({"logScale3": navigation.logScale3 ? false : true});
-    ftGraph.draw({
+    plots['ft_graph'].draw({
         "y": {
             "scale": navigation.logScale3 ? "scaleLog" : "scaleLinear",
             "tickFormat": Grapher.formatTick(navigation.logScale3, false)
@@ -1306,7 +1355,7 @@ $('#logScaleSwitch3').change(function(){
 });
 $('#hideLegend').change(function(){
     updateNavigation({"hideLegend": navigation.hideLegend ? false : true});
-    ftGraph.draw({"legend": {
+    plots['ft_graph'].draw({"legend": {
         "show": !navigation.hideLegend
     }});
     action([navigation.page,'hideLegend',navigation.hideLegend].join('_').replace(/ /g,'_'));
@@ -1317,27 +1366,27 @@ $('#ft_add_country').change(function(){
         updateNavigation({"ft_countries":navigation.ft_countries.concat([c])});
         build_ft_countries();
         build_ft_countries_select();
-        ftGraph.draw({"data": ftData(data_by_country),
+        plots['ft_graph'].draw({"data": ftData(_data.cases),
                      "categories":navigation.ft_countries});
     }});
 $('#ftCategory').change(function(){
     updateNavigation({"ft_category":$('#ftCategory option:selected').text()});
-    ftGraph.draw({"data": ftData(data_by_country)});
+    plots['ft_graph'].draw({"data": ftData(_data.cases)});
 });
 $("#thresholdRange").on('change mousemouve', function() {
     let threshold = $(this).val();
     $('#thresholdValue').html(threshold);
     updateNavigation({"ft_threshold": threshold});
-    ftGraph.draw({
-        "data": ftData(data_by_country),
+    plots['ft_graph'].draw({
+        "data": ftData(_data.cases),
         "x": {
             "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
         }});
 });
 $('#ftThresholdCategory').change(function(){
     updateNavigation({"ft_thresholdCategory":$('#ftThresholdCategory option:selected').text()});
-    ftGraph.draw({
-        "data": ftData(data_by_country),
+    plots['ft_graph'].draw({
+        "data": ftData(_data.cases),
         "x": {
             "label": "Number of days since " + navigation.ft_threshold.toString() + ` ${navigation.ft_thresholdCategory} first recorded ->`
         }});
@@ -1347,8 +1396,8 @@ $("#movingAverageFTRange").on('change mousemouve', function() {
     let ma = $(this).val();
     $('#movingAverageFTValue').html(ma);
     updateNavigation({"ft_ma": ma});
-    ftGraph.draw({
-        "data": ftData(data_by_country)
+    plots['ft_graph'].draw({
+        "data": ftData(_data.cases)
     });
 });
 
@@ -1359,14 +1408,14 @@ $('#testing_add_country').change(function(){
         updateNavigation({"testing_countries":navigation.testing_countries.concat([c])});
         build_testing_countries();
         build_testing_countries_select();
-        testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
+        plots['testing_graph'].draw({"data": filterByDate(_data.testing, 'Entity', navigation.testing_countries),
                           "categories":navigation.testing_countries});
     }
 });
 $('#testingYAxis').change(function(){
     updateNavigation({"testing_yVar":$('#testingYAxis option:selected').text()});
-    testingGraph.draw({
-        "data": filterByDate(testing_data, 'Entity', navigation.testing_countries),
+    plots['testing_graph'].draw({
+        "data": filterByDate(_data.testing, 'Entity', navigation.testing_countries),
         "y": {
             "name": navigation.testing_yVar,
             "parse": d => parseFloat(d),
@@ -1374,75 +1423,66 @@ $('#testingYAxis').change(function(){
         }
     });;
 });
-$('#startDate3').change(function() {
-    updateNavigation({"startDate": $('#startDate3 option:selected').text()});
-    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
-    action([navigation.page,'startDate3',navigation.startDate].join('_').replace(/ /g,'_'));
-});
-$('#endDate3').change(function() {
-    updateNavigation({"endDate": $('#endDate3 option:selected').text()});
-    testingGraph.draw({"data": filterByDate(testing_data, 'Entity', navigation.testing_countries)});
-    action([navigation.page,'endDate3',navigation.endDate].join('_').replace(/ /g,'_'));
-});
+
 
 
 // Mobility
 $('#barSwitch4').change(function(){
     updateNavigation({"lines4": navigation.lines4 ? false : true});
-    mobilityGraph.draw({"type": navigation.lines4 ? "line" : "bar"});
+    plots['mobility_graph'].draw({"type": navigation.lines4 ? "line" : "bar"});
     action([navigation.page,'barSwitch4',navigation.lines4].join('_').replace(/ /g,'_'));
-});
-$('#startDate4').change(function() {
-    updateNavigation({"startDate": $('#startDate4 option:selected').text()});
-    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
-                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`))});
-    action([navigation.page,'startDate4',navigation.startDate].join('_').replace(/ /g,'_'));
-});
-$('#endDate4').change(function() {
-    updateNavigation({"endDate": $('#endDate4 option:selected').text()});
-    mobilityGraph.draw({"data": filterByDate(mobilityData,'key',
-                                             navigation.mobility_elements.map(d => `${d['region']} - ${d['transportation_type']}`))});
-    action([navigation.page,'endDate4',navigation.endDate].join('_').replace(/ /g,'_'));
 });
 $('#hideLegendMobility').change(function(){
     updateNavigation({"hideLegendMobility": navigation.hideLegendMobility ? false : true});
-    mobilityGraph.draw({"legend": {
+    plots['mobility_graph'].draw({"legend": {
         "show": !navigation.hideLegendMobility
     }});
     action([navigation.page,'hideLegendMobility',navigation.hideLegendMobility].join('_').replace(/ /g,'_'));
 });
 
 // Hospitalization
+$('#barSwitch5').change(function(){
+    updateNavigation({"lines5": navigation.lines5 ? false : true});
+    plots['hospitalization_graph'].draw({"type": navigation.lines5 ? "line" : "bar"});
+    action([navigation.page,'barSwitch5',navigation.lines5].join('_').replace(/ /g,'_'));
+});
 $('#hospitalization_variables').change(function(){
     updateNavigation({
         "hospitalizationVariables":$('#hospitalization_variables option:selected')
             .map((i,e) => e.text)
             .toArray()
     });
-    hospitalizationGraph.draw(
-        {"data": filterByDate(hospitalizationData,
-                              'Category',
-                              navigation.hospitalizationVariables)
+    plots['hospitalization_graph'].draw(
+        {"data": ma_json(filterByDate(_data.hospitalization,
+                                      'Category',
+                                      navigation.hospitalizationVariables),
+                         ["value"],
+                         navigation.maHospitalization
+                        )
         });
 });
-$('#startDate5').change(function() {
-    updateNavigation({"startDate": $('#startDate5 option:selected').text()});
-    hospitalizationGraph.draw(
-        {"data": filterByDate(hospitalizationData,
-                              'Category',
-                              navigation.hospitalizationVariables)
-        }
-    );
+$('#hideLegendHospitalization').change(function(){
+    updateNavigation({"hideLegendHospitalization": navigation.hideLegendHospitalization ? false : true});
+    plots['hospitalization_graph'].draw({"legend": {
+        "show": !navigation.hideLegendHospitalization
+    }});
+    action([navigation.page,'hideLegendHospitalization',navigation.hideLegendHospitalization].join('_').replace(/ /g,'_'));
 });
-$('#endDate5').change(function() {
-    updateNavigation({"endDate": $('#endDate5 option:selected').text()});
-    hospitalizationGraph.draw(
-        {"data": filterByDate(hospitalizationData,
-                              'Category',
-                              navigation.hospitalizationVariables)
-        }
-    );
+$("#movingAverageHospitalizationRange").on('change mousemouve', function() {
+    let ma = $(this).val();
+    $('#movingAverageHospitalizationValue').html(ma);
+    updateNavigation({"maHospitalization": ma});
+    plots['hospitalization_graph'].draw(
+        {"data": ma_json(filterByDate(_data.hospitalization,
+                                      'Category',
+                                      navigation.hospitalizationVariables),
+                         ["value"],
+                         navigation.maHospitalization
+                        )
+        });
 });
+// ========================================================================== //
+
 
 // Mobile menu
 function menu(id) {

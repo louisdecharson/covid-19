@@ -77,22 +77,27 @@ def process_data(filepath: str) -> None:
     #             .sum().reset_index())
     # df_total['Region'] = 'National'
     # df_merged = pd.concat([df, df_total])
-    idx = df.set_index(group).index
     
     # Compute diff
-    cols = [c for c in df.columns if c not in group]
-    df_with_diff = (df
-                    .sort_values(by=group)
-                    # .groupby(['Region','Age group'])
-                    [cols]
-                    .diff())
-    df_with_diff.index = idx
-    df_with_diff.rename(columns={f"{c}": f"New {c}"
-                                 for c in df_with_diff.columns},
-                        inplace=True)
-    df_with_diff.reset_index(inplace=True)
-    df_total = df.merge(df_with_diff,
-                        on=group)
+    # idx = df.set_index(group).index
+    # cols = [c for c in df.columns if c not in group]
+    # df_with_diff = (df
+    #                 .sort_values(by=group)
+    #                 # .groupby(['Region','Age group'])
+    #                 [cols]
+    #                 .diff())
+    # df_with_diff.index = idx
+    # df_with_diff.rename(columns={f"{c}": f"New {c}"
+    #                              for c in df_with_diff.columns},
+    #                     inplace=True)
+    # df_with_diff.reset_index(inplace=True)
+
+    # Merge
+    # df_total = df.merge(df_with_diff,
+    #                     on=group)
+    df_total = df
+    
+    # Wide to long
     df_long = pd.melt(df_total,
                       id_vars=group,
                       value_vars=[c for c in df_total.columns
