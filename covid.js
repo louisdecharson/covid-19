@@ -14,6 +14,7 @@ const main = document.getElementById('main'),
 const root = document.documentElement,
       rootStyle = window.getComputedStyle(root);
 
+const stylesheet = window.document.styleSheets[2];
 
 // Dark Mode
 const cssVariables = ['--background-color','--color-text','--text-muted']; // for dark mode
@@ -177,7 +178,11 @@ let navigation = {
     "hospitalizationVariables": ["Hospitalizations for suspicion of COVID-19"],
     "hideLegendHospitalization": false,
     "lines5": true,
-    "maHospitalization": 1
+    "maHospitalization": 1,
+    "custom_settings": [
+        ["Font size axis tick text",".tick text","font-size","12px"],
+        ["Font size axis label", ".axisLabel text", "font-size", "16px"]
+    ]
 };
 function loadPage(button, target) {
     $('.sidebar_show.active').each(function() {
@@ -903,6 +908,23 @@ function buildSelectHospitalizationVariables() {
     }
     $('#hospitalization_variables').html(html);
 }
+function buildCustomSettings() {
+    // Settings
+    let htmlSettings = '';
+    navigation.custom_settings.forEach(function(it,ind) {
+        htmlSettings += `
+<div class="form-group form-inline">
+    <label for="${it[0].replace(' ','_')}">${it[0]}</label>
+    <input id="${it[0].replace(' ','_')}" type="text" class="setting form-control form-control-sm mx-sm-3" target="${it[1]}" css="${it[2]}" value="${it[3]}">
+</div>
+`;
+        // activate rule
+        $(it[1]).css(it[2], it[3]);
+        // insert rule to DOM
+        stylesheet.insertRule(`${it[1]} { ${it[2]}: ${it[3]}; }`, stylesheet.cssRules.length);
+    });
+    $('#form_settings').html(htmlSettings);
+}
 // ========================================================================== //
 
 // CHARTS
@@ -1227,6 +1249,9 @@ let timer = setInterval(() => {
                              navigation.maHospitalization
                             )
             });
+
+        // Custom settings
+        buildCustomSettings();
     }
 }, 100);
 
@@ -1508,4 +1533,24 @@ $('#navSwitch').on('click',function() {
 });
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
-})
+});
+
+// Settings
+$('#save_settings').click(function() {
+    let $inputs = $('#form_settings :input');
+    let custom_settings = [];
+    // Remove existing rules
+    for (const index of Object.keys(stylesheet.rules)) {
+        stylesheet.deleteRule(0);
+    }
+    $inputs.each(function() {
+        let name = $(this).attr('id').replace('_',' '),
+            selector = $(this).attr('target'),
+            attribute = $(this).attr('css'),
+            value = $(this).val();
+        $(selector).css(attribute, value);
+        stylesheet.insertRule(`${selector} { ${attribute}: ${value}; }`, stylesheet.cssRules.length);
+        custom_settings.push([name, selector, attribute, value]);
+    });
+    updateNavigation({"custom_settings": custom_settings});
+});
