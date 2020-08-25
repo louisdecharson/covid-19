@@ -742,7 +742,7 @@ function remove_ft_country(index) {
     updateNavigation({"ft_countries": navigation.ft_countries});
     build_ft_countries();
     build_ft_countries_select();
-    ftGraph.draw({"data": ftData(_data.cases),
+    plots['ft_graph'].draw({"data": ftData(_data.cases),
                   "categories":navigation.ft_countries});
 }
 function remove_testing_country(index) {
