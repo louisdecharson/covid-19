@@ -198,9 +198,10 @@ Day,Category,value
 2020-09-07,Urgent care attendances for suspicion of COVID-19,1378.0
 2020-09-08,Urgent care attendances for suspicion of COVID-19,1440.0
 2020-09-09,Urgent care attendances for suspicion of COVID-19,1366.0
-2020-09-10,Urgent care attendances for suspicion of COVID-19,1796.0
-2020-09-11,Urgent care attendances for suspicion of COVID-19,1620.0
-2020-09-12,Urgent care attendances for suspicion of COVID-19,1394.0
+2020-09-10,Urgent care attendances for suspicion of COVID-19,1800.0
+2020-09-11,Urgent care attendances for suspicion of COVID-19,1630.0
+2020-09-12,Urgent care attendances for suspicion of COVID-19,1582.0
+2020-09-13,Urgent care attendances for suspicion of COVID-19,1232.0
 2020-02-24,Total urgent care attendances,97179.0
 2020-02-25,Total urgent care attendances,85390.0
 2020-02-26,Total urgent care attendances,84226.0
@@ -397,12 +398,13 @@ Day,Category,value
 2020-09-04,Total urgent care attendances,81934.0
 2020-09-05,Total urgent care attendances,82815.0
 2020-09-06,Total urgent care attendances,81906.0
-2020-09-07,Total urgent care attendances,91093.0
-2020-09-08,Total urgent care attendances,83728.0
-2020-09-09,Total urgent care attendances,85007.0
-2020-09-10,Total urgent care attendances,88225.0
-2020-09-11,Total urgent care attendances,85816.0
-2020-09-12,Total urgent care attendances,74931.0
+2020-09-07,Total urgent care attendances,91099.0
+2020-09-08,Total urgent care attendances,83760.0
+2020-09-09,Total urgent care attendances,85071.0
+2020-09-10,Total urgent care attendances,88337.0
+2020-09-11,Total urgent care attendances,86596.0
+2020-09-12,Total urgent care attendances,82885.0
+2020-09-13,Total urgent care attendances,74226.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -602,9 +604,10 @@ Day,Category,value
 2020-09-07,Hospitalizations for suspicion of COVID-19,408.0
 2020-09-08,Hospitalizations for suspicion of COVID-19,416.0
 2020-09-09,Hospitalizations for suspicion of COVID-19,352.0
-2020-09-10,Hospitalizations for suspicion of COVID-19,464.0
-2020-09-11,Hospitalizations for suspicion of COVID-19,498.0
-2020-09-12,Hospitalizations for suspicion of COVID-19,370.0
+2020-09-10,Hospitalizations for suspicion of COVID-19,466.0
+2020-09-11,Hospitalizations for suspicion of COVID-19,524.0
+2020-09-12,Hospitalizations for suspicion of COVID-19,468.0
+2020-09-13,Hospitalizations for suspicion of COVID-19,310.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -805,8 +808,9 @@ Day,Category,value
 2020-09-08,Medical acts (SOS Médecin) for suspicion of COVID-19,1986.0
 2020-09-09,Medical acts (SOS Médecin) for suspicion of COVID-19,1942.0
 2020-09-10,Medical acts (SOS Médecin) for suspicion of COVID-19,1984.0
-2020-09-11,Medical acts (SOS Médecin) for suspicion of COVID-19,1965.0
-2020-09-12,Medical acts (SOS Médecin) for suspicion of COVID-19,2149.0
+2020-09-11,Medical acts (SOS Médecin) for suspicion of COVID-19,1959.0
+2020-09-12,Medical acts (SOS Médecin) for suspicion of COVID-19,2171.0
+2020-09-13,Medical acts (SOS Médecin) for suspicion of COVID-19,2534.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -1006,6 +1010,7 @@ Day,Category,value
 2020-09-07,Medical acts total (SOS Médecin),21397.0
 2020-09-08,Medical acts total (SOS Médecin),19958.0
 2020-09-09,Medical acts total (SOS Médecin),20748.0
-2020-09-10,Medical acts total (SOS Médecin),21852.0
-2020-09-11,Medical acts total (SOS Médecin),21227.0
-2020-09-12,Medical acts total (SOS Médecin),24531.0
+2020-09-10,Medical acts total (SOS Médecin),21848.0
+2020-09-11,Medical acts total (SOS Médecin),21113.0
+2020-09-12,Medical acts total (SOS Médecin),24854.0
+2020-09-13,Medical acts total (SOS Médecin),24686.0
