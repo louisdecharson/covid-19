@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 
 # ============================================================================ #
-
+# Constants
 NAME_DATASET = "sursaud-corona-quot-reg"
 SLUG_DATASET = "5e74ecf52eb7514f2d3b8845"
 URL_DATASET = "https://www.data.gouv.fr/api/1/datasets/{}/".format(SLUG_DATASET)
@@ -29,16 +29,16 @@ OUT_RAW_FILE = "sursaud_corona_raw.csv"
 OUT_PROCESSED_FILE = "sursaud_corona.csv"
 
 # ============================================================================ #
-
-
+# Exceptions
 class RequestError(Exception):
     pass
 class FormatError(Exception):
     pass
 class ResourceNotFound(Exception):
     pass
-# ============================================================================ #
 
+# ============================================================================ #
+# Functions and main code
 
 def download_data() -> None:
     """Download SOS Medecins data from data-gouv.
