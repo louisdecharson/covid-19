@@ -49,8 +49,8 @@ def download_data() -> None:
     
     """
     datasets = retrieve_datasets()
-    hospit_dataset = filter(lambda x: True if NAME_DATASET in x["title"] else False,
-                            datasets)
+    hospit_dataset = list(filter(lambda x: True if NAME_DATASET in x["title"] else False,
+                                 datasets))
     if len(hospit_dataset) == 1:
         url_data = hospit_dataset[0]["url"]
     else:
