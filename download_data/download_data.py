@@ -11,6 +11,7 @@ import numpy as np
 
 # ============================================================================ #
 
+NAME_DATASET = "sursaud-corona-quot-reg"
 SLUG_DATASET = "5e74ecf52eb7514f2d3b8845"
 URL_DATASET = "https://www.data.gouv.fr/api/1/datasets/{}/".format(SLUG_DATASET)
 
@@ -32,12 +33,10 @@ OUT_PROCESSED_FILE = "sursaud_corona.csv"
 
 class RequestError(Exception):
     pass
-
-
 class FormatError(Exception):
     pass
-
-
+class ResourceNotFound(Exception):
+    pass
 # ============================================================================ #
 
 
@@ -50,9 +49,12 @@ def download_data() -> None:
     
     """
     datasets = retrieve_datasets()
-    url_data = [d["url"] for d in datasets if "sursaud-corona-quot-reg" in d["title"]][
-        0
-    ]
+    hospit_dataset = filter(lambda x: True if NAME_DATASET in x["title"] else False,
+                            datasets)
+    if len(hospit_dataset) == 1:
+        url_data = hospit_dataset[0]["url"]
+    else:
+        raise ResourceNotFound(f"Dataset {NAME_DATASET} cannot be found in datasets at {URL_DATASET}")
     download_csv(url_data)
 
     # Process data
@@ -60,7 +62,7 @@ def download_data() -> None:
     df.to_csv(OUT_PROCESSED_FILE, index=None)
     print("{} saved to disk.".format(OUT_PROCESSED_FILE))
 
-def process_data(filepath: str) -> None:
+def process_data(filepath: str) -> pd.DataFrame:
     # Read the csv file
     df = pd.read_csv(filepath, sep=";")
 
@@ -70,32 +72,7 @@ def process_data(filepath: str) -> None:
     df = df[list(COLUMNS_MAPPING.keys())]
     df.rename(columns=COLUMNS_MAPPING, inplace=True)
 
-    df = df.groupby(group).sum().reset_index()
-    
-    # Compute total region
-    # df_total = (df.groupby(["Day", "Age group"])
-    #             .sum().reset_index())
-    # df_total['Region'] = 'National'
-    # df_merged = pd.concat([df, df_total])
-    
-    # Compute diff
-    # idx = df.set_index(group).index
-    # cols = [c for c in df.columns if c not in group]
-    # df_with_diff = (df
-    #                 .sort_values(by=group)
-    #                 # .groupby(['Region','Age group'])
-    #                 [cols]
-    #                 .diff())
-    # df_with_diff.index = idx
-    # df_with_diff.rename(columns={f"{c}": f"New {c}"
-    #                              for c in df_with_diff.columns},
-    #                     inplace=True)
-    # df_with_diff.reset_index(inplace=True)
-
-    # Merge
-    # df_total = df.merge(df_with_diff,
-    #                     on=group)
-    df_total = df
+    df_total = df.groupby(group).sum().reset_index()
     
     # Wide to long
     df_long = pd.melt(df_total,
