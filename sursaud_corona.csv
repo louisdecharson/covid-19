@@ -290,12 +290,13 @@ Day,Category,value
 2020-12-08,Urgent care attendances for suspicion of COVID-19,1316.0
 2020-12-09,Urgent care attendances for suspicion of COVID-19,1214.0
 2020-12-10,Urgent care attendances for suspicion of COVID-19,1348.0
-2020-12-11,Urgent care attendances for suspicion of COVID-19,1420.0
-2020-12-12,Urgent care attendances for suspicion of COVID-19,1350.0
+2020-12-11,Urgent care attendances for suspicion of COVID-19,1422.0
+2020-12-12,Urgent care attendances for suspicion of COVID-19,1354.0
 2020-12-13,Urgent care attendances for suspicion of COVID-19,1272.0
-2020-12-14,Urgent care attendances for suspicion of COVID-19,1586.0
-2020-12-15,Urgent care attendances for suspicion of COVID-19,1448.0
-2020-12-16,Urgent care attendances for suspicion of COVID-19,1124.0
+2020-12-14,Urgent care attendances for suspicion of COVID-19,1584.0
+2020-12-15,Urgent care attendances for suspicion of COVID-19,1464.0
+2020-12-16,Urgent care attendances for suspicion of COVID-19,1322.0
+2020-12-17,Urgent care attendances for suspicion of COVID-19,1120.0
 2020-02-24,Total urgent care attendances,97179.0
 2020-02-25,Total urgent care attendances,85390.0
 2020-02-26,Total urgent care attendances,84228.0
@@ -587,12 +588,13 @@ Day,Category,value
 2020-12-08,Total urgent care attendances,66824.0
 2020-12-09,Total urgent care attendances,63912.0
 2020-12-10,Total urgent care attendances,66812.0
-2020-12-11,Total urgent care attendances,68516.0
-2020-12-12,Total urgent care attendances,64560.0
-2020-12-13,Total urgent care attendances,60477.0
-2020-12-14,Total urgent care attendances,73681.0
-2020-12-15,Total urgent care attendances,67850.0
-2020-12-16,Total urgent care attendances,55130.0
+2020-12-11,Total urgent care attendances,68696.0
+2020-12-12,Total urgent care attendances,64744.0
+2020-12-13,Total urgent care attendances,60583.0
+2020-12-14,Total urgent care attendances,73841.0
+2020-12-15,Total urgent care attendances,68360.0
+2020-12-16,Total urgent care attendances,63000.0
+2020-12-17,Total urgent care attendances,56518.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -885,11 +887,12 @@ Day,Category,value
 2020-12-09,Hospitalizations for suspicion of COVID-19,724.0
 2020-12-10,Hospitalizations for suspicion of COVID-19,740.0
 2020-12-11,Hospitalizations for suspicion of COVID-19,796.0
-2020-12-12,Hospitalizations for suspicion of COVID-19,734.0
+2020-12-12,Hospitalizations for suspicion of COVID-19,732.0
 2020-12-13,Hospitalizations for suspicion of COVID-19,652.0
-2020-12-14,Hospitalizations for suspicion of COVID-19,878.0
-2020-12-15,Hospitalizations for suspicion of COVID-19,756.0
-2020-12-16,Hospitalizations for suspicion of COVID-19,558.0
+2020-12-14,Hospitalizations for suspicion of COVID-19,876.0
+2020-12-15,Hospitalizations for suspicion of COVID-19,768.0
+2020-12-16,Hospitalizations for suspicion of COVID-19,722.0
+2020-12-17,Hospitalizations for suspicion of COVID-19,558.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -1185,8 +1188,9 @@ Day,Category,value
 2020-12-12,Medical acts (SOS Médecin) for suspicion of COVID-19,552.0
 2020-12-13,Medical acts (SOS Médecin) for suspicion of COVID-19,684.0
 2020-12-14,Medical acts (SOS Médecin) for suspicion of COVID-19,713.0
-2020-12-15,Medical acts (SOS Médecin) for suspicion of COVID-19,598.0
-2020-12-16,Medical acts (SOS Médecin) for suspicion of COVID-19,610.0
+2020-12-15,Medical acts (SOS Médecin) for suspicion of COVID-19,590.0
+2020-12-16,Medical acts (SOS Médecin) for suspicion of COVID-19,620.0
+2020-12-17,Medical acts (SOS Médecin) for suspicion of COVID-19,569.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -1481,6 +1485,7 @@ Day,Category,value
 2020-12-11,Medical acts total (SOS Médecin),15123.0
 2020-12-12,Medical acts total (SOS Médecin),18476.0
 2020-12-13,Medical acts total (SOS Médecin),19465.0
-2020-12-14,Medical acts total (SOS Médecin),18240.0
-2020-12-15,Medical acts total (SOS Médecin),15592.0
-2020-12-16,Medical acts total (SOS Médecin),14940.0
+2020-12-14,Medical acts total (SOS Médecin),18236.0
+2020-12-15,Medical acts total (SOS Médecin),15510.0
+2020-12-16,Medical acts total (SOS Médecin),15264.0
+2020-12-17,Medical acts total (SOS Médecin),15061.0
