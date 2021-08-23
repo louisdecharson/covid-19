@@ -538,11 +538,12 @@ Day,Category,value
 2021-08-13,Urgent care attendances for suspicion of COVID-19,2238.0
 2021-08-14,Urgent care attendances for suspicion of COVID-19,2200.0
 2021-08-15,Urgent care attendances for suspicion of COVID-19,2058.0
-2021-08-16,Urgent care attendances for suspicion of COVID-19,2348.0
-2021-08-17,Urgent care attendances for suspicion of COVID-19,2104.0
-2021-08-18,Urgent care attendances for suspicion of COVID-19,2124.0
-2021-08-19,Urgent care attendances for suspicion of COVID-19,1816.0
-2021-08-20,Urgent care attendances for suspicion of COVID-19,1348.0
+2021-08-16,Urgent care attendances for suspicion of COVID-19,2350.0
+2021-08-17,Urgent care attendances for suspicion of COVID-19,2110.0
+2021-08-18,Urgent care attendances for suspicion of COVID-19,2150.0
+2021-08-19,Urgent care attendances for suspicion of COVID-19,1904.0
+2021-08-20,Urgent care attendances for suspicion of COVID-19,1790.0
+2021-08-21,Urgent care attendances for suspicion of COVID-19,1384.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85504.0
 2020-02-26,Total urgent care attendances,84328.0
@@ -1081,12 +1082,13 @@ Day,Category,value
 2021-08-12,Total urgent care attendances,89549.0
 2021-08-13,Total urgent care attendances,91576.0
 2021-08-14,Total urgent care attendances,88377.0
-2021-08-15,Total urgent care attendances,83963.0
-2021-08-16,Total urgent care attendances,98166.0
-2021-08-17,Total urgent care attendances,89635.0
-2021-08-18,Total urgent care attendances,88357.0
-2021-08-19,Total urgent care attendances,85620.0
-2021-08-20,Total urgent care attendances,75387.0
+2021-08-15,Total urgent care attendances,83977.0
+2021-08-16,Total urgent care attendances,98188.0
+2021-08-17,Total urgent care attendances,89663.0
+2021-08-18,Total urgent care attendances,88477.0
+2021-08-19,Total urgent care attendances,86338.0
+2021-08-20,Total urgent care attendances,85865.0
+2021-08-21,Total urgent care attendances,72432.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -1626,11 +1628,12 @@ Day,Category,value
 2021-08-13,Hospitalizations for suspicion of COVID-19,1014.0
 2021-08-14,Hospitalizations for suspicion of COVID-19,858.0
 2021-08-15,Hospitalizations for suspicion of COVID-19,842.0
-2021-08-16,Hospitalizations for suspicion of COVID-19,1084.0
-2021-08-17,Hospitalizations for suspicion of COVID-19,960.0
-2021-08-18,Hospitalizations for suspicion of COVID-19,938.0
-2021-08-19,Hospitalizations for suspicion of COVID-19,824.0
-2021-08-20,Hospitalizations for suspicion of COVID-19,576.0
+2021-08-16,Hospitalizations for suspicion of COVID-19,1088.0
+2021-08-17,Hospitalizations for suspicion of COVID-19,968.0
+2021-08-18,Hospitalizations for suspicion of COVID-19,958.0
+2021-08-19,Hospitalizations for suspicion of COVID-19,880.0
+2021-08-20,Hospitalizations for suspicion of COVID-19,804.0
+2021-08-21,Hospitalizations for suspicion of COVID-19,516.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -2174,7 +2177,8 @@ Day,Category,value
 2021-08-17,Medical acts (SOS Médecin) for suspicion of COVID-19,616.0
 2021-08-18,Medical acts (SOS Médecin) for suspicion of COVID-19,584.0
 2021-08-19,Medical acts (SOS Médecin) for suspicion of COVID-19,619.0
-2021-08-20,Medical acts (SOS Médecin) for suspicion of COVID-19,414.0
+2021-08-20,Medical acts (SOS Médecin) for suspicion of COVID-19,494.0
+2021-08-21,Medical acts (SOS Médecin) for suspicion of COVID-19,545.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -2716,6 +2720,7 @@ Day,Category,value
 2021-08-15,Medical acts total (SOS Médecin),18456.0
 2021-08-16,Medical acts total (SOS Médecin),17639.0
 2021-08-17,Medical acts total (SOS Médecin),16867.0
-2021-08-18,Medical acts total (SOS Médecin),16728.0
-2021-08-19,Medical acts total (SOS Médecin),16673.0
-2021-08-20,Medical acts total (SOS Médecin),15331.0
+2021-08-18,Medical acts total (SOS Médecin),16724.0
+2021-08-19,Medical acts total (SOS Médecin),16589.0
+2021-08-20,Medical acts total (SOS Médecin),15754.0
+2021-08-21,Medical acts total (SOS Médecin),19130.0
