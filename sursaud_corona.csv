@@ -580,15 +580,16 @@ Day,Category,value
 2021-09-24,Urgent care attendances for suspicion of COVID-19,586.0
 2021-09-25,Urgent care attendances for suspicion of COVID-19,492.0
 2021-09-26,Urgent care attendances for suspicion of COVID-19,482.0
-2021-09-27,Urgent care attendances for suspicion of COVID-19,506.0
+2021-09-27,Urgent care attendances for suspicion of COVID-19,508.0
 2021-09-28,Urgent care attendances for suspicion of COVID-19,506.0
-2021-09-29,Urgent care attendances for suspicion of COVID-19,464.0
-2021-09-30,Urgent care attendances for suspicion of COVID-19,406.0
-2021-10-01,Urgent care attendances for suspicion of COVID-19,374.0
-2021-10-02,Urgent care attendances for suspicion of COVID-19,402.0
-2021-10-03,Urgent care attendances for suspicion of COVID-19,382.0
-2021-10-04,Urgent care attendances for suspicion of COVID-19,364.0
-2021-10-05,Urgent care attendances for suspicion of COVID-19,296.0
+2021-09-29,Urgent care attendances for suspicion of COVID-19,466.0
+2021-09-30,Urgent care attendances for suspicion of COVID-19,408.0
+2021-10-01,Urgent care attendances for suspicion of COVID-19,376.0
+2021-10-02,Urgent care attendances for suspicion of COVID-19,408.0
+2021-10-03,Urgent care attendances for suspicion of COVID-19,386.0
+2021-10-04,Urgent care attendances for suspicion of COVID-19,402.0
+2021-10-05,Urgent care attendances for suspicion of COVID-19,384.0
+2021-10-06,Urgent care attendances for suspicion of COVID-19,238.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85504.0
 2020-02-26,Total urgent care attendances,84328.0
@@ -1169,16 +1170,17 @@ Day,Category,value
 2021-09-23,Total urgent care attendances,97260.0
 2021-09-24,Total urgent care attendances,96460.0
 2021-09-25,Total urgent care attendances,94121.0
-2021-09-26,Total urgent care attendances,93228.0
-2021-09-27,Total urgent care attendances,105199.0
-2021-09-28,Total urgent care attendances,92523.0
-2021-09-29,Total urgent care attendances,90279.0
-2021-09-30,Total urgent care attendances,92114.0
-2021-10-01,Total urgent care attendances,92051.0
-2021-10-02,Total urgent care attendances,88848.0
-2021-10-03,Total urgent care attendances,85211.0
-2021-10-04,Total urgent care attendances,97905.0
-2021-10-05,Total urgent care attendances,75244.0
+2021-09-26,Total urgent care attendances,93250.0
+2021-09-27,Total urgent care attendances,105397.0
+2021-09-28,Total urgent care attendances,92659.0
+2021-09-29,Total urgent care attendances,90289.0
+2021-09-30,Total urgent care attendances,92312.0
+2021-10-01,Total urgent care attendances,92431.0
+2021-10-02,Total urgent care attendances,89200.0
+2021-10-03,Total urgent care attendances,85529.0
+2021-10-04,Total urgent care attendances,99635.0
+2021-10-05,Total urgent care attendances,88493.0
+2021-10-06,Total urgent care attendances,74776.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -1762,13 +1764,14 @@ Day,Category,value
 2021-09-26,Hospitalizations for suspicion of COVID-19,244.0
 2021-09-27,Hospitalizations for suspicion of COVID-19,204.0
 2021-09-28,Hospitalizations for suspicion of COVID-19,218.0
-2021-09-29,Hospitalizations for suspicion of COVID-19,216.0
-2021-09-30,Hospitalizations for suspicion of COVID-19,172.0
-2021-10-01,Hospitalizations for suspicion of COVID-19,202.0
-2021-10-02,Hospitalizations for suspicion of COVID-19,196.0
+2021-09-29,Hospitalizations for suspicion of COVID-19,218.0
+2021-09-30,Hospitalizations for suspicion of COVID-19,168.0
+2021-10-01,Hospitalizations for suspicion of COVID-19,204.0
+2021-10-02,Hospitalizations for suspicion of COVID-19,202.0
 2021-10-03,Hospitalizations for suspicion of COVID-19,182.0
-2021-10-04,Hospitalizations for suspicion of COVID-19,156.0
-2021-10-05,Hospitalizations for suspicion of COVID-19,130.0
+2021-10-04,Hospitalizations for suspicion of COVID-19,198.0
+2021-10-05,Hospitalizations for suspicion of COVID-19,188.0
+2021-10-06,Hospitalizations for suspicion of COVID-19,104.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -2356,9 +2359,10 @@ Day,Category,value
 2021-09-30,Medical acts (SOS Médecin) for suspicion of COVID-19,345.0
 2021-10-01,Medical acts (SOS Médecin) for suspicion of COVID-19,217.0
 2021-10-02,Medical acts (SOS Médecin) for suspicion of COVID-19,260.0
-2021-10-03,Medical acts (SOS Médecin) for suspicion of COVID-19,275.0
-2021-10-04,Medical acts (SOS Médecin) for suspicion of COVID-19,307.0
-2021-10-05,Medical acts (SOS Médecin) for suspicion of COVID-19,221.0
+2021-10-03,Medical acts (SOS Médecin) for suspicion of COVID-19,273.0
+2021-10-04,Medical acts (SOS Médecin) for suspicion of COVID-19,299.0
+2021-10-05,Medical acts (SOS Médecin) for suspicion of COVID-19,247.0
+2021-10-06,Medical acts (SOS Médecin) for suspicion of COVID-19,235.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -2946,6 +2950,7 @@ Day,Category,value
 2021-09-30,Medical acts total (SOS Médecin),20811.0
 2021-10-01,Medical acts total (SOS Médecin),20010.0
 2021-10-02,Medical acts total (SOS Médecin),24948.0
-2021-10-03,Medical acts total (SOS Médecin),24202.0
-2021-10-04,Medical acts total (SOS Médecin),23232.0
-2021-10-05,Medical acts total (SOS Médecin),20362.0
+2021-10-03,Medical acts total (SOS Médecin),24198.0
+2021-10-04,Medical acts total (SOS Médecin),22942.0
+2021-10-05,Medical acts total (SOS Médecin),20750.0
+2021-10-06,Medical acts total (SOS Médecin),20500.0
