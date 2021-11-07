@@ -11,7 +11,7 @@ import numpy as np
 
 # ============================================================================ #
 # Constants
-NAME_DATASET = "sursaud-corona-quot-reg"
+NAME_DATASET = "sursaud-covid-quot-reg"
 SLUG_DATASET = "5e74ecf52eb7514f2d3b8845"
 URL_DATASET = "https://www.data.gouv.fr/api/1/datasets/{}/".format(SLUG_DATASET)
 
