@@ -641,6 +641,7 @@ Day,Category,value
 2021-11-24,Urgent care attendances for suspicion of COVID-19,1142.0
 2021-11-25,Urgent care attendances for suspicion of COVID-19,1236.0
 2021-11-26,Urgent care attendances for suspicion of COVID-19,642.0
+2021-11-27,Urgent care attendances for suspicion of COVID-19,0.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85504.0
 2020-02-26,Total urgent care attendances,84328.0
@@ -1283,6 +1284,7 @@ Day,Category,value
 2021-11-24,Total urgent care attendances,90833.0
 2021-11-25,Total urgent care attendances,86069.0
 2021-11-26,Total urgent care attendances,43535.0
+2021-11-27,Total urgent care attendances,52.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -1925,6 +1927,7 @@ Day,Category,value
 2021-11-24,Hospitalizations for suspicion of COVID-19,560.0
 2021-11-25,Hospitalizations for suspicion of COVID-19,650.0
 2021-11-26,Hospitalizations for suspicion of COVID-19,288.0
+2021-11-27,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -2567,6 +2570,7 @@ Day,Category,value
 2021-11-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2021-11-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2021-11-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
+2021-11-27,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -3209,3 +3213,4 @@ Day,Category,value
 2021-11-24,Medical acts total (SOS Médecin),0.0
 2021-11-25,Medical acts total (SOS Médecin),0.0
 2021-11-26,Medical acts total (SOS Médecin),0.0
+2021-11-27,Medical acts total (SOS Médecin),0.0
