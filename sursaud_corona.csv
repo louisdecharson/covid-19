@@ -706,17 +706,18 @@ Day,Category,value
 2022-01-28,Urgent care attendances for suspicion of COVID-19,4342.0
 2022-01-29,Urgent care attendances for suspicion of COVID-19,4058.0
 2022-01-30,Urgent care attendances for suspicion of COVID-19,3630.0
-2022-01-31,Urgent care attendances for suspicion of COVID-19,4158.0
-2022-02-01,Urgent care attendances for suspicion of COVID-19,3845.0
+2022-01-31,Urgent care attendances for suspicion of COVID-19,4162.0
+2022-02-01,Urgent care attendances for suspicion of COVID-19,3847.0
 2022-02-02,Urgent care attendances for suspicion of COVID-19,3580.0
-2022-02-03,Urgent care attendances for suspicion of COVID-19,3412.0
-2022-02-04,Urgent care attendances for suspicion of COVID-19,3578.0
-2022-02-05,Urgent care attendances for suspicion of COVID-19,3062.0
-2022-02-06,Urgent care attendances for suspicion of COVID-19,2683.0
-2022-02-07,Urgent care attendances for suspicion of COVID-19,3084.0
-2022-02-08,Urgent care attendances for suspicion of COVID-19,2792.0
-2022-02-09,Urgent care attendances for suspicion of COVID-19,2424.0
-2022-02-10,Urgent care attendances for suspicion of COVID-19,1924.0
+2022-02-03,Urgent care attendances for suspicion of COVID-19,3420.0
+2022-02-04,Urgent care attendances for suspicion of COVID-19,3580.0
+2022-02-05,Urgent care attendances for suspicion of COVID-19,3066.0
+2022-02-06,Urgent care attendances for suspicion of COVID-19,2695.0
+2022-02-07,Urgent care attendances for suspicion of COVID-19,3080.0
+2022-02-08,Urgent care attendances for suspicion of COVID-19,2800.0
+2022-02-09,Urgent care attendances for suspicion of COVID-19,2470.0
+2022-02-10,Urgent care attendances for suspicion of COVID-19,2416.0
+2022-02-11,Urgent care attendances for suspicion of COVID-19,1660.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85504.0
 2020-02-26,Total urgent care attendances,84328.0
@@ -1398,7 +1399,7 @@ Day,Category,value
 2022-01-02,Total urgent care attendances,83678.0
 2022-01-03,Total urgent care attendances,100890.0
 2022-01-04,Total urgent care attendances,91810.0
-2022-01-05,Total urgent care attendances,87805.0
+2022-01-05,Total urgent care attendances,87803.0
 2022-01-06,Total urgent care attendances,88575.0
 2022-01-07,Total urgent care attendances,87564.0
 2022-01-08,Total urgent care attendances,82828.0
@@ -1420,21 +1421,22 @@ Day,Category,value
 2022-01-24,Total urgent care attendances,98946.0
 2022-01-25,Total urgent care attendances,88449.0
 2022-01-26,Total urgent care attendances,87241.0
-2022-01-27,Total urgent care attendances,89452.0
+2022-01-27,Total urgent care attendances,89454.0
 2022-01-28,Total urgent care attendances,92771.0
 2022-01-29,Total urgent care attendances,87986.0
-2022-01-30,Total urgent care attendances,85446.0
-2022-01-31,Total urgent care attendances,99597.0
-2022-02-01,Total urgent care attendances,89527.0
-2022-02-02,Total urgent care attendances,87599.0
-2022-02-03,Total urgent care attendances,90740.0
-2022-02-04,Total urgent care attendances,92204.0
-2022-02-05,Total urgent care attendances,86893.0
-2022-02-06,Total urgent care attendances,83631.0
-2022-02-07,Total urgent care attendances,98584.0
-2022-02-08,Total urgent care attendances,89351.0
-2022-02-09,Total urgent care attendances,85158.0
-2022-02-10,Total urgent care attendances,74366.0
+2022-01-30,Total urgent care attendances,85456.0
+2022-01-31,Total urgent care attendances,99697.0
+2022-02-01,Total urgent care attendances,89615.0
+2022-02-02,Total urgent care attendances,87693.0
+2022-02-03,Total urgent care attendances,90826.0
+2022-02-04,Total urgent care attendances,92292.0
+2022-02-05,Total urgent care attendances,87069.0
+2022-02-06,Total urgent care attendances,83967.0
+2022-02-07,Total urgent care attendances,98750.0
+2022-02-08,Total urgent care attendances,89893.0
+2022-02-09,Total urgent care attendances,86728.0
+2022-02-10,Total urgent care attendances,88087.0
+2022-02-11,Total urgent care attendances,74483.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -2148,11 +2150,12 @@ Day,Category,value
 2022-02-03,Hospitalizations for suspicion of COVID-19,1508.0
 2022-02-04,Hospitalizations for suspicion of COVID-19,1478.0
 2022-02-05,Hospitalizations for suspicion of COVID-19,1282.0
-2022-02-06,Hospitalizations for suspicion of COVID-19,1062.0
-2022-02-07,Hospitalizations for suspicion of COVID-19,1376.0
-2022-02-08,Hospitalizations for suspicion of COVID-19,1222.0
-2022-02-09,Hospitalizations for suspicion of COVID-19,1082.0
-2022-02-10,Hospitalizations for suspicion of COVID-19,752.0
+2022-02-06,Hospitalizations for suspicion of COVID-19,1064.0
+2022-02-07,Hospitalizations for suspicion of COVID-19,1378.0
+2022-02-08,Hospitalizations for suspicion of COVID-19,1226.0
+2022-02-09,Hospitalizations for suspicion of COVID-19,1112.0
+2022-02-10,Hospitalizations for suspicion of COVID-19,1068.0
+2022-02-11,Hospitalizations for suspicion of COVID-19,624.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -2868,9 +2871,10 @@ Day,Category,value
 2022-02-05,Medical acts (SOS Médecin) for suspicion of COVID-19,1315.0
 2022-02-06,Medical acts (SOS Médecin) for suspicion of COVID-19,1467.0
 2022-02-07,Medical acts (SOS Médecin) for suspicion of COVID-19,1493.0
-2022-02-08,Medical acts (SOS Médecin) for suspicion of COVID-19,1136.0
-2022-02-09,Medical acts (SOS Médecin) for suspicion of COVID-19,1163.0
-2022-02-10,Medical acts (SOS Médecin) for suspicion of COVID-19,890.0
+2022-02-08,Medical acts (SOS Médecin) for suspicion of COVID-19,1134.0
+2022-02-09,Medical acts (SOS Médecin) for suspicion of COVID-19,1161.0
+2022-02-10,Medical acts (SOS Médecin) for suspicion of COVID-19,932.0
+2022-02-11,Medical acts (SOS Médecin) for suspicion of COVID-19,748.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -3586,6 +3590,7 @@ Day,Category,value
 2022-02-05,Medical acts total (SOS Médecin),22451.0
 2022-02-06,Medical acts total (SOS Médecin),22624.0
 2022-02-07,Medical acts total (SOS Médecin),21022.0
-2022-02-08,Medical acts total (SOS Médecin),18790.0
-2022-02-09,Medical acts total (SOS Médecin),18597.0
-2022-02-10,Medical acts total (SOS Médecin),18394.0
+2022-02-08,Medical acts total (SOS Médecin),18786.0
+2022-02-09,Medical acts total (SOS Médecin),18500.0
+2022-02-10,Medical acts total (SOS Médecin),18779.0
+2022-02-11,Medical acts total (SOS Médecin),17639.0
