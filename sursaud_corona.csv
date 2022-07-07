@@ -855,12 +855,13 @@ Day,Category,value
 2022-06-26,Urgent care attendances for suspicion of COVID-19,1852.0
 2022-06-27,Urgent care attendances for suspicion of COVID-19,2153.0
 2022-06-28,Urgent care attendances for suspicion of COVID-19,2256.0
-2022-06-29,Urgent care attendances for suspicion of COVID-19,2310.0
-2022-06-30,Urgent care attendances for suspicion of COVID-19,2222.0
-2022-07-01,Urgent care attendances for suspicion of COVID-19,2276.0
-2022-07-02,Urgent care attendances for suspicion of COVID-19,2264.0
-2022-07-03,Urgent care attendances for suspicion of COVID-19,2428.0
-2022-07-04,Urgent care attendances for suspicion of COVID-19,2330.0
+2022-06-29,Urgent care attendances for suspicion of COVID-19,2316.0
+2022-06-30,Urgent care attendances for suspicion of COVID-19,2238.0
+2022-07-01,Urgent care attendances for suspicion of COVID-19,2312.0
+2022-07-02,Urgent care attendances for suspicion of COVID-19,2308.0
+2022-07-03,Urgent care attendances for suspicion of COVID-19,2486.0
+2022-07-04,Urgent care attendances for suspicion of COVID-19,2902.0
+2022-07-05,Urgent care attendances for suspicion of COVID-19,2228.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85504.0
 2020-02-26,Total urgent care attendances,84328.0
@@ -1716,13 +1717,14 @@ Day,Category,value
 2022-06-25,Total urgent care attendances,98385.0
 2022-06-26,Total urgent care attendances,95734.0
 2022-06-27,Total urgent care attendances,109669.0
-2022-06-28,Total urgent care attendances,98863.0
-2022-06-29,Total urgent care attendances,93419.0
-2022-06-30,Total urgent care attendances,91096.0
-2022-07-01,Total urgent care attendances,91311.0
-2022-07-02,Total urgent care attendances,89194.0
-2022-07-03,Total urgent care attendances,89072.0
-2022-07-04,Total urgent care attendances,85389.0
+2022-06-28,Total urgent care attendances,98933.0
+2022-06-29,Total urgent care attendances,93751.0
+2022-06-30,Total urgent care attendances,91476.0
+2022-07-01,Total urgent care attendances,92379.0
+2022-07-02,Total urgent care attendances,90322.0
+2022-07-03,Total urgent care attendances,90532.0
+2022-07-04,Total urgent care attendances,99861.0
+2022-07-05,Total urgent care attendances,76057.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -2580,11 +2582,12 @@ Day,Category,value
 2022-06-27,Hospitalizations for suspicion of COVID-19,592.0
 2022-06-28,Hospitalizations for suspicion of COVID-19,574.0
 2022-06-29,Hospitalizations for suspicion of COVID-19,678.0
-2022-06-30,Hospitalizations for suspicion of COVID-19,674.0
-2022-07-01,Hospitalizations for suspicion of COVID-19,748.0
-2022-07-02,Hospitalizations for suspicion of COVID-19,646.0
-2022-07-03,Hospitalizations for suspicion of COVID-19,650.0
-2022-07-04,Hospitalizations for suspicion of COVID-19,564.0
+2022-06-30,Hospitalizations for suspicion of COVID-19,678.0
+2022-07-01,Hospitalizations for suspicion of COVID-19,754.0
+2022-07-02,Hospitalizations for suspicion of COVID-19,668.0
+2022-07-03,Hospitalizations for suspicion of COVID-19,680.0
+2022-07-04,Hospitalizations for suspicion of COVID-19,836.0
+2022-07-05,Hospitalizations for suspicion of COVID-19,528.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -3308,145 +3311,146 @@ Day,Category,value
 2022-02-13,Medical acts (SOS Médecin) for suspicion of COVID-19,998.0
 2022-02-14,Medical acts (SOS Médecin) for suspicion of COVID-19,860.0
 2022-02-15,Medical acts (SOS Médecin) for suspicion of COVID-19,869.0
-2022-02-16,Medical acts (SOS Médecin) for suspicion of COVID-19,550.0
-2022-02-17,Medical acts (SOS Médecin) for suspicion of COVID-19,501.0
-2022-02-18,Medical acts (SOS Médecin) for suspicion of COVID-19,339.0
-2022-02-19,Medical acts (SOS Médecin) for suspicion of COVID-19,286.0
-2022-02-20,Medical acts (SOS Médecin) for suspicion of COVID-19,376.0
-2022-02-21,Medical acts (SOS Médecin) for suspicion of COVID-19,500.0
-2022-02-22,Medical acts (SOS Médecin) for suspicion of COVID-19,404.0
-2022-02-23,Medical acts (SOS Médecin) for suspicion of COVID-19,420.0
-2022-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,426.0
-2022-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,270.0
-2022-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,260.0
-2022-02-27,Medical acts (SOS Médecin) for suspicion of COVID-19,331.0
-2022-02-28,Medical acts (SOS Médecin) for suspicion of COVID-19,439.0
-2022-03-01,Medical acts (SOS Médecin) for suspicion of COVID-19,382.0
-2022-03-02,Medical acts (SOS Médecin) for suspicion of COVID-19,459.0
-2022-03-03,Medical acts (SOS Médecin) for suspicion of COVID-19,408.0
-2022-03-04,Medical acts (SOS Médecin) for suspicion of COVID-19,323.0
-2022-03-05,Medical acts (SOS Médecin) for suspicion of COVID-19,250.0
-2022-03-06,Medical acts (SOS Médecin) for suspicion of COVID-19,344.0
-2022-03-07,Medical acts (SOS Médecin) for suspicion of COVID-19,452.0
-2022-03-08,Medical acts (SOS Médecin) for suspicion of COVID-19,468.0
-2022-03-09,Medical acts (SOS Médecin) for suspicion of COVID-19,530.0
-2022-03-10,Medical acts (SOS Médecin) for suspicion of COVID-19,430.0
-2022-03-11,Medical acts (SOS Médecin) for suspicion of COVID-19,344.0
-2022-03-12,Medical acts (SOS Médecin) for suspicion of COVID-19,360.0
-2022-03-13,Medical acts (SOS Médecin) for suspicion of COVID-19,498.0
-2022-03-14,Medical acts (SOS Médecin) for suspicion of COVID-19,567.0
-2022-03-15,Medical acts (SOS Médecin) for suspicion of COVID-19,525.0
-2022-03-16,Medical acts (SOS Médecin) for suspicion of COVID-19,464.0
-2022-03-17,Medical acts (SOS Médecin) for suspicion of COVID-19,528.0
-2022-03-18,Medical acts (SOS Médecin) for suspicion of COVID-19,422.0
-2022-03-19,Medical acts (SOS Médecin) for suspicion of COVID-19,487.0
-2022-03-20,Medical acts (SOS Médecin) for suspicion of COVID-19,559.0
-2022-03-21,Medical acts (SOS Médecin) for suspicion of COVID-19,751.0
-2022-03-22,Medical acts (SOS Médecin) for suspicion of COVID-19,545.0
-2022-03-23,Medical acts (SOS Médecin) for suspicion of COVID-19,604.0
-2022-03-24,Medical acts (SOS Médecin) for suspicion of COVID-19,609.0
-2022-03-25,Medical acts (SOS Médecin) for suspicion of COVID-19,508.0
-2022-03-26,Medical acts (SOS Médecin) for suspicion of COVID-19,634.0
-2022-03-27,Medical acts (SOS Médecin) for suspicion of COVID-19,676.0
-2022-03-28,Medical acts (SOS Médecin) for suspicion of COVID-19,818.0
-2022-03-29,Medical acts (SOS Médecin) for suspicion of COVID-19,731.0
-2022-03-30,Medical acts (SOS Médecin) for suspicion of COVID-19,720.0
-2022-03-31,Medical acts (SOS Médecin) for suspicion of COVID-19,592.0
-2022-04-01,Medical acts (SOS Médecin) for suspicion of COVID-19,500.0
-2022-04-02,Medical acts (SOS Médecin) for suspicion of COVID-19,469.0
-2022-04-03,Medical acts (SOS Médecin) for suspicion of COVID-19,559.0
-2022-04-04,Medical acts (SOS Médecin) for suspicion of COVID-19,754.0
-2022-04-05,Medical acts (SOS Médecin) for suspicion of COVID-19,581.0
-2022-04-06,Medical acts (SOS Médecin) for suspicion of COVID-19,573.0
-2022-04-07,Medical acts (SOS Médecin) for suspicion of COVID-19,608.0
-2022-04-08,Medical acts (SOS Médecin) for suspicion of COVID-19,453.0
-2022-04-09,Medical acts (SOS Médecin) for suspicion of COVID-19,461.0
-2022-04-10,Medical acts (SOS Médecin) for suspicion of COVID-19,514.0
-2022-04-11,Medical acts (SOS Médecin) for suspicion of COVID-19,680.0
-2022-04-12,Medical acts (SOS Médecin) for suspicion of COVID-19,540.0
-2022-04-13,Medical acts (SOS Médecin) for suspicion of COVID-19,509.0
-2022-04-14,Medical acts (SOS Médecin) for suspicion of COVID-19,387.0
-2022-04-15,Medical acts (SOS Médecin) for suspicion of COVID-19,381.0
-2022-04-16,Medical acts (SOS Médecin) for suspicion of COVID-19,378.0
-2022-04-17,Medical acts (SOS Médecin) for suspicion of COVID-19,415.0
-2022-04-18,Medical acts (SOS Médecin) for suspicion of COVID-19,570.0
-2022-04-19,Medical acts (SOS Médecin) for suspicion of COVID-19,478.0
-2022-04-20,Medical acts (SOS Médecin) for suspicion of COVID-19,325.0
-2022-04-21,Medical acts (SOS Médecin) for suspicion of COVID-19,388.0
-2022-04-22,Medical acts (SOS Médecin) for suspicion of COVID-19,322.0
-2022-04-23,Medical acts (SOS Médecin) for suspicion of COVID-19,309.0
-2022-04-24,Medical acts (SOS Médecin) for suspicion of COVID-19,319.0
-2022-04-25,Medical acts (SOS Médecin) for suspicion of COVID-19,353.0
-2022-04-26,Medical acts (SOS Médecin) for suspicion of COVID-19,323.0
-2022-04-27,Medical acts (SOS Médecin) for suspicion of COVID-19,230.0
-2022-04-28,Medical acts (SOS Médecin) for suspicion of COVID-19,275.0
-2022-04-29,Medical acts (SOS Médecin) for suspicion of COVID-19,226.0
-2022-04-30,Medical acts (SOS Médecin) for suspicion of COVID-19,196.0
-2022-05-01,Medical acts (SOS Médecin) for suspicion of COVID-19,216.0
-2022-05-02,Medical acts (SOS Médecin) for suspicion of COVID-19,306.0
-2022-05-03,Medical acts (SOS Médecin) for suspicion of COVID-19,292.0
-2022-05-04,Medical acts (SOS Médecin) for suspicion of COVID-19,258.0
-2022-05-05,Medical acts (SOS Médecin) for suspicion of COVID-19,253.0
-2022-05-06,Medical acts (SOS Médecin) for suspicion of COVID-19,219.0
-2022-05-07,Medical acts (SOS Médecin) for suspicion of COVID-19,220.0
-2022-05-08,Medical acts (SOS Médecin) for suspicion of COVID-19,231.0
-2022-05-09,Medical acts (SOS Médecin) for suspicion of COVID-19,324.0
-2022-05-10,Medical acts (SOS Médecin) for suspicion of COVID-19,254.0
-2022-05-11,Medical acts (SOS Médecin) for suspicion of COVID-19,238.0
-2022-05-12,Medical acts (SOS Médecin) for suspicion of COVID-19,211.0
-2022-05-13,Medical acts (SOS Médecin) for suspicion of COVID-19,198.0
-2022-05-14,Medical acts (SOS Médecin) for suspicion of COVID-19,185.0
-2022-05-15,Medical acts (SOS Médecin) for suspicion of COVID-19,230.0
-2022-05-16,Medical acts (SOS Médecin) for suspicion of COVID-19,242.0
-2022-05-17,Medical acts (SOS Médecin) for suspicion of COVID-19,223.0
-2022-05-18,Medical acts (SOS Médecin) for suspicion of COVID-19,216.0
-2022-05-19,Medical acts (SOS Médecin) for suspicion of COVID-19,207.0
-2022-05-20,Medical acts (SOS Médecin) for suspicion of COVID-19,158.0
-2022-05-21,Medical acts (SOS Médecin) for suspicion of COVID-19,106.0
-2022-05-22,Medical acts (SOS Médecin) for suspicion of COVID-19,166.0
-2022-05-23,Medical acts (SOS Médecin) for suspicion of COVID-19,223.0
-2022-05-24,Medical acts (SOS Médecin) for suspicion of COVID-19,138.0
-2022-05-25,Medical acts (SOS Médecin) for suspicion of COVID-19,154.0
-2022-05-26,Medical acts (SOS Médecin) for suspicion of COVID-19,166.0
-2022-05-27,Medical acts (SOS Médecin) for suspicion of COVID-19,173.0
-2022-05-28,Medical acts (SOS Médecin) for suspicion of COVID-19,142.0
-2022-05-29,Medical acts (SOS Médecin) for suspicion of COVID-19,159.0
-2022-05-30,Medical acts (SOS Médecin) for suspicion of COVID-19,238.0
-2022-05-31,Medical acts (SOS Médecin) for suspicion of COVID-19,240.0
-2022-06-01,Medical acts (SOS Médecin) for suspicion of COVID-19,218.0
-2022-06-02,Medical acts (SOS Médecin) for suspicion of COVID-19,220.0
-2022-06-03,Medical acts (SOS Médecin) for suspicion of COVID-19,179.0
-2022-06-04,Medical acts (SOS Médecin) for suspicion of COVID-19,177.0
-2022-06-05,Medical acts (SOS Médecin) for suspicion of COVID-19,178.0
-2022-06-06,Medical acts (SOS Médecin) for suspicion of COVID-19,297.0
-2022-06-07,Medical acts (SOS Médecin) for suspicion of COVID-19,305.0
-2022-06-08,Medical acts (SOS Médecin) for suspicion of COVID-19,319.0
-2022-06-09,Medical acts (SOS Médecin) for suspicion of COVID-19,286.0
-2022-06-10,Medical acts (SOS Médecin) for suspicion of COVID-19,244.0
-2022-06-11,Medical acts (SOS Médecin) for suspicion of COVID-19,253.0
-2022-06-12,Medical acts (SOS Médecin) for suspicion of COVID-19,329.0
-2022-06-13,Medical acts (SOS Médecin) for suspicion of COVID-19,422.0
-2022-06-14,Medical acts (SOS Médecin) for suspicion of COVID-19,373.0
-2022-06-15,Medical acts (SOS Médecin) for suspicion of COVID-19,416.0
-2022-06-16,Medical acts (SOS Médecin) for suspicion of COVID-19,404.0
-2022-06-17,Medical acts (SOS Médecin) for suspicion of COVID-19,365.0
-2022-06-18,Medical acts (SOS Médecin) for suspicion of COVID-19,331.0
-2022-06-19,Medical acts (SOS Médecin) for suspicion of COVID-19,437.0
-2022-06-20,Medical acts (SOS Médecin) for suspicion of COVID-19,541.0
-2022-06-21,Medical acts (SOS Médecin) for suspicion of COVID-19,491.0
-2022-06-22,Medical acts (SOS Médecin) for suspicion of COVID-19,585.0
-2022-06-23,Medical acts (SOS Médecin) for suspicion of COVID-19,591.0
-2022-06-24,Medical acts (SOS Médecin) for suspicion of COVID-19,656.0
-2022-06-25,Medical acts (SOS Médecin) for suspicion of COVID-19,603.0
-2022-06-26,Medical acts (SOS Médecin) for suspicion of COVID-19,668.0
-2022-06-27,Medical acts (SOS Médecin) for suspicion of COVID-19,914.0
-2022-06-28,Medical acts (SOS Médecin) for suspicion of COVID-19,869.0
-2022-06-29,Medical acts (SOS Médecin) for suspicion of COVID-19,835.0
-2022-06-30,Medical acts (SOS Médecin) for suspicion of COVID-19,789.0
-2022-07-01,Medical acts (SOS Médecin) for suspicion of COVID-19,678.0
-2022-07-02,Medical acts (SOS Médecin) for suspicion of COVID-19,791.0
-2022-07-03,Medical acts (SOS Médecin) for suspicion of COVID-19,939.0
-2022-07-04,Medical acts (SOS Médecin) for suspicion of COVID-19,1053.0
+2022-02-16,Medical acts (SOS Médecin) for suspicion of COVID-19,1386.0
+2022-02-17,Medical acts (SOS Médecin) for suspicion of COVID-19,1230.0
+2022-02-18,Medical acts (SOS Médecin) for suspicion of COVID-19,1042.0
+2022-02-19,Medical acts (SOS Médecin) for suspicion of COVID-19,952.0
+2022-02-20,Medical acts (SOS Médecin) for suspicion of COVID-19,1192.0
+2022-02-21,Medical acts (SOS Médecin) for suspicion of COVID-19,1006.0
+2022-02-22,Medical acts (SOS Médecin) for suspicion of COVID-19,802.0
+2022-02-23,Medical acts (SOS Médecin) for suspicion of COVID-19,800.0
+2022-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,796.0
+2022-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,622.0
+2022-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,825.0
+2022-02-27,Medical acts (SOS Médecin) for suspicion of COVID-19,879.0
+2022-02-28,Medical acts (SOS Médecin) for suspicion of COVID-19,1077.0
+2022-03-01,Medical acts (SOS Médecin) for suspicion of COVID-19,951.0
+2022-03-02,Medical acts (SOS Médecin) for suspicion of COVID-19,994.0
+2022-03-03,Medical acts (SOS Médecin) for suspicion of COVID-19,925.0
+2022-03-04,Medical acts (SOS Médecin) for suspicion of COVID-19,780.0
+2022-03-05,Medical acts (SOS Médecin) for suspicion of COVID-19,1020.0
+2022-03-06,Medical acts (SOS Médecin) for suspicion of COVID-19,1089.0
+2022-03-07,Medical acts (SOS Médecin) for suspicion of COVID-19,1195.0
+2022-03-08,Medical acts (SOS Médecin) for suspicion of COVID-19,1131.0
+2022-03-09,Medical acts (SOS Médecin) for suspicion of COVID-19,1214.0
+2022-03-10,Medical acts (SOS Médecin) for suspicion of COVID-19,1093.0
+2022-03-11,Medical acts (SOS Médecin) for suspicion of COVID-19,1013.0
+2022-03-12,Medical acts (SOS Médecin) for suspicion of COVID-19,1201.0
+2022-03-13,Medical acts (SOS Médecin) for suspicion of COVID-19,1322.0
+2022-03-14,Medical acts (SOS Médecin) for suspicion of COVID-19,1444.0
+2022-03-15,Medical acts (SOS Médecin) for suspicion of COVID-19,1388.0
+2022-03-16,Medical acts (SOS Médecin) for suspicion of COVID-19,1313.0
+2022-03-17,Medical acts (SOS Médecin) for suspicion of COVID-19,1304.0
+2022-03-18,Medical acts (SOS Médecin) for suspicion of COVID-19,1182.0
+2022-03-19,Medical acts (SOS Médecin) for suspicion of COVID-19,1682.0
+2022-03-20,Medical acts (SOS Médecin) for suspicion of COVID-19,1665.0
+2022-03-21,Medical acts (SOS Médecin) for suspicion of COVID-19,1911.0
+2022-03-22,Medical acts (SOS Médecin) for suspicion of COVID-19,1668.0
+2022-03-23,Medical acts (SOS Médecin) for suspicion of COVID-19,1858.0
+2022-03-24,Medical acts (SOS Médecin) for suspicion of COVID-19,1501.0
+2022-03-25,Medical acts (SOS Médecin) for suspicion of COVID-19,1508.0
+2022-03-26,Medical acts (SOS Médecin) for suspicion of COVID-19,1922.0
+2022-03-27,Medical acts (SOS Médecin) for suspicion of COVID-19,1874.0
+2022-03-28,Medical acts (SOS Médecin) for suspicion of COVID-19,2076.0
+2022-03-29,Medical acts (SOS Médecin) for suspicion of COVID-19,1939.0
+2022-03-30,Medical acts (SOS Médecin) for suspicion of COVID-19,1844.0
+2022-03-31,Medical acts (SOS Médecin) for suspicion of COVID-19,1678.0
+2022-04-01,Medical acts (SOS Médecin) for suspicion of COVID-19,1528.0
+2022-04-02,Medical acts (SOS Médecin) for suspicion of COVID-19,1827.0
+2022-04-03,Medical acts (SOS Médecin) for suspicion of COVID-19,1820.0
+2022-04-04,Medical acts (SOS Médecin) for suspicion of COVID-19,1956.0
+2022-04-05,Medical acts (SOS Médecin) for suspicion of COVID-19,1748.0
+2022-04-06,Medical acts (SOS Médecin) for suspicion of COVID-19,1691.0
+2022-04-07,Medical acts (SOS Médecin) for suspicion of COVID-19,1392.0
+2022-04-08,Medical acts (SOS Médecin) for suspicion of COVID-19,1234.0
+2022-04-09,Medical acts (SOS Médecin) for suspicion of COVID-19,1420.0
+2022-04-10,Medical acts (SOS Médecin) for suspicion of COVID-19,1341.0
+2022-04-11,Medical acts (SOS Médecin) for suspicion of COVID-19,1959.0
+2022-04-12,Medical acts (SOS Médecin) for suspicion of COVID-19,1680.0
+2022-04-13,Medical acts (SOS Médecin) for suspicion of COVID-19,1715.0
+2022-04-14,Medical acts (SOS Médecin) for suspicion of COVID-19,1487.0
+2022-04-15,Medical acts (SOS Médecin) for suspicion of COVID-19,1332.0
+2022-04-16,Medical acts (SOS Médecin) for suspicion of COVID-19,1617.0
+2022-04-17,Medical acts (SOS Médecin) for suspicion of COVID-19,1536.0
+2022-04-18,Medical acts (SOS Médecin) for suspicion of COVID-19,1720.0
+2022-04-19,Medical acts (SOS Médecin) for suspicion of COVID-19,1535.0
+2022-04-20,Medical acts (SOS Médecin) for suspicion of COVID-19,1273.0
+2022-04-21,Medical acts (SOS Médecin) for suspicion of COVID-19,1288.0
+2022-04-22,Medical acts (SOS Médecin) for suspicion of COVID-19,1091.0
+2022-04-23,Medical acts (SOS Médecin) for suspicion of COVID-19,1212.0
+2022-04-24,Medical acts (SOS Médecin) for suspicion of COVID-19,1095.0
+2022-04-25,Medical acts (SOS Médecin) for suspicion of COVID-19,1159.0
+2022-04-26,Medical acts (SOS Médecin) for suspicion of COVID-19,910.0
+2022-04-27,Medical acts (SOS Médecin) for suspicion of COVID-19,813.0
+2022-04-28,Medical acts (SOS Médecin) for suspicion of COVID-19,844.0
+2022-04-29,Medical acts (SOS Médecin) for suspicion of COVID-19,717.0
+2022-04-30,Medical acts (SOS Médecin) for suspicion of COVID-19,813.0
+2022-05-01,Medical acts (SOS Médecin) for suspicion of COVID-19,764.0
+2022-05-02,Medical acts (SOS Médecin) for suspicion of COVID-19,798.0
+2022-05-03,Medical acts (SOS Médecin) for suspicion of COVID-19,778.0
+2022-05-04,Medical acts (SOS Médecin) for suspicion of COVID-19,711.0
+2022-05-05,Medical acts (SOS Médecin) for suspicion of COVID-19,689.0
+2022-05-06,Medical acts (SOS Médecin) for suspicion of COVID-19,643.0
+2022-05-07,Medical acts (SOS Médecin) for suspicion of COVID-19,665.0
+2022-05-08,Medical acts (SOS Médecin) for suspicion of COVID-19,695.0
+2022-05-09,Medical acts (SOS Médecin) for suspicion of COVID-19,761.0
+2022-05-10,Medical acts (SOS Médecin) for suspicion of COVID-19,677.0
+2022-05-11,Medical acts (SOS Médecin) for suspicion of COVID-19,684.0
+2022-05-12,Medical acts (SOS Médecin) for suspicion of COVID-19,590.0
+2022-05-13,Medical acts (SOS Médecin) for suspicion of COVID-19,578.0
+2022-05-14,Medical acts (SOS Médecin) for suspicion of COVID-19,643.0
+2022-05-15,Medical acts (SOS Médecin) for suspicion of COVID-19,618.0
+2022-05-16,Medical acts (SOS Médecin) for suspicion of COVID-19,636.0
+2022-05-17,Medical acts (SOS Médecin) for suspicion of COVID-19,584.0
+2022-05-18,Medical acts (SOS Médecin) for suspicion of COVID-19,510.0
+2022-05-19,Medical acts (SOS Médecin) for suspicion of COVID-19,530.0
+2022-05-20,Medical acts (SOS Médecin) for suspicion of COVID-19,437.0
+2022-05-21,Medical acts (SOS Médecin) for suspicion of COVID-19,372.0
+2022-05-22,Medical acts (SOS Médecin) for suspicion of COVID-19,478.0
+2022-05-23,Medical acts (SOS Médecin) for suspicion of COVID-19,482.0
+2022-05-24,Medical acts (SOS Médecin) for suspicion of COVID-19,437.0
+2022-05-25,Medical acts (SOS Médecin) for suspicion of COVID-19,411.0
+2022-05-26,Medical acts (SOS Médecin) for suspicion of COVID-19,486.0
+2022-05-27,Medical acts (SOS Médecin) for suspicion of COVID-19,500.0
+2022-05-28,Medical acts (SOS Médecin) for suspicion of COVID-19,544.0
+2022-05-29,Medical acts (SOS Médecin) for suspicion of COVID-19,500.0
+2022-05-30,Medical acts (SOS Médecin) for suspicion of COVID-19,529.0
+2022-05-31,Medical acts (SOS Médecin) for suspicion of COVID-19,620.0
+2022-06-01,Medical acts (SOS Médecin) for suspicion of COVID-19,562.0
+2022-06-02,Medical acts (SOS Médecin) for suspicion of COVID-19,538.0
+2022-06-03,Medical acts (SOS Médecin) for suspicion of COVID-19,568.0
+2022-06-04,Medical acts (SOS Médecin) for suspicion of COVID-19,644.0
+2022-06-05,Medical acts (SOS Médecin) for suspicion of COVID-19,635.0
+2022-06-06,Medical acts (SOS Médecin) for suspicion of COVID-19,814.0
+2022-06-07,Medical acts (SOS Médecin) for suspicion of COVID-19,802.0
+2022-06-08,Medical acts (SOS Médecin) for suspicion of COVID-19,895.0
+2022-06-09,Medical acts (SOS Médecin) for suspicion of COVID-19,801.0
+2022-06-10,Medical acts (SOS Médecin) for suspicion of COVID-19,689.0
+2022-06-11,Medical acts (SOS Médecin) for suspicion of COVID-19,831.0
+2022-06-12,Medical acts (SOS Médecin) for suspicion of COVID-19,914.0
+2022-06-13,Medical acts (SOS Médecin) for suspicion of COVID-19,1123.0
+2022-06-14,Medical acts (SOS Médecin) for suspicion of COVID-19,939.0
+2022-06-15,Medical acts (SOS Médecin) for suspicion of COVID-19,1089.0
+2022-06-16,Medical acts (SOS Médecin) for suspicion of COVID-19,1030.0
+2022-06-17,Medical acts (SOS Médecin) for suspicion of COVID-19,940.0
+2022-06-18,Medical acts (SOS Médecin) for suspicion of COVID-19,1139.0
+2022-06-19,Medical acts (SOS Médecin) for suspicion of COVID-19,1219.0
+2022-06-20,Medical acts (SOS Médecin) for suspicion of COVID-19,1403.0
+2022-06-21,Medical acts (SOS Médecin) for suspicion of COVID-19,1307.0
+2022-06-22,Medical acts (SOS Médecin) for suspicion of COVID-19,1508.0
+2022-06-23,Medical acts (SOS Médecin) for suspicion of COVID-19,1433.0
+2022-06-24,Medical acts (SOS Médecin) for suspicion of COVID-19,1523.0
+2022-06-25,Medical acts (SOS Médecin) for suspicion of COVID-19,1734.0
+2022-06-26,Medical acts (SOS Médecin) for suspicion of COVID-19,1845.0
+2022-06-27,Medical acts (SOS Médecin) for suspicion of COVID-19,2163.0
+2022-06-28,Medical acts (SOS Médecin) for suspicion of COVID-19,2307.0
+2022-06-29,Medical acts (SOS Médecin) for suspicion of COVID-19,2166.0
+2022-06-30,Medical acts (SOS Médecin) for suspicion of COVID-19,2101.0
+2022-07-01,Medical acts (SOS Médecin) for suspicion of COVID-19,1880.0
+2022-07-02,Medical acts (SOS Médecin) for suspicion of COVID-19,2449.0
+2022-07-03,Medical acts (SOS Médecin) for suspicion of COVID-19,2763.0
+2022-07-04,Medical acts (SOS Médecin) for suspicion of COVID-19,2798.0
+2022-07-05,Medical acts (SOS Médecin) for suspicion of COVID-19,2634.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -4170,142 +4174,143 @@ Day,Category,value
 2022-02-13,Medical acts total (SOS Médecin),22041.0
 2022-02-14,Medical acts total (SOS Médecin),20259.0
 2022-02-15,Medical acts total (SOS Médecin),18879.0
-2022-02-16,Medical acts total (SOS Médecin),14281.0
-2022-02-17,Medical acts total (SOS Médecin),13702.0
-2022-02-18,Medical acts total (SOS Médecin),13128.0
-2022-02-19,Medical acts total (SOS Médecin),16355.0
-2022-02-20,Medical acts total (SOS Médecin),16428.0
-2022-02-21,Medical acts total (SOS Médecin),15816.0
-2022-02-22,Medical acts total (SOS Médecin),14089.0
-2022-02-23,Medical acts total (SOS Médecin),13805.0
-2022-02-24,Medical acts total (SOS Médecin),14070.0
-2022-02-25,Medical acts total (SOS Médecin),13261.0
-2022-02-26,Medical acts total (SOS Médecin),16717.0
-2022-02-27,Medical acts total (SOS Médecin),16741.0
-2022-02-28,Medical acts total (SOS Médecin),16427.0
-2022-03-01,Medical acts total (SOS Médecin),14955.0
-2022-03-02,Medical acts total (SOS Médecin),14959.0
-2022-03-03,Medical acts total (SOS Médecin),15016.0
-2022-03-04,Medical acts total (SOS Médecin),14022.0
-2022-03-05,Medical acts total (SOS Médecin),17535.0
-2022-03-06,Medical acts total (SOS Médecin),17841.0
-2022-03-07,Medical acts total (SOS Médecin),18061.0
-2022-03-08,Medical acts total (SOS Médecin),16673.0
-2022-03-09,Medical acts total (SOS Médecin),15637.0
-2022-03-10,Medical acts total (SOS Médecin),16602.0
-2022-03-11,Medical acts total (SOS Médecin),15556.0
-2022-03-12,Medical acts total (SOS Médecin),18830.0
-2022-03-13,Medical acts total (SOS Médecin),18968.0
-2022-03-14,Medical acts total (SOS Médecin),18599.0
-2022-03-15,Medical acts total (SOS Médecin),17662.0
-2022-03-16,Medical acts total (SOS Médecin),16691.0
-2022-03-17,Medical acts total (SOS Médecin),16687.0
-2022-03-18,Medical acts total (SOS Médecin),16200.0
-2022-03-19,Medical acts total (SOS Médecin),19578.0
-2022-03-20,Medical acts total (SOS Médecin),19800.0
-2022-03-21,Medical acts total (SOS Médecin),19797.0
-2022-03-22,Medical acts total (SOS Médecin),18118.0
-2022-03-23,Medical acts total (SOS Médecin),17470.0
-2022-03-24,Medical acts total (SOS Médecin),17209.0
-2022-03-25,Medical acts total (SOS Médecin),16420.0
-2022-03-26,Medical acts total (SOS Médecin),19851.0
-2022-03-27,Medical acts total (SOS Médecin),19560.0
-2022-03-28,Medical acts total (SOS Médecin),20375.0
-2022-03-29,Medical acts total (SOS Médecin),18449.0
-2022-03-30,Medical acts total (SOS Médecin),17718.0
-2022-03-31,Medical acts total (SOS Médecin),17390.0
-2022-04-01,Medical acts total (SOS Médecin),16133.0
-2022-04-02,Medical acts total (SOS Médecin),19734.0
-2022-04-03,Medical acts total (SOS Médecin),20032.0
-2022-04-04,Medical acts total (SOS Médecin),19855.0
-2022-04-05,Medical acts total (SOS Médecin),18515.0
-2022-04-06,Medical acts total (SOS Médecin),17403.0
-2022-04-07,Medical acts total (SOS Médecin),17874.0
-2022-04-08,Medical acts total (SOS Médecin),16787.0
-2022-04-09,Medical acts total (SOS Médecin),19172.0
-2022-04-10,Medical acts total (SOS Médecin),19254.0
-2022-04-11,Medical acts total (SOS Médecin),18699.0
-2022-04-12,Medical acts total (SOS Médecin),17706.0
-2022-04-13,Medical acts total (SOS Médecin),16699.0
-2022-04-14,Medical acts total (SOS Médecin),16394.0
-2022-04-15,Medical acts total (SOS Médecin),15924.0
-2022-04-16,Medical acts total (SOS Médecin),18160.0
-2022-04-17,Medical acts total (SOS Médecin),17030.0
-2022-04-18,Medical acts total (SOS Médecin),19105.0
-2022-04-19,Medical acts total (SOS Médecin),16820.0
-2022-04-20,Medical acts total (SOS Médecin),15640.0
-2022-04-21,Medical acts total (SOS Médecin),15058.0
-2022-04-22,Medical acts total (SOS Médecin),14598.0
-2022-04-23,Medical acts total (SOS Médecin),17961.0
-2022-04-24,Medical acts total (SOS Médecin),16441.0
-2022-04-25,Medical acts total (SOS Médecin),15628.0
-2022-04-26,Medical acts total (SOS Médecin),13816.0
-2022-04-27,Medical acts total (SOS Médecin),13660.0
-2022-04-28,Medical acts total (SOS Médecin),13210.0
-2022-04-29,Medical acts total (SOS Médecin),13223.0
-2022-04-30,Medical acts total (SOS Médecin),16479.0
-2022-05-01,Medical acts total (SOS Médecin),14668.0
-2022-05-02,Medical acts total (SOS Médecin),15430.0
-2022-05-03,Medical acts total (SOS Médecin),14107.0
-2022-05-04,Medical acts total (SOS Médecin),13883.0
-2022-05-05,Medical acts total (SOS Médecin),13666.0
-2022-05-06,Medical acts total (SOS Médecin),13508.0
-2022-05-07,Medical acts total (SOS Médecin),16118.0
-2022-05-08,Medical acts total (SOS Médecin),15894.0
-2022-05-09,Medical acts total (SOS Médecin),16121.0
-2022-05-10,Medical acts total (SOS Médecin),14295.0
-2022-05-11,Medical acts total (SOS Médecin),13594.0
-2022-05-12,Medical acts total (SOS Médecin),14636.0
-2022-05-13,Medical acts total (SOS Médecin),13930.0
-2022-05-14,Medical acts total (SOS Médecin),16805.0
-2022-05-15,Medical acts total (SOS Médecin),16329.0
-2022-05-16,Medical acts total (SOS Médecin),16661.0
-2022-05-17,Medical acts total (SOS Médecin),14585.0
-2022-05-18,Medical acts total (SOS Médecin),14295.0
-2022-05-19,Medical acts total (SOS Médecin),15114.0
-2022-05-20,Medical acts total (SOS Médecin),14391.0
-2022-05-21,Medical acts total (SOS Médecin),17266.0
-2022-05-22,Medical acts total (SOS Médecin),17675.0
-2022-05-23,Medical acts total (SOS Médecin),17146.0
-2022-05-24,Medical acts total (SOS Médecin),15496.0
-2022-05-25,Medical acts total (SOS Médecin),14954.0
-2022-05-26,Medical acts total (SOS Médecin),18184.0
-2022-05-27,Medical acts total (SOS Médecin),18786.0
-2022-05-28,Medical acts total (SOS Médecin),18107.0
-2022-05-29,Medical acts total (SOS Médecin),16831.0
-2022-05-30,Medical acts total (SOS Médecin),17758.0
-2022-05-31,Medical acts total (SOS Médecin),16167.0
-2022-06-01,Medical acts total (SOS Médecin),16246.0
-2022-06-02,Medical acts total (SOS Médecin),15806.0
-2022-06-03,Medical acts total (SOS Médecin),14773.0
-2022-06-04,Medical acts total (SOS Médecin),18218.0
-2022-06-05,Medical acts total (SOS Médecin),18134.0
-2022-06-06,Medical acts total (SOS Médecin),20869.0
-2022-06-07,Medical acts total (SOS Médecin),17769.0
-2022-06-08,Medical acts total (SOS Médecin),15922.0
-2022-06-09,Medical acts total (SOS Médecin),15967.0
-2022-06-10,Medical acts total (SOS Médecin),14704.0
-2022-06-11,Medical acts total (SOS Médecin),17428.0
-2022-06-12,Medical acts total (SOS Médecin),17709.0
-2022-06-13,Medical acts total (SOS Médecin),17353.0
-2022-06-14,Medical acts total (SOS Médecin),15898.0
-2022-06-15,Medical acts total (SOS Médecin),15348.0
-2022-06-16,Medical acts total (SOS Médecin),15038.0
-2022-06-17,Medical acts total (SOS Médecin),14296.0
-2022-06-18,Medical acts total (SOS Médecin),17499.0
-2022-06-19,Medical acts total (SOS Médecin),17902.0
-2022-06-20,Medical acts total (SOS Médecin),17630.0
-2022-06-21,Medical acts total (SOS Médecin),16240.0
-2022-06-22,Medical acts total (SOS Médecin),15970.0
-2022-06-23,Medical acts total (SOS Médecin),15620.0
-2022-06-24,Medical acts total (SOS Médecin),14949.0
-2022-06-25,Medical acts total (SOS Médecin),18238.0
-2022-06-26,Medical acts total (SOS Médecin),18202.0
-2022-06-27,Medical acts total (SOS Médecin),17364.0
-2022-06-28,Medical acts total (SOS Médecin),15418.0
-2022-06-29,Medical acts total (SOS Médecin),15219.0
-2022-06-30,Medical acts total (SOS Médecin),15166.0
-2022-07-01,Medical acts total (SOS Médecin),13667.0
-2022-07-02,Medical acts total (SOS Médecin),16719.0
-2022-07-03,Medical acts total (SOS Médecin),16725.0
-2022-07-04,Medical acts total (SOS Médecin),15901.0
+2022-02-16,Medical acts total (SOS Médecin),19313.0
+2022-02-17,Medical acts total (SOS Médecin),18481.0
+2022-02-18,Medical acts total (SOS Médecin),17860.0
+2022-02-19,Medical acts total (SOS Médecin),22446.0
+2022-02-20,Medical acts total (SOS Médecin),22447.0
+2022-02-21,Medical acts total (SOS Médecin),16450.0
+2022-02-22,Medical acts total (SOS Médecin),14549.0
+2022-02-23,Medical acts total (SOS Médecin),14286.0
+2022-02-24,Medical acts total (SOS Médecin),14508.0
+2022-02-25,Medical acts total (SOS Médecin),13701.0
+2022-02-26,Medical acts total (SOS Médecin),22987.0
+2022-02-27,Medical acts total (SOS Médecin),22598.0
+2022-02-28,Medical acts total (SOS Médecin),21871.0
+2022-03-01,Medical acts total (SOS Médecin),19999.0
+2022-03-02,Medical acts total (SOS Médecin),20086.0
+2022-03-03,Medical acts total (SOS Médecin),20002.0
+2022-03-04,Medical acts total (SOS Médecin),18715.0
+2022-03-05,Medical acts total (SOS Médecin),24560.0
+2022-03-06,Medical acts total (SOS Médecin),24741.0
+2022-03-07,Medical acts total (SOS Médecin),24358.0
+2022-03-08,Medical acts total (SOS Médecin),22239.0
+2022-03-09,Medical acts total (SOS Médecin),21601.0
+2022-03-10,Medical acts total (SOS Médecin),22518.0
+2022-03-11,Medical acts total (SOS Médecin),21466.0
+2022-03-12,Medical acts total (SOS Médecin),26018.0
+2022-03-13,Medical acts total (SOS Médecin),26489.0
+2022-03-14,Medical acts total (SOS Médecin),25282.0
+2022-03-15,Medical acts total (SOS Médecin),24194.0
+2022-03-16,Medical acts total (SOS Médecin),22994.0
+2022-03-17,Medical acts total (SOS Médecin),22866.0
+2022-03-18,Medical acts total (SOS Médecin),22428.0
+2022-03-19,Medical acts total (SOS Médecin),27279.0
+2022-03-20,Medical acts total (SOS Médecin),27772.0
+2022-03-21,Medical acts total (SOS Médecin),27209.0
+2022-03-22,Medical acts total (SOS Médecin),25022.0
+2022-03-23,Medical acts total (SOS Médecin),24433.0
+2022-03-24,Medical acts total (SOS Médecin),23765.0
+2022-03-25,Medical acts total (SOS Médecin),23053.0
+2022-03-26,Medical acts total (SOS Médecin),28110.0
+2022-03-27,Medical acts total (SOS Médecin),27998.0
+2022-03-28,Medical acts total (SOS Médecin),27511.0
+2022-03-29,Medical acts total (SOS Médecin),24898.0
+2022-03-30,Medical acts total (SOS Médecin),23349.0
+2022-03-31,Medical acts total (SOS Médecin),23829.0
+2022-04-01,Medical acts total (SOS Médecin),22144.0
+2022-04-02,Medical acts total (SOS Médecin),27405.0
+2022-04-03,Medical acts total (SOS Médecin),27747.0
+2022-04-04,Medical acts total (SOS Médecin),26729.0
+2022-04-05,Medical acts total (SOS Médecin),24717.0
+2022-04-06,Medical acts total (SOS Médecin),23182.0
+2022-04-07,Medical acts total (SOS Médecin),18889.0
+2022-04-08,Medical acts total (SOS Médecin),17793.0
+2022-04-09,Medical acts total (SOS Médecin),20163.0
+2022-04-10,Medical acts total (SOS Médecin),20271.0
+2022-04-11,Medical acts total (SOS Médecin),25273.0
+2022-04-12,Medical acts total (SOS Médecin),23618.0
+2022-04-13,Medical acts total (SOS Médecin),22934.0
+2022-04-14,Medical acts total (SOS Médecin),22628.0
+2022-04-15,Medical acts total (SOS Médecin),21718.0
+2022-04-16,Medical acts total (SOS Médecin),25108.0
+2022-04-17,Medical acts total (SOS Médecin),23697.0
+2022-04-18,Medical acts total (SOS Médecin),26218.0
+2022-04-19,Medical acts total (SOS Médecin),22728.0
+2022-04-20,Medical acts total (SOS Médecin),21294.0
+2022-04-21,Medical acts total (SOS Médecin),20525.0
+2022-04-22,Medical acts total (SOS Médecin),19718.0
+2022-04-23,Medical acts total (SOS Médecin),24487.0
+2022-04-24,Medical acts total (SOS Médecin),22622.0
+2022-04-25,Medical acts total (SOS Médecin),21152.0
+2022-04-26,Medical acts total (SOS Médecin),18730.0
+2022-04-27,Medical acts total (SOS Médecin),18403.0
+2022-04-28,Medical acts total (SOS Médecin),17743.0
+2022-04-29,Medical acts total (SOS Médecin),17888.0
+2022-04-30,Medical acts total (SOS Médecin),22332.0
+2022-05-01,Medical acts total (SOS Médecin),19866.0
+2022-05-02,Medical acts total (SOS Médecin),20302.0
+2022-05-03,Medical acts total (SOS Médecin),18828.0
+2022-05-04,Medical acts total (SOS Médecin),18358.0
+2022-05-05,Medical acts total (SOS Médecin),18279.0
+2022-05-06,Medical acts total (SOS Médecin),17785.0
+2022-05-07,Medical acts total (SOS Médecin),21563.0
+2022-05-08,Medical acts total (SOS Médecin),21329.0
+2022-05-09,Medical acts total (SOS Médecin),21043.0
+2022-05-10,Medical acts total (SOS Médecin),18620.0
+2022-05-11,Medical acts total (SOS Médecin),18274.0
+2022-05-12,Medical acts total (SOS Médecin),19016.0
+2022-05-13,Medical acts total (SOS Médecin),18673.0
+2022-05-14,Medical acts total (SOS Médecin),22458.0
+2022-05-15,Medical acts total (SOS Médecin),21828.0
+2022-05-16,Medical acts total (SOS Médecin),21804.0
+2022-05-17,Medical acts total (SOS Médecin),19050.0
+2022-05-18,Medical acts total (SOS Médecin),18864.0
+2022-05-19,Medical acts total (SOS Médecin),19703.0
+2022-05-20,Medical acts total (SOS Médecin),18977.0
+2022-05-21,Medical acts total (SOS Médecin),22974.0
+2022-05-22,Medical acts total (SOS Médecin),23129.0
+2022-05-23,Medical acts total (SOS Médecin),22387.0
+2022-05-24,Medical acts total (SOS Médecin),20271.0
+2022-05-25,Medical acts total (SOS Médecin),19864.0
+2022-05-26,Medical acts total (SOS Médecin),24243.0
+2022-05-27,Medical acts total (SOS Médecin),24937.0
+2022-05-28,Medical acts total (SOS Médecin),24242.0
+2022-05-29,Medical acts total (SOS Médecin),22657.0
+2022-05-30,Medical acts total (SOS Médecin),23022.0
+2022-05-31,Medical acts total (SOS Médecin),21288.0
+2022-06-01,Medical acts total (SOS Médecin),21107.0
+2022-06-02,Medical acts total (SOS Médecin),20762.0
+2022-06-03,Medical acts total (SOS Médecin),19675.0
+2022-06-04,Medical acts total (SOS Médecin),24256.0
+2022-06-05,Medical acts total (SOS Médecin),24499.0
+2022-06-06,Medical acts total (SOS Médecin),27686.0
+2022-06-07,Medical acts total (SOS Médecin),22744.0
+2022-06-08,Medical acts total (SOS Médecin),21297.0
+2022-06-09,Medical acts total (SOS Médecin),21057.0
+2022-06-10,Medical acts total (SOS Médecin),20016.0
+2022-06-11,Medical acts total (SOS Médecin),23575.0
+2022-06-12,Medical acts total (SOS Médecin),23663.0
+2022-06-13,Medical acts total (SOS Médecin),22945.0
+2022-06-14,Medical acts total (SOS Médecin),21046.0
+2022-06-15,Medical acts total (SOS Médecin),20438.0
+2022-06-16,Medical acts total (SOS Médecin),20416.0
+2022-06-17,Medical acts total (SOS Médecin),19207.0
+2022-06-18,Medical acts total (SOS Médecin),23858.0
+2022-06-19,Medical acts total (SOS Médecin),24228.0
+2022-06-20,Medical acts total (SOS Médecin),23554.0
+2022-06-21,Medical acts total (SOS Médecin),21763.0
+2022-06-22,Medical acts total (SOS Médecin),21572.0
+2022-06-23,Medical acts total (SOS Médecin),20949.0
+2022-06-24,Medical acts total (SOS Médecin),20421.0
+2022-06-25,Medical acts total (SOS Médecin),24845.0
+2022-06-26,Medical acts total (SOS Médecin),25122.0
+2022-06-27,Medical acts total (SOS Médecin),23054.0
+2022-06-28,Medical acts total (SOS Médecin),21253.0
+2022-06-29,Medical acts total (SOS Médecin),21156.0
+2022-06-30,Medical acts total (SOS Médecin),21099.0
+2022-07-01,Medical acts total (SOS Médecin),19126.0
+2022-07-02,Medical acts total (SOS Médecin),24364.0
+2022-07-03,Medical acts total (SOS Médecin),24670.0
+2022-07-04,Medical acts total (SOS Médecin),22979.0
+2022-07-05,Medical acts total (SOS Médecin),19865.0
