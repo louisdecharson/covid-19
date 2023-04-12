@@ -1136,10 +1136,11 @@ Day,Category,value
 2023-04-03,Urgent care attendances for suspicion of COVID-19,626.0
 2023-04-04,Urgent care attendances for suspicion of COVID-19,554.0
 2023-04-05,Urgent care attendances for suspicion of COVID-19,574.0
-2023-04-06,Urgent care attendances for suspicion of COVID-19,576.0
-2023-04-07,Urgent care attendances for suspicion of COVID-19,558.0
-2023-04-08,Urgent care attendances for suspicion of COVID-19,530.0
-2023-04-09,Urgent care attendances for suspicion of COVID-19,476.0
+2023-04-06,Urgent care attendances for suspicion of COVID-19,578.0
+2023-04-07,Urgent care attendances for suspicion of COVID-19,562.0
+2023-04-08,Urgent care attendances for suspicion of COVID-19,542.0
+2023-04-09,Urgent care attendances for suspicion of COVID-19,596.0
+2023-04-10,Urgent care attendances for suspicion of COVID-19,486.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85508.0
 2020-02-26,Total urgent care attendances,84330.0
@@ -2275,12 +2276,13 @@ Day,Category,value
 2023-04-01,Total urgent care attendances,91836.0
 2023-04-02,Total urgent care attendances,87691.0
 2023-04-03,Total urgent care attendances,106381.0
-2023-04-04,Total urgent care attendances,96364.0
-2023-04-05,Total urgent care attendances,93930.0
-2023-04-06,Total urgent care attendances,93604.0
-2023-04-07,Total urgent care attendances,93594.0
-2023-04-08,Total urgent care attendances,86066.0
-2023-04-09,Total urgent care attendances,74330.0
+2023-04-04,Total urgent care attendances,96390.0
+2023-04-05,Total urgent care attendances,94000.0
+2023-04-06,Total urgent care attendances,93896.0
+2023-04-07,Total urgent care attendances,93906.0
+2023-04-08,Total urgent care attendances,87154.0
+2023-04-09,Total urgent care attendances,84054.0
+2023-04-10,Total urgent care attendances,74876.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -3418,10 +3420,11 @@ Day,Category,value
 2023-04-03,Hospitalizations for suspicion of COVID-19,268.0
 2023-04-04,Hospitalizations for suspicion of COVID-19,226.0
 2023-04-05,Hospitalizations for suspicion of COVID-19,252.0
-2023-04-06,Hospitalizations for suspicion of COVID-19,258.0
-2023-04-07,Hospitalizations for suspicion of COVID-19,244.0
-2023-04-08,Hospitalizations for suspicion of COVID-19,234.0
-2023-04-09,Hospitalizations for suspicion of COVID-19,182.0
+2023-04-06,Hospitalizations for suspicion of COVID-19,260.0
+2023-04-07,Hospitalizations for suspicion of COVID-19,248.0
+2023-04-08,Hospitalizations for suspicion of COVID-19,244.0
+2023-04-09,Hospitalizations for suspicion of COVID-19,232.0
+2023-04-10,Hospitalizations for suspicion of COVID-19,154.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -4562,7 +4565,8 @@ Day,Category,value
 2023-04-06,Medical acts (SOS Médecin) for suspicion of COVID-19,419.0
 2023-04-07,Medical acts (SOS Médecin) for suspicion of COVID-19,425.0
 2023-04-08,Medical acts (SOS Médecin) for suspicion of COVID-19,442.0
-2023-04-09,Medical acts (SOS Médecin) for suspicion of COVID-19,397.0
+2023-04-09,Medical acts (SOS Médecin) for suspicion of COVID-19,411.0
+2023-04-10,Medical acts (SOS Médecin) for suspicion of COVID-19,718.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -5702,5 +5706,6 @@ Day,Category,value
 2023-04-05,Medical acts total (SOS Médecin),22074.0
 2023-04-06,Medical acts total (SOS Médecin),22380.0
 2023-04-07,Medical acts total (SOS Médecin),22556.0
-2023-04-08,Medical acts total (SOS Médecin),25683.0
-2023-04-09,Medical acts total (SOS Médecin),24162.0
+2023-04-08,Medical acts total (SOS Médecin),25696.0
+2023-04-09,Medical acts total (SOS Médecin),24551.0
+2023-04-10,Medical acts total (SOS Médecin),27943.0
