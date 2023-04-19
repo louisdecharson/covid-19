@@ -1133,20 +1133,21 @@ Day,Category,value
 2023-03-31,Urgent care attendances for suspicion of COVID-19,704.0
 2023-04-01,Urgent care attendances for suspicion of COVID-19,576.0
 2023-04-02,Urgent care attendances for suspicion of COVID-19,560.0
-2023-04-03,Urgent care attendances for suspicion of COVID-19,626.0
+2023-04-03,Urgent care attendances for suspicion of COVID-19,624.0
 2023-04-04,Urgent care attendances for suspicion of COVID-19,554.0
 2023-04-05,Urgent care attendances for suspicion of COVID-19,576.0
 2023-04-06,Urgent care attendances for suspicion of COVID-19,578.0
-2023-04-07,Urgent care attendances for suspicion of COVID-19,590.0
+2023-04-07,Urgent care attendances for suspicion of COVID-19,592.0
 2023-04-08,Urgent care attendances for suspicion of COVID-19,592.0
-2023-04-09,Urgent care attendances for suspicion of COVID-19,666.0
+2023-04-09,Urgent care attendances for suspicion of COVID-19,668.0
 2023-04-10,Urgent care attendances for suspicion of COVID-19,702.0
-2023-04-11,Urgent care attendances for suspicion of COVID-19,850.0
-2023-04-12,Urgent care attendances for suspicion of COVID-19,664.0
-2023-04-13,Urgent care attendances for suspicion of COVID-19,690.0
-2023-04-14,Urgent care attendances for suspicion of COVID-19,594.0
-2023-04-15,Urgent care attendances for suspicion of COVID-19,544.0
-2023-04-16,Urgent care attendances for suspicion of COVID-19,456.0
+2023-04-11,Urgent care attendances for suspicion of COVID-19,854.0
+2023-04-12,Urgent care attendances for suspicion of COVID-19,682.0
+2023-04-13,Urgent care attendances for suspicion of COVID-19,704.0
+2023-04-14,Urgent care attendances for suspicion of COVID-19,654.0
+2023-04-15,Urgent care attendances for suspicion of COVID-19,600.0
+2023-04-16,Urgent care attendances for suspicion of COVID-19,598.0
+2023-04-17,Urgent care attendances for suspicion of COVID-19,546.0
 2020-02-24,Total urgent care attendances,97307.0
 2020-02-25,Total urgent care attendances,85508.0
 2020-02-26,Total urgent care attendances,84330.0
@@ -2281,20 +2282,21 @@ Day,Category,value
 2023-03-31,Total urgent care attendances,97514.0
 2023-04-01,Total urgent care attendances,91990.0
 2023-04-02,Total urgent care attendances,87837.0
-2023-04-03,Total urgent care attendances,106549.0
+2023-04-03,Total urgent care attendances,106371.0
 2023-04-04,Total urgent care attendances,96556.0
 2023-04-05,Total urgent care attendances,94182.0
-2023-04-06,Total urgent care attendances,95081.0
-2023-04-07,Total urgent care attendances,97806.0
-2023-04-08,Total urgent care attendances,92614.0
-2023-04-09,Total urgent care attendances,90177.0
-2023-04-10,Total urgent care attendances,92168.0
-2023-04-11,Total urgent care attendances,104611.0
-2023-04-12,Total urgent care attendances,89863.0
-2023-04-13,Total urgent care attendances,87690.0
-2023-04-14,Total urgent care attendances,86197.0
-2023-04-15,Total urgent care attendances,78809.0
-2023-04-16,Total urgent care attendances,69238.0
+2023-04-06,Total urgent care attendances,95085.0
+2023-04-07,Total urgent care attendances,97876.0
+2023-04-08,Total urgent care attendances,92690.0
+2023-04-09,Total urgent care attendances,90303.0
+2023-04-10,Total urgent care attendances,92372.0
+2023-04-11,Total urgent care attendances,105667.0
+2023-04-12,Total urgent care attendances,93927.0
+2023-04-13,Total urgent care attendances,92116.0
+2023-04-14,Total urgent care attendances,92271.0
+2023-04-15,Total urgent care attendances,85485.0
+2023-04-16,Total urgent care attendances,83344.0
+2023-04-17,Total urgent care attendances,85260.0
 2020-02-24,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-25,Hospitalizations for suspicion of COVID-19,0.0
 2020-02-26,Hospitalizations for suspicion of COVID-19,0.0
@@ -3438,11 +3440,12 @@ Day,Category,value
 2023-04-09,Hospitalizations for suspicion of COVID-19,280.0
 2023-04-10,Hospitalizations for suspicion of COVID-19,282.0
 2023-04-11,Hospitalizations for suspicion of COVID-19,392.0
-2023-04-12,Hospitalizations for suspicion of COVID-19,306.0
-2023-04-13,Hospitalizations for suspicion of COVID-19,286.0
-2023-04-14,Hospitalizations for suspicion of COVID-19,274.0
-2023-04-15,Hospitalizations for suspicion of COVID-19,238.0
-2023-04-16,Hospitalizations for suspicion of COVID-19,172.0
+2023-04-12,Hospitalizations for suspicion of COVID-19,316.0
+2023-04-13,Hospitalizations for suspicion of COVID-19,300.0
+2023-04-14,Hospitalizations for suspicion of COVID-19,308.0
+2023-04-15,Hospitalizations for suspicion of COVID-19,266.0
+2023-04-16,Hospitalizations for suspicion of COVID-19,256.0
+2023-04-17,Hospitalizations for suspicion of COVID-19,180.0
 2020-02-24,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-25,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
 2020-02-26,Medical acts (SOS Médecin) for suspicion of COVID-19,0.0
@@ -4590,7 +4593,8 @@ Day,Category,value
 2023-04-13,Medical acts (SOS Médecin) for suspicion of COVID-19,477.0
 2023-04-14,Medical acts (SOS Médecin) for suspicion of COVID-19,490.0
 2023-04-15,Medical acts (SOS Médecin) for suspicion of COVID-19,443.0
-2023-04-16,Medical acts (SOS Médecin) for suspicion of COVID-19,450.0
+2023-04-16,Medical acts (SOS Médecin) for suspicion of COVID-19,460.0
+2023-04-17,Medical acts (SOS Médecin) for suspicion of COVID-19,568.0
 2020-02-24,Medical acts total (SOS Médecin),24085.0
 2020-02-25,Medical acts total (SOS Médecin),21793.0
 2020-02-26,Medical acts total (SOS Médecin),21595.0
@@ -5737,5 +5741,6 @@ Day,Category,value
 2023-04-12,Medical acts total (SOS Médecin),22949.0
 2023-04-13,Medical acts total (SOS Médecin),21737.0
 2023-04-14,Medical acts total (SOS Médecin),21439.0
-2023-04-15,Medical acts total (SOS Médecin),25155.0
-2023-04-16,Medical acts total (SOS Médecin),23524.0
+2023-04-15,Medical acts total (SOS Médecin),25169.0
+2023-04-16,Medical acts total (SOS Médecin),23869.0
+2023-04-17,Medical acts total (SOS Médecin),22870.0
