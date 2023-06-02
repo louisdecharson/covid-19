@@ -150,11 +150,12 @@ Day,Category,value
 2023-05-23,Urgent care attendances for suspicion of COVID-19,320.0
 2023-05-24,Urgent care attendances for suspicion of COVID-19,314.0
 2023-05-25,Urgent care attendances for suspicion of COVID-19,340.0
-2023-05-26,Urgent care attendances for suspicion of COVID-19,310.0
+2023-05-26,Urgent care attendances for suspicion of COVID-19,318.0
 2023-05-27,Urgent care attendances for suspicion of COVID-19,264.0
-2023-05-28,Urgent care attendances for suspicion of COVID-19,368.0
-2023-05-29,Urgent care attendances for suspicion of COVID-19,268.0
-2023-05-30,Urgent care attendances for suspicion of COVID-19,230.0
+2023-05-28,Urgent care attendances for suspicion of COVID-19,374.0
+2023-05-29,Urgent care attendances for suspicion of COVID-19,278.0
+2023-05-30,Urgent care attendances for suspicion of COVID-19,294.0
+2023-05-31,Urgent care attendances for suspicion of COVID-19,210.0
 2022-12-26,Total urgent care attendances,113931.0
 2022-12-27,Total urgent care attendances,105227.0
 2022-12-28,Total urgent care attendances,101474.0
@@ -304,13 +305,14 @@ Day,Category,value
 2023-05-21,Total urgent care attendances,90318.0
 2023-05-22,Total urgent care attendances,109838.0
 2023-05-23,Total urgent care attendances,97661.0
-2023-05-24,Total urgent care attendances,95421.0
-2023-05-25,Total urgent care attendances,98923.0
-2023-05-26,Total urgent care attendances,98981.0
-2023-05-27,Total urgent care attendances,94183.0
-2023-05-28,Total urgent care attendances,93963.0
-2023-05-29,Total urgent care attendances,98294.0
-2023-05-30,Total urgent care attendances,89984.0
+2023-05-24,Total urgent care attendances,95747.0
+2023-05-25,Total urgent care attendances,99387.0
+2023-05-26,Total urgent care attendances,99735.0
+2023-05-27,Total urgent care attendances,95133.0
+2023-05-28,Total urgent care attendances,95483.0
+2023-05-29,Total urgent care attendances,100704.0
+2023-05-30,Total urgent care attendances,108655.0
+2023-05-31,Total urgent care attendances,80561.0
 2022-12-26,Hospitalizations for suspicion of COVID-19,746.0
 2022-12-27,Hospitalizations for suspicion of COVID-19,630.0
 2022-12-28,Hospitalizations for suspicion of COVID-19,632.0
@@ -462,11 +464,12 @@ Day,Category,value
 2023-05-23,Hospitalizations for suspicion of COVID-19,128.0
 2023-05-24,Hospitalizations for suspicion of COVID-19,118.0
 2023-05-25,Hospitalizations for suspicion of COVID-19,122.0
-2023-05-26,Hospitalizations for suspicion of COVID-19,128.0
-2023-05-27,Hospitalizations for suspicion of COVID-19,118.0
-2023-05-28,Hospitalizations for suspicion of COVID-19,170.0
-2023-05-29,Hospitalizations for suspicion of COVID-19,90.0
-2023-05-30,Hospitalizations for suspicion of COVID-19,92.0
+2023-05-26,Hospitalizations for suspicion of COVID-19,136.0
+2023-05-27,Hospitalizations for suspicion of COVID-19,116.0
+2023-05-28,Hospitalizations for suspicion of COVID-19,176.0
+2023-05-29,Hospitalizations for suspicion of COVID-19,96.0
+2023-05-30,Hospitalizations for suspicion of COVID-19,126.0
+2023-05-31,Hospitalizations for suspicion of COVID-19,78.0
 2022-12-26,Medical acts (SOS Médecin) for suspicion of COVID-19,571.0
 2022-12-27,Medical acts (SOS Médecin) for suspicion of COVID-19,575.0
 2022-12-28,Medical acts (SOS Médecin) for suspicion of COVID-19,539.0
@@ -622,7 +625,8 @@ Day,Category,value
 2023-05-27,Medical acts (SOS Médecin) for suspicion of COVID-19,268.0
 2023-05-28,Medical acts (SOS Médecin) for suspicion of COVID-19,267.0
 2023-05-29,Medical acts (SOS Médecin) for suspicion of COVID-19,348.0
-2023-05-30,Medical acts (SOS Médecin) for suspicion of COVID-19,360.0
+2023-05-30,Medical acts (SOS Médecin) for suspicion of COVID-19,394.0
+2023-05-31,Medical acts (SOS Médecin) for suspicion of COVID-19,340.0
 2022-12-26,Medical acts total (SOS Médecin),28436.0
 2022-12-27,Medical acts total (SOS Médecin),25726.0
 2022-12-28,Medical acts total (SOS Médecin),26694.0
@@ -777,5 +781,6 @@ Day,Category,value
 2023-05-26,Medical acts total (SOS Médecin),20158.0
 2023-05-27,Medical acts total (SOS Médecin),23878.0
 2023-05-28,Medical acts total (SOS Médecin),23885.0
-2023-05-29,Medical acts total (SOS Médecin),27744.0
-2023-05-30,Medical acts total (SOS Médecin),23858.0
+2023-05-29,Medical acts total (SOS Médecin),27752.0
+2023-05-30,Medical acts total (SOS Médecin),24305.0
+2023-05-31,Medical acts total (SOS Médecin),22034.0
