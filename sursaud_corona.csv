@@ -454,7 +454,7 @@ Day,Category,value
 2024-03-22,Urgent care attendances for suspicion of COVID-19,64.0
 2024-03-23,Urgent care attendances for suspicion of COVID-19,90.0
 2024-03-24,Urgent care attendances for suspicion of COVID-19,56.0
-2024-03-25,Urgent care attendances for suspicion of COVID-19,86.0
+2024-03-25,Urgent care attendances for suspicion of COVID-19,84.0
 2024-03-26,Urgent care attendances for suspicion of COVID-19,58.0
 2024-03-27,Urgent care attendances for suspicion of COVID-19,80.0
 2024-03-28,Urgent care attendances for suspicion of COVID-19,92.0
@@ -511,13 +511,21 @@ Day,Category,value
 2024-05-18,Urgent care attendances for suspicion of COVID-19,106.0
 2024-05-19,Urgent care attendances for suspicion of COVID-19,138.0
 2024-05-20,Urgent care attendances for suspicion of COVID-19,164.0
-2024-05-21,Urgent care attendances for suspicion of COVID-19,178.0
-2024-05-22,Urgent care attendances for suspicion of COVID-19,124.0
-2024-05-23,Urgent care attendances for suspicion of COVID-19,138.0
-2024-05-24,Urgent care attendances for suspicion of COVID-19,174.0
-2024-05-25,Urgent care attendances for suspicion of COVID-19,194.0
-2024-05-26,Urgent care attendances for suspicion of COVID-19,180.0
-2024-05-27,Urgent care attendances for suspicion of COVID-19,158.0
+2024-05-21,Urgent care attendances for suspicion of COVID-19,176.0
+2024-05-22,Urgent care attendances for suspicion of COVID-19,128.0
+2024-05-23,Urgent care attendances for suspicion of COVID-19,142.0
+2024-05-24,Urgent care attendances for suspicion of COVID-19,178.0
+2024-05-25,Urgent care attendances for suspicion of COVID-19,198.0
+2024-05-26,Urgent care attendances for suspicion of COVID-19,194.0
+2024-05-27,Urgent care attendances for suspicion of COVID-19,214.0
+2024-05-28,Urgent care attendances for suspicion of COVID-19,208.0
+2024-05-29,Urgent care attendances for suspicion of COVID-19,234.0
+2024-05-30,Urgent care attendances for suspicion of COVID-19,266.0
+2024-05-31,Urgent care attendances for suspicion of COVID-19,248.0
+2024-06-01,Urgent care attendances for suspicion of COVID-19,184.0
+2024-06-02,Urgent care attendances for suspicion of COVID-19,250.0
+2024-06-03,Urgent care attendances for suspicion of COVID-19,284.0
+2024-06-04,Urgent care attendances for suspicion of COVID-19,232.0
 2022-12-26,Total urgent care attendances,114455.0
 2022-12-27,Total urgent care attendances,105713.0
 2022-12-28,Total urgent care attendances,101974.0
@@ -890,22 +898,22 @@ Day,Category,value
 2023-12-30,Total urgent care attendances,106182.0
 2023-12-31,Total urgent care attendances,84973.0
 2024-01-01,Total urgent care attendances,94416.0
-2024-01-02,Total urgent care attendances,110244.0
+2024-01-02,Total urgent care attendances,110246.0
 2024-01-03,Total urgent care attendances,104173.0
 2024-01-04,Total urgent care attendances,103289.0
-2024-01-05,Total urgent care attendances,101689.0
+2024-01-05,Total urgent care attendances,101693.0
 2024-01-06,Total urgent care attendances,92876.0
 2024-01-07,Total urgent care attendances,86001.0
 2024-01-08,Total urgent care attendances,102206.0
 2024-01-09,Total urgent care attendances,93239.0
-2024-01-10,Total urgent care attendances,92137.0
-2024-01-11,Total urgent care attendances,94617.0
+2024-01-10,Total urgent care attendances,92139.0
+2024-01-11,Total urgent care attendances,94621.0
 2024-01-12,Total urgent care attendances,96705.0
-2024-01-13,Total urgent care attendances,90573.0
-2024-01-14,Total urgent care attendances,88209.0
-2024-01-15,Total urgent care attendances,108912.0
-2024-01-16,Total urgent care attendances,99915.0
-2024-01-17,Total urgent care attendances,96891.0
+2024-01-13,Total urgent care attendances,90579.0
+2024-01-14,Total urgent care attendances,88217.0
+2024-01-15,Total urgent care attendances,108960.0
+2024-01-16,Total urgent care attendances,99919.0
+2024-01-17,Total urgent care attendances,96897.0
 2024-01-18,Total urgent care attendances,96844.0
 2024-01-19,Total urgent care attendances,101335.0
 2024-01-20,Total urgent care attendances,94369.0
@@ -913,13 +921,13 @@ Day,Category,value
 2024-01-22,Total urgent care attendances,114972.0
 2024-01-23,Total urgent care attendances,103896.0
 2024-01-24,Total urgent care attendances,102184.0
-2024-01-25,Total urgent care attendances,105896.0
+2024-01-25,Total urgent care attendances,105894.0
 2024-01-26,Total urgent care attendances,105728.0
 2024-01-27,Total urgent care attendances,98764.0
 2024-01-28,Total urgent care attendances,95819.0
 2024-01-29,Total urgent care attendances,117742.0
-2024-01-30,Total urgent care attendances,104892.0
-2024-01-31,Total urgent care attendances,101544.0
+2024-01-30,Total urgent care attendances,104962.0
+2024-01-31,Total urgent care attendances,101640.0
 2024-02-01,Total urgent care attendances,102057.0
 2024-02-02,Total urgent care attendances,105004.0
 2024-02-03,Total urgent care attendances,98658.0
@@ -930,113 +938,121 @@ Day,Category,value
 2024-02-08,Total urgent care attendances,106561.0
 2024-02-09,Total urgent care attendances,108262.0
 2024-02-10,Total urgent care attendances,98320.0
-2024-02-11,Total urgent care attendances,96282.0
-2024-02-12,Total urgent care attendances,115215.0
-2024-02-13,Total urgent care attendances,103135.0
-2024-02-14,Total urgent care attendances,99693.0
-2024-02-15,Total urgent care attendances,104696.0
-2024-02-16,Total urgent care attendances,102324.0
-2024-02-17,Total urgent care attendances,97419.0
-2024-02-18,Total urgent care attendances,90779.0
-2024-02-19,Total urgent care attendances,109207.0
+2024-02-11,Total urgent care attendances,96336.0
+2024-02-12,Total urgent care attendances,115377.0
+2024-02-13,Total urgent care attendances,103121.0
+2024-02-14,Total urgent care attendances,99765.0
+2024-02-15,Total urgent care attendances,104834.0
+2024-02-16,Total urgent care attendances,102554.0
+2024-02-17,Total urgent care attendances,97627.0
+2024-02-18,Total urgent care attendances,90951.0
+2024-02-19,Total urgent care attendances,109429.0
 2024-02-20,Total urgent care attendances,98284.0
 2024-02-21,Total urgent care attendances,95054.0
-2024-02-22,Total urgent care attendances,95945.0
-2024-02-23,Total urgent care attendances,96023.0
+2024-02-22,Total urgent care attendances,95949.0
+2024-02-23,Total urgent care attendances,96025.0
 2024-02-24,Total urgent care attendances,90313.0
 2024-02-25,Total urgent care attendances,83969.0
-2024-02-26,Total urgent care attendances,103965.0
+2024-02-26,Total urgent care attendances,103967.0
 2024-02-27,Total urgent care attendances,93954.0
-2024-02-28,Total urgent care attendances,93697.0
+2024-02-28,Total urgent care attendances,93585.0
 2024-02-29,Total urgent care attendances,94317.0
-2024-03-01,Total urgent care attendances,95481.0
+2024-03-01,Total urgent care attendances,95483.0
 2024-03-02,Total urgent care attendances,91297.0
 2024-03-03,Total urgent care attendances,85428.0
 2024-03-04,Total urgent care attendances,104493.0
 2024-03-05,Total urgent care attendances,95146.0
 2024-03-06,Total urgent care attendances,95172.0
-2024-03-07,Total urgent care attendances,98076.0
+2024-03-07,Total urgent care attendances,98078.0
 2024-03-08,Total urgent care attendances,97230.0
 2024-03-09,Total urgent care attendances,92684.0
 2024-03-10,Total urgent care attendances,91337.0
 2024-03-11,Total urgent care attendances,107822.0
-2024-03-12,Total urgent care attendances,98509.0
+2024-03-12,Total urgent care attendances,98511.0
 2024-03-13,Total urgent care attendances,98747.0
-2024-03-14,Total urgent care attendances,102046.0
+2024-03-14,Total urgent care attendances,101904.0
 2024-03-15,Total urgent care attendances,100250.0
 2024-03-16,Total urgent care attendances,96963.0
 2024-03-17,Total urgent care attendances,93743.0
-2024-03-18,Total urgent care attendances,112916.0
-2024-03-19,Total urgent care attendances,101035.0
+2024-03-18,Total urgent care attendances,112918.0
+2024-03-19,Total urgent care attendances,101037.0
 2024-03-20,Total urgent care attendances,100498.0
-2024-03-21,Total urgent care attendances,102578.0
+2024-03-21,Total urgent care attendances,102582.0
 2024-03-22,Total urgent care attendances,102880.0
 2024-03-23,Total urgent care attendances,94564.0
-2024-03-24,Total urgent care attendances,92873.0
-2024-03-25,Total urgent care attendances,112947.0
+2024-03-24,Total urgent care attendances,92871.0
+2024-03-25,Total urgent care attendances,112741.0
 2024-03-26,Total urgent care attendances,99920.0
 2024-03-27,Total urgent care attendances,97006.0
-2024-03-28,Total urgent care attendances,101247.0
+2024-03-28,Total urgent care attendances,101071.0
 2024-03-29,Total urgent care attendances,101242.0
-2024-03-30,Total urgent care attendances,95622.0
-2024-03-31,Total urgent care attendances,86424.0
+2024-03-30,Total urgent care attendances,95624.0
+2024-03-31,Total urgent care attendances,86248.0
 2024-04-01,Total urgent care attendances,94235.0
 2024-04-02,Total urgent care attendances,112171.0
 2024-04-03,Total urgent care attendances,102096.0
 2024-04-04,Total urgent care attendances,103261.0
 2024-04-05,Total urgent care attendances,103605.0
 2024-04-06,Total urgent care attendances,99249.0
-2024-04-07,Total urgent care attendances,96963.0
+2024-04-07,Total urgent care attendances,96965.0
 2024-04-08,Total urgent care attendances,113230.0
-2024-04-09,Total urgent care attendances,96093.0
-2024-04-10,Total urgent care attendances,93414.0
-2024-04-11,Total urgent care attendances,102255.0
-2024-04-12,Total urgent care attendances,102257.0
-2024-04-13,Total urgent care attendances,97978.0
-2024-04-14,Total urgent care attendances,96138.0
-2024-04-15,Total urgent care attendances,112074.0
-2024-04-16,Total urgent care attendances,96583.0
-2024-04-17,Total urgent care attendances,94514.0
-2024-04-18,Total urgent care attendances,95936.0
-2024-04-19,Total urgent care attendances,98436.0
-2024-04-20,Total urgent care attendances,90895.0
-2024-04-21,Total urgent care attendances,86234.0
-2024-04-22,Total urgent care attendances,103644.0
-2024-04-23,Total urgent care attendances,94035.0
-2024-04-24,Total urgent care attendances,93069.0
-2024-04-25,Total urgent care attendances,94901.0
-2024-04-26,Total urgent care attendances,97122.0
-2024-04-27,Total urgent care attendances,92495.0
-2024-04-28,Total urgent care attendances,88069.0
-2024-04-29,Total urgent care attendances,108617.0
-2024-04-30,Total urgent care attendances,102165.0
-2024-05-01,Total urgent care attendances,84055.0
-2024-05-02,Total urgent care attendances,103103.0
-2024-05-03,Total urgent care attendances,100187.0
-2024-05-04,Total urgent care attendances,93813.0
-2024-05-05,Total urgent care attendances,91476.0
-2024-05-06,Total urgent care attendances,110091.0
-2024-05-07,Total urgent care attendances,102322.0
-2024-05-08,Total urgent care attendances,91768.0
-2024-05-09,Total urgent care attendances,96608.0
-2024-05-10,Total urgent care attendances,109366.0
-2024-05-11,Total urgent care attendances,97923.0
-2024-05-12,Total urgent care attendances,95621.0
-2024-05-13,Total urgent care attendances,118152.0
-2024-05-14,Total urgent care attendances,103008.0
-2024-05-15,Total urgent care attendances,100451.0
-2024-05-16,Total urgent care attendances,104317.0
-2024-05-17,Total urgent care attendances,104498.0
-2024-05-18,Total urgent care attendances,99293.0
-2024-05-19,Total urgent care attendances,96501.0
-2024-05-20,Total urgent care attendances,102759.0
-2024-05-21,Total urgent care attendances,111441.0
-2024-05-22,Total urgent care attendances,100959.0
-2024-05-23,Total urgent care attendances,100026.0
-2024-05-24,Total urgent care attendances,99251.0
-2024-05-25,Total urgent care attendances,94562.0
-2024-05-26,Total urgent care attendances,89777.0
-2024-05-27,Total urgent care attendances,89406.0
+2024-04-09,Total urgent care attendances,96119.0
+2024-04-10,Total urgent care attendances,93456.0
+2024-04-11,Total urgent care attendances,102287.0
+2024-04-12,Total urgent care attendances,102287.0
+2024-04-13,Total urgent care attendances,98006.0
+2024-04-14,Total urgent care attendances,95956.0
+2024-04-15,Total urgent care attendances,112108.0
+2024-04-16,Total urgent care attendances,96607.0
+2024-04-17,Total urgent care attendances,94552.0
+2024-04-18,Total urgent care attendances,95974.0
+2024-04-19,Total urgent care attendances,98476.0
+2024-04-20,Total urgent care attendances,90925.0
+2024-04-21,Total urgent care attendances,86258.0
+2024-04-22,Total urgent care attendances,103662.0
+2024-04-23,Total urgent care attendances,94053.0
+2024-04-24,Total urgent care attendances,92941.0
+2024-04-25,Total urgent care attendances,94927.0
+2024-04-26,Total urgent care attendances,97152.0
+2024-04-27,Total urgent care attendances,92519.0
+2024-04-28,Total urgent care attendances,88081.0
+2024-04-29,Total urgent care attendances,108631.0
+2024-04-30,Total urgent care attendances,102187.0
+2024-05-01,Total urgent care attendances,84065.0
+2024-05-02,Total urgent care attendances,103125.0
+2024-05-03,Total urgent care attendances,100203.0
+2024-05-04,Total urgent care attendances,93823.0
+2024-05-05,Total urgent care attendances,91502.0
+2024-05-06,Total urgent care attendances,110115.0
+2024-05-07,Total urgent care attendances,102352.0
+2024-05-08,Total urgent care attendances,91786.0
+2024-05-09,Total urgent care attendances,96634.0
+2024-05-10,Total urgent care attendances,109394.0
+2024-05-11,Total urgent care attendances,97947.0
+2024-05-12,Total urgent care attendances,95633.0
+2024-05-13,Total urgent care attendances,118162.0
+2024-05-14,Total urgent care attendances,103026.0
+2024-05-15,Total urgent care attendances,100459.0
+2024-05-16,Total urgent care attendances,104329.0
+2024-05-17,Total urgent care attendances,104510.0
+2024-05-18,Total urgent care attendances,99313.0
+2024-05-19,Total urgent care attendances,96521.0
+2024-05-20,Total urgent care attendances,103139.0
+2024-05-21,Total urgent care attendances,112323.0
+2024-05-22,Total urgent care attendances,102293.0
+2024-05-23,Total urgent care attendances,102474.0
+2024-05-24,Total urgent care attendances,102237.0
+2024-05-25,Total urgent care attendances,98363.0
+2024-05-26,Total urgent care attendances,95652.0
+2024-05-27,Total urgent care attendances,115053.0
+2024-05-28,Total urgent care attendances,101096.0
+2024-05-29,Total urgent care attendances,98288.0
+2024-05-30,Total urgent care attendances,101306.0
+2024-05-31,Total urgent care attendances,100402.0
+2024-06-01,Total urgent care attendances,92297.0
+2024-06-02,Total urgent care attendances,91664.0
+2024-06-03,Total urgent care attendances,108528.0
+2024-06-04,Total urgent care attendances,78024.0
 2022-12-26,Hospitalizations for suspicion of COVID-19,760.0
 2022-12-27,Hospitalizations for suspicion of COVID-19,632.0
 2022-12-28,Hospitalizations for suspicion of COVID-19,636.0
@@ -1550,12 +1566,20 @@ Day,Category,value
 2024-05-19,Hospitalizations for suspicion of COVID-19,58.0
 2024-05-20,Hospitalizations for suspicion of COVID-19,44.0
 2024-05-21,Hospitalizations for suspicion of COVID-19,70.0
-2024-05-22,Hospitalizations for suspicion of COVID-19,40.0
+2024-05-22,Hospitalizations for suspicion of COVID-19,42.0
 2024-05-23,Hospitalizations for suspicion of COVID-19,42.0
 2024-05-24,Hospitalizations for suspicion of COVID-19,80.0
-2024-05-25,Hospitalizations for suspicion of COVID-19,88.0
-2024-05-26,Hospitalizations for suspicion of COVID-19,66.0
-2024-05-27,Hospitalizations for suspicion of COVID-19,44.0
+2024-05-25,Hospitalizations for suspicion of COVID-19,90.0
+2024-05-26,Hospitalizations for suspicion of COVID-19,70.0
+2024-05-27,Hospitalizations for suspicion of COVID-19,72.0
+2024-05-28,Hospitalizations for suspicion of COVID-19,68.0
+2024-05-29,Hospitalizations for suspicion of COVID-19,100.0
+2024-05-30,Hospitalizations for suspicion of COVID-19,118.0
+2024-05-31,Hospitalizations for suspicion of COVID-19,102.0
+2024-06-01,Hospitalizations for suspicion of COVID-19,76.0
+2024-06-02,Hospitalizations for suspicion of COVID-19,80.0
+2024-06-03,Hospitalizations for suspicion of COVID-19,88.0
+2024-06-04,Hospitalizations for suspicion of COVID-19,60.0
 2022-12-26,Medical acts (SOS Médecin) for suspicion of COVID-19,571.0
 2022-12-27,Medical acts (SOS Médecin) for suspicion of COVID-19,575.0
 2022-12-28,Medical acts (SOS Médecin) for suspicion of COVID-19,539.0
@@ -2074,7 +2098,15 @@ Day,Category,value
 2024-05-24,Medical acts (SOS Médecin) for suspicion of COVID-19,226.0
 2024-05-25,Medical acts (SOS Médecin) for suspicion of COVID-19,158.0
 2024-05-26,Medical acts (SOS Médecin) for suspicion of COVID-19,212.0
-2024-05-27,Medical acts (SOS Médecin) for suspicion of COVID-19,291.0
+2024-05-27,Medical acts (SOS Médecin) for suspicion of COVID-19,301.0
+2024-05-28,Medical acts (SOS Médecin) for suspicion of COVID-19,312.0
+2024-05-29,Medical acts (SOS Médecin) for suspicion of COVID-19,297.0
+2024-05-30,Medical acts (SOS Médecin) for suspicion of COVID-19,248.0
+2024-05-31,Medical acts (SOS Médecin) for suspicion of COVID-19,250.0
+2024-06-01,Medical acts (SOS Médecin) for suspicion of COVID-19,298.0
+2024-06-02,Medical acts (SOS Médecin) for suspicion of COVID-19,320.0
+2024-06-03,Medical acts (SOS Médecin) for suspicion of COVID-19,482.0
+2024-06-04,Medical acts (SOS Médecin) for suspicion of COVID-19,428.0
 2022-12-26,Medical acts total (SOS Médecin),28436.0
 2022-12-27,Medical acts total (SOS Médecin),25726.0
 2022-12-28,Medical acts total (SOS Médecin),26694.0
@@ -2592,5 +2624,13 @@ Day,Category,value
 2024-05-23,Medical acts total (SOS Médecin),23711.0
 2024-05-24,Medical acts total (SOS Médecin),22006.0
 2024-05-25,Medical acts total (SOS Médecin),25693.0
-2024-05-26,Medical acts total (SOS Médecin),24552.0
-2024-05-27,Medical acts total (SOS Médecin),25596.0
+2024-05-26,Medical acts total (SOS Médecin),24554.0
+2024-05-27,Medical acts total (SOS Médecin),26124.0
+2024-05-28,Medical acts total (SOS Médecin),24058.0
+2024-05-29,Medical acts total (SOS Médecin),23612.0
+2024-05-30,Medical acts total (SOS Médecin),23849.0
+2024-05-31,Medical acts total (SOS Médecin),23486.0
+2024-06-01,Medical acts total (SOS Médecin),25881.0
+2024-06-02,Medical acts total (SOS Médecin),25433.0
+2024-06-03,Medical acts total (SOS Médecin),26337.0
+2024-06-04,Medical acts total (SOS Médecin),23269.0
