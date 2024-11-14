@@ -675,11 +675,18 @@ Day,Category,value
 2024-10-29,Urgent care attendances for suspicion of COVID-19,350.0
 2024-10-30,Urgent care attendances for suspicion of COVID-19,366.0
 2024-10-31,Urgent care attendances for suspicion of COVID-19,284.0
-2024-11-01,Urgent care attendances for suspicion of COVID-19,254.0
-2024-11-02,Urgent care attendances for suspicion of COVID-19,298.0
-2024-11-03,Urgent care attendances for suspicion of COVID-19,272.0
-2024-11-04,Urgent care attendances for suspicion of COVID-19,304.0
-2024-11-05,Urgent care attendances for suspicion of COVID-19,164.0
+2024-11-01,Urgent care attendances for suspicion of COVID-19,258.0
+2024-11-02,Urgent care attendances for suspicion of COVID-19,300.0
+2024-11-03,Urgent care attendances for suspicion of COVID-19,280.0
+2024-11-04,Urgent care attendances for suspicion of COVID-19,320.0
+2024-11-05,Urgent care attendances for suspicion of COVID-19,202.0
+2024-11-06,Urgent care attendances for suspicion of COVID-19,226.0
+2024-11-07,Urgent care attendances for suspicion of COVID-19,240.0
+2024-11-08,Urgent care attendances for suspicion of COVID-19,264.0
+2024-11-09,Urgent care attendances for suspicion of COVID-19,210.0
+2024-11-10,Urgent care attendances for suspicion of COVID-19,194.0
+2024-11-11,Urgent care attendances for suspicion of COVID-19,202.0
+2024-11-12,Urgent care attendances for suspicion of COVID-19,172.0
 2022-12-26,Total urgent care attendances,114825.0
 2022-12-27,Total urgent care attendances,106061.0
 2022-12-28,Total urgent care attendances,102300.0
@@ -1354,13 +1361,20 @@ Day,Category,value
 2024-10-27,Total urgent care attendances,90207.0
 2024-10-28,Total urgent care attendances,105545.0
 2024-10-29,Total urgent care attendances,96322.0
-2024-10-30,Total urgent care attendances,95932.0
-2024-10-31,Total urgent care attendances,94788.0
-2024-11-01,Total urgent care attendances,90297.0
-2024-11-02,Total urgent care attendances,94069.0
-2024-11-03,Total urgent care attendances,88364.0
-2024-11-04,Total urgent care attendances,104562.0
-2024-11-05,Total urgent care attendances,79390.0
+2024-10-30,Total urgent care attendances,95758.0
+2024-10-31,Total urgent care attendances,94866.0
+2024-11-01,Total urgent care attendances,90851.0
+2024-11-02,Total urgent care attendances,94827.0
+2024-11-03,Total urgent care attendances,89396.0
+2024-11-04,Total urgent care attendances,107440.0
+2024-11-05,Total urgent care attendances,96437.0
+2024-11-06,Total urgent care attendances,96540.0
+2024-11-07,Total urgent care attendances,98761.0
+2024-11-08,Total urgent care attendances,98343.0
+2024-11-09,Total urgent care attendances,94386.0
+2024-11-10,Total urgent care attendances,91260.0
+2024-11-11,Total urgent care attendances,90091.0
+2024-11-12,Total urgent care attendances,83067.0
 2022-12-26,Hospitalizations for suspicion of COVID-19,762.0
 2022-12-27,Hospitalizations for suspicion of COVID-19,636.0
 2022-12-28,Hospitalizations for suspicion of COVID-19,638.0
@@ -2037,11 +2051,18 @@ Day,Category,value
 2024-10-29,Hospitalizations for suspicion of COVID-19,146.0
 2024-10-30,Hospitalizations for suspicion of COVID-19,180.0
 2024-10-31,Hospitalizations for suspicion of COVID-19,144.0
-2024-11-01,Hospitalizations for suspicion of COVID-19,102.0
+2024-11-01,Hospitalizations for suspicion of COVID-19,106.0
 2024-11-02,Hospitalizations for suspicion of COVID-19,134.0
-2024-11-03,Hospitalizations for suspicion of COVID-19,134.0
-2024-11-04,Hospitalizations for suspicion of COVID-19,134.0
-2024-11-05,Hospitalizations for suspicion of COVID-19,56.0
+2024-11-03,Hospitalizations for suspicion of COVID-19,136.0
+2024-11-04,Hospitalizations for suspicion of COVID-19,152.0
+2024-11-05,Hospitalizations for suspicion of COVID-19,86.0
+2024-11-06,Hospitalizations for suspicion of COVID-19,102.0
+2024-11-07,Hospitalizations for suspicion of COVID-19,114.0
+2024-11-08,Hospitalizations for suspicion of COVID-19,126.0
+2024-11-09,Hospitalizations for suspicion of COVID-19,92.0
+2024-11-10,Hospitalizations for suspicion of COVID-19,86.0
+2024-11-11,Hospitalizations for suspicion of COVID-19,66.0
+2024-11-12,Hospitalizations for suspicion of COVID-19,68.0
 2022-12-26,Medical acts (SOS Médecin) for suspicion of COVID-19,571.0
 2022-12-27,Medical acts (SOS Médecin) for suspicion of COVID-19,575.0
 2022-12-28,Medical acts (SOS Médecin) for suspicion of COVID-19,539.0
@@ -2721,8 +2742,15 @@ Day,Category,value
 2024-11-01,Medical acts (SOS Médecin) for suspicion of COVID-19,174.0
 2024-11-02,Medical acts (SOS Médecin) for suspicion of COVID-19,232.0
 2024-11-03,Medical acts (SOS Médecin) for suspicion of COVID-19,270.0
-2024-11-04,Medical acts (SOS Médecin) for suspicion of COVID-19,333.0
-2024-11-05,Medical acts (SOS Médecin) for suspicion of COVID-19,276.0
+2024-11-04,Medical acts (SOS Médecin) for suspicion of COVID-19,325.0
+2024-11-05,Medical acts (SOS Médecin) for suspicion of COVID-19,282.0
+2024-11-06,Medical acts (SOS Médecin) for suspicion of COVID-19,239.0
+2024-11-07,Medical acts (SOS Médecin) for suspicion of COVID-19,186.0
+2024-11-08,Medical acts (SOS Médecin) for suspicion of COVID-19,136.0
+2024-11-09,Medical acts (SOS Médecin) for suspicion of COVID-19,154.0
+2024-11-10,Medical acts (SOS Médecin) for suspicion of COVID-19,126.0
+2024-11-11,Medical acts (SOS Médecin) for suspicion of COVID-19,166.0
+2024-11-12,Medical acts (SOS Médecin) for suspicion of COVID-19,212.0
 2022-12-26,Medical acts total (SOS Médecin),28436.0
 2022-12-27,Medical acts total (SOS Médecin),25726.0
 2022-12-28,Medical acts total (SOS Médecin),26694.0
@@ -3402,5 +3430,12 @@ Day,Category,value
 2024-11-01,Medical acts total (SOS Médecin),26167.0
 2024-11-02,Medical acts total (SOS Médecin),27965.0
 2024-11-03,Medical acts total (SOS Médecin),25536.0
-2024-11-04,Medical acts total (SOS Médecin),26331.0
-2024-11-05,Medical acts total (SOS Médecin),23862.0
+2024-11-04,Medical acts total (SOS Médecin),26165.0
+2024-11-05,Medical acts total (SOS Médecin),24192.0
+2024-11-06,Medical acts total (SOS Médecin),23476.0
+2024-11-07,Medical acts total (SOS Médecin),23699.0
+2024-11-08,Medical acts total (SOS Médecin),22481.0
+2024-11-09,Medical acts total (SOS Médecin),21837.0
+2024-11-10,Medical acts total (SOS Médecin),21230.0
+2024-11-11,Medical acts total (SOS Médecin),23539.0
+2024-11-12,Medical acts total (SOS Médecin),21333.0
